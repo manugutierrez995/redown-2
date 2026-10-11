@@ -89,3 +89,15 @@ The existing **Order** field is a preset ordering control, **not** a submenu-dep
 **Scope limitation:** Ordering is currently stable **within each preset's additional destinations**, while preset `Order` controls ordering between presets. No independent global interleaving of default and additional destinations from different presets is supported. These tests have been authored but have not been executed in the present session. Human Chrome checks and real transfer routing remain necessary. No source change in this update affects Nested mode or directory creation.
 
 **Acceptance for this change:** With a blank label and `images/portraits/final`, the default shows `final`; choosing Top bucket shows that destination's selected bucket instead. A custom label remains unchanged in both settings. After reordering additional options, the next REDOWN menu uses the new sequence without adding a second submenu, and the selected targets remain unchanged.
+
+## Label-source selector correction — 2026-10-11
+
+**Implemented in source, human Chrome testing pending.** The Simple Mode label-source dropdown now has **three** choices:
+
+1. **Menu Label (DEFAULT)** — use the explicit Menu label text; if it is blank, safely fall back to the deepest directory name, or bucket name for a root destination.
+2. **Lowest directory** — use the deepest selected directory name (or the bucket name for a root destination), regardless of any manually typed menu label.
+3. **Top bucket name** — use the destination's selected bucket name, regardless of any manually typed menu label.
+
+An absent or unrecognized saved preference resolves to `menu`, preserving the intuitive behavior for existing profiles. Existing persisted values `deepest` and `bucket` retain their exact meaning. This supersedes the earlier assertion in this document that an explicit label always overrides either automatic naming mode.
+
+Source commits: `bd17338` (menu resolution), `38feaea` (dropdown), `c3b722c` (regression tests). Tests have been committed but not independently executed here. No change to the **ONE popup** rule or destination transfer paths.
