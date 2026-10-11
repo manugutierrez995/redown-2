@@ -8,13 +8,13 @@ const begin=source.indexOf('async function buildMenus() {');
 const end=source.indexOf('chrome.runtime.onInstalled.addListener(rebuildMenus);',begin);
 assert.ok(begin>=0&&end>begin);
 
-function harness(profiles){
+function harness(profiles,labelFallback){
   const created=[];
   const context=vm.createContext({
     ROOT_MENU_ID:'REDOWN',
     chrome:{
       contextMenus:{removeAll:async()=>{created.length=0;},create:item=>created.push(item)},
-      storage:{local:{get:async()=>({rightClickMode:'simple'}),set:async()=>{}}}
+      storage:{local:{get:async()=>({rightClickMode:'simple',simpleLabelFallback:labelFallback}),set:async()=>{}}}
     },
     getProfiles:async()=>profiles,
     RedownNestedLocations:{menuMode:()=> 'simple'}
@@ -42,4 +42,22 @@ test('Simple menu places default and extra destinations immediately under REDOWN
     {id:'simple-option:p:c',parentId:'REDOWN',title:'bucket-one'}
   ]);
   assert.ok(!h.created.some(x=>String(x.id).startsWith('simple:p')));
+});
+
+test('Simple blank labels honor bucket fallback without adding a submenu or changing explicit names',async()=>{
+  const h=harness([{
+    id:'p',type:'cloudflare-r2',accountId:'a',bucketName:'bucket-one',
+    simpleBucketName:'alternate-bucket',defaultPrefix:'images/portraits/final',menuLabel:'',
+    showInContextMenu:true,menuOrder:1,
+    simpleOptions:[
+      {id:'a',bucketName:'bucket-two',prefix:'collections/deep',label:''},
+      {id:'b',bucketName:'bucket-two',prefix:'collections/deep',label:'Named by user'}
+    ]
+  }],'bucket');
+  await h.build();
+  assert.deepEqual(h.created.filter(x=>String(x.id).startsWith('quick:')||String(x.id).startsWith('simple-option:')).map(x=>({id:x.id,parentId:x.parentId,title:x.title})),[
+    {id:'quick:p',parentId:'REDOWN',title:'alternate-bucket'},
+    {id:'simple-option:p:a',parentId:'REDOWN',title:'bucket-two'},
+    {id:'simple-option:p:b',parentId:'REDOWN',title:'Named by user'}
+  ]);
 });
