@@ -28,7 +28,7 @@ Examples with bucket `meme-material` and destination `sexy_shit/ozempic`:
 | *(empty)* | Highest/root bucket | `meme-material` |
 | *(empty)* | Either, bucket root destination | `meme-material` |
 
-**Current implementation distinction:** Commit `c172731` flattened Simple destinations and provides explicit-label or deepest-folder-then-bucket fallback, but **does not yet expose the two-choice fallback preference**. The bucket-name mode is an approved requirement, **not shipped**. Do not claim it has been implemented or tested. The future preference should apply consistently to primary and additional Simple destinations, persist after reload and fall back safely for older saved profiles.
+**Current implementation distinction:** Commit `c172731` flattened Simple destinations and provides explicit-label or deepest-folder-then-bucket fallback, and now exposes the two-choice fallback preference as of commit `22d7ed9`. Both modes are implemented in source; Chrome testing is pending. Do not claim it has been implemented or tested. The future preference should apply consistently to primary and additional Simple destinations, persist after reload and fall back safely for older saved profiles.
 
 ## Destination editor rules
 
@@ -41,7 +41,7 @@ Examples with bucket `meme-material` and destination `sexy_shit/ozempic`:
 
 ## Ordering is separate from hierarchy
 
-The existing **Order** field is a preset ordering control, **not** a submenu-depth setting. Additional Simple destinations currently follow their saved array order within each preset and have no individually editable Order field. Flattening into one REDOWN level does **not** automatically establish a globally sortable list. Explicit per-destination move up/down, drag ordering or an equivalent control is **proposed/pending**, not delivered. Such a control must not bring back an extra submenu. Sorting must have stable, deterministic behavior and preserve the chosen target.
+The existing **Order** field is a preset ordering control, **not** a submenu-depth setting. Additional Simple destinations follow their saved array order within each preset and now offer Move up / Move down controls. Flattening into one REDOWN level does **not** automatically establish a globally sortable list. Cross-preset interleaving and globally independent ordering remain **proposed/pending**; within-preset Move up / Move down is implemented in source. Such a control must not bring back an extra submenu. Sorting must have stable, deterministic behavior and preserve the chosen target.
 
 ## Implemented versus pending
 
@@ -49,10 +49,10 @@ The existing **Order** field is a preset ordering control, **not** a submenu-dep
 | --- | --- | --- |
 | One-level REDOWN Simple destination list | Source fix `c172731` | Automated run and human Chrome verification |
 | Custom label or default to deepest folder/bucket root | In source `c172731` | Human verification, including blank labels |
-| **Optional bucket-name fallback for blank labels** | **NOT implemented** | Add persistent setting, apply to all Simple destinations, test migration |
+| **Optional bucket-name fallback for blank labels** | Source commits `70a7c26`, `22d7ed9` | Test preference persistence, migration and Chrome behavior |
 | Simple path editor, per-row ×, explicit directory creation | Source fixes `7c1b0d6`, `3ac4496`, `376d933` | Test execution, Chrome/R2 end-to-end check |
 | Preserve descendant rows as blank after parent removal | Intended by path editor | Regression and browser verification |
-| Independent per-destination ordering | NOT implemented | Design and test controls while retaining flat popup |
+| Within-preset ordering for additional destinations | Move up/down implemented (`22d7ed9`) | Verify persistence and Chrome order; global interleaving still pending |
 | Right-click transfer to exact account/bucket/prefix | Existing handlers use stable `quick:` and `simple-option:` IDs | Verify all targets, fallback/root cases and after reorder/reload |
 | Slow/unnecessary panel rerenders | Some subtree changes are local | Verify BUG-016 acceptance, focus/drafts/scroll |
 | Global Simple/Nested switch | Existing UI/configuration | Preserve both configurations when switching |
