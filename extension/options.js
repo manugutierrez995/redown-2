@@ -605,7 +605,19 @@ function simpleExtraOptions(profile){
     first.append(field("Menu label (shown on right-click)",item.label||"",v=>{item.label=v;},"text","My Artwork"));
     const remove=document.createElement("button");remove.type="button";remove.className="ghost";remove.textContent="Remove option";
     remove.addEventListener("click",()=>{const i=options.indexOf(item);if(i>=0)options.splice(i,1);row.remove();saveProfiles();});
-    first.append(remove);row.append(first);
+    const moveUp=document.createElement("button");moveUp.type="button";moveUp.className="ghost";moveUp.textContent="Move up";
+    const moveDown=document.createElement("button");moveDown.type="button";moveDown.className="ghost";moveDown.textContent="Move down";
+    const move=(delta)=>{
+      const index=options.indexOf(item),next=index+delta;
+      if(index<0||next<0||next>=options.length)return;
+      [options[index],options[next]]=[options[next],options[index]];
+      if(delta<0)rows.insertBefore(row,row.previousElementSibling);
+      else rows.insertBefore(row.nextElementSibling,row);
+      saveProfiles();
+    };
+    moveUp.addEventListener("click",()=>move(-1));
+    moveDown.addEventListener("click",()=>move(1));
+    first.append(moveUp,moveDown,remove);row.append(first);
     const second=document.createElement("div");second.className="grid two";
     const bucketWrap=document.createElement("div"),bucketLabel=document.createElement("label");bucketLabel.textContent="Bucket";
     const bucket=document.createElement("select");bucketWrap.append(bucketLabel,bucket);
@@ -665,7 +677,24 @@ function simpleBucketCreator(){
     }catch(error){status.textContent=error.message||String(error);}
     finally{submit.disabled=false;}
   });
-  bar.append(heading,note,form,status);return bar;
+  const fallback=document.createElement("label");
+  fallback.textContent="When a Simple menu label is empty, show";
+  const fallbackSelect=document.createElement("select");
+  fallbackSelect.setAttribute("aria-label","Simple automatic menu label");
+  for(const [value,label] of [["deepest","Lowest directory (default)"],["bucket","Top bucket name"]]){
+    const o=document.createElement("option");o.value=value;o.textContent=label;fallbackSelect.append(o);
+  }
+  fallback.append(fallbackSelect);
+  fallbackSelect.addEventListener("change",async()=>{
+    fallbackSelect.disabled=true;
+    try{await chrome.storage.local.set({simpleLabelFallback:fallbackSelect.value});}
+    catch(error){status.textContent=error?.message||"Could not save label preference.";}
+    finally{fallbackSelect.disabled=false;}
+  });
+  chrome.storage.local.get("simpleLabelFallback").then(settings=>{
+    if(fallbackSelect.isConnected)fallbackSelect.value=settings.simpleLabelFallback==="bucket"?"bucket":"deepest";
+  }).catch(()=>{});
+  bar.append(heading,note,fallback,form,status);return bar;
 }
 function renderProfiles(){
   renderRightClickMode();
