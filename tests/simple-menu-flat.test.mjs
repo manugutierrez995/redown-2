@@ -58,6 +58,20 @@ test('Simple blank labels honor bucket fallback without adding a submenu or chan
   assert.deepEqual(h.created.filter(x=>String(x.id).startsWith('quick:')||String(x.id).startsWith('simple-option:')).map(x=>({id:x.id,parentId:x.parentId,title:x.title})),[
     {id:'quick:p',parentId:'REDOWN',title:'alternate-bucket'},
     {id:'simple-option:p:a',parentId:'REDOWN',title:'bucket-two'},
-    {id:'simple-option:p:b',parentId:'REDOWN',title:'Named by user'}
+    {id:'simple-option:p:b',parentId:'REDOWN',title:'bucket-two'}
   ]);
+});
+
+test('Menu Label is default for existing profiles without a saved preference',async()=>{
+  const h=harness([{
+    id:'p',type:'cloudflare-r2',bucketName:'gallery',defaultPrefix:'images/final',menuLabel:'My Choice',showInContextMenu:true,
+    simpleOptions:[{id:'blank',bucketName:'gallery',prefix:'other/leaf',label:''}]
+  }]);
+  await h.build();
+  assert.deepEqual(h.created.filter(x=>String(x.id).startsWith('quick:')||String(x.id).startsWith('simple-option:')).map(x=>x.title),['My Choice','leaf']);
+});
+test('Lowest directory preference selects location name rather than a manually entered label',async()=>{
+  const h=harness([{id:'p',type:'cloudflare-r2',bucketName:'gallery',defaultPrefix:'images/final',menuLabel:'My Choice',showInContextMenu:true,simpleOptions:[]}],'deepest');
+  await h.build();
+  assert.equal(h.created.find(x=>x.id==='quick:p').title,'final');
 });
