@@ -490,7 +490,7 @@ function simpleFolderPathEditor(profile, host, message, bucketName, initialPrefi
     else while(host.children.length>from)host.lastElementChild.remove();
     for(let index=from;index<parts.length;index++){
       if(token!==generation)return;
-      const row=document.createElement("div");row.className="location-level-row";
+      const row=document.createElement("div");row.className="location-level-row simple-location-row";
       const selected=document.createElement("select");selected.className="location-level-select";
       const input=document.createElement("input");input.type="text";input.className="location-level-input";
       input.placeholder="New directory name";input.value=drafts.get(index)||"";
