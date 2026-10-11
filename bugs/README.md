@@ -404,9 +404,11 @@ In **Upload from computer**, after choosing the Cloudflare R2 bucket `works`, th
 
 **Requirement (2026-10-10):** Simple right-click mode must have **exactly ONE REDOWN popup level**: `REDOWN → directly clickable destination`, never `REDOWN → preset → location`, regardless of remote folder depth.
 
-The destination's **Menu label** takes precedence. When the label is empty, a persistent user setting chooses the automatic label: **lowest/deepest directory (DEFAULT)** or **highest/root bucket name**. At the bucket root, both modes show the bucket name. This fallback setting is **not yet implemented**; the current flat-menu source fix implements deepest-directory fallback only. The **Order** field controls preset order, not submenu depth; individual ordering of extra Simple options is still missing.
+The destination's **Menu label** takes precedence. When the label is empty, a persistent user setting chooses the automatic label: **lowest/deepest directory (DEFAULT)** or **highest/root bucket name**. At the bucket root, both modes show the bucket name. Both choices are now implemented in source (`70a7c26`, `22d7ed9`); human Chrome testing remains pending. The **Order** field controls preset order, not submenu depth; additional options now have Move up/down controls within their preset (`22d7ed9`); global ordering across presets is still missing.
 
 **Complete specification and acceptance:** [Simple right-click menu contract](../docs/SIMPLE_RIGHT_CLICK_MENU_CONTRACT.md).
+
+**Latest source work (2026-10-11):** Persisted label preference (deepest directory by default or bucket name), additional-option Move up/down controls, and a new label fallback regression test (`e896f3b`). Fixes committed; automated and human Chrome verification pending.
 
 ## Source fix — Flat Simple right-click destinations (human testing pending)
 
