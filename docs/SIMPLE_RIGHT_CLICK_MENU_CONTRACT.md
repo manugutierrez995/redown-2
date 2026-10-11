@@ -101,3 +101,9 @@ The existing **Order** field is a preset ordering control, **not** a submenu-dep
 An absent or unrecognized saved preference resolves to `menu`, preserving the intuitive behavior for existing profiles. Existing persisted values `deepest` and `bucket` retain their exact meaning. This supersedes the earlier assertion in this document that an explicit label always overrides either automatic naming mode.
 
 Source commits: `bd17338` (menu resolution), `38feaea` (dropdown), `c3b722c` (regression tests). Tests have been committed but not independently executed here. No change to the **ONE popup** rule or destination transfer paths.
+
+## Compact path-row layout — 2026-10-11
+
+**Source styling committed; human visual Chrome testing pending.** Simple Mode's folder editor rows now use a five-column grid scoped to `.simple-location-row`, ordered **existing folder dropdown → new-directory input → Create → + Child → ×**. The delete/clear `×` is a compact square, aligned at the far right of the **same row** and never deliberately placed below it. Dropdown and input widths and gaps have been reduced, including at narrower viewports. The change is scoped to Simple Mode; the generic four-column builder used elsewhere is not modified. No folder-selection, clearing, persistence or remote mutation logic was changed.
+
+Commits: `c2e88cc` (row class) and `c25a922` (CSS). Browser acceptance: confirm visually at 1366×768 and smaller responsive windows that all five controls stay aligned without clipping, that long folder names are reachable in the native dropdown, and that keyboard focus and row actions still work. **Not independently Chrome-verified yet.**
