@@ -1117,8 +1117,8 @@ function renderUploadLocationBuilder(){
 
   uploadLocationSegments.forEach((segment,index)=>{
     const row=document.createElement("div");
-    row.className="upload-path-row";
-    row.style.setProperty("--depth",String(index));
+    row.className="upload-path-row"+(index>3?" upload-path-continuation":"");
+    row.style.setProperty("--depth",String(Math.min(index,3)));
 
     const pathLine=document.createElement("div");
     pathLine.className="upload-path-connector";
