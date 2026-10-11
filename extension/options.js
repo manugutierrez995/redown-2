@@ -681,7 +681,7 @@ function simpleBucketCreator(){
   fallback.textContent="When a Simple menu label is empty, show";
   const fallbackSelect=document.createElement("select");
   fallbackSelect.setAttribute("aria-label","Simple automatic menu label");
-  for(const [value,label] of [["deepest","Lowest directory (default)"],["bucket","Top bucket name"]]){
+  for(const [value,label] of [["menu","Menu Label (default)"],["deepest","Lowest directory"],["bucket","Top bucket name"]]){
     const o=document.createElement("option");o.value=value;o.textContent=label;fallbackSelect.append(o);
   }
   fallback.append(fallbackSelect);
@@ -692,7 +692,7 @@ function simpleBucketCreator(){
     finally{fallbackSelect.disabled=false;}
   });
   chrome.storage.local.get("simpleLabelFallback").then(settings=>{
-    if(fallbackSelect.isConnected)fallbackSelect.value=settings.simpleLabelFallback==="bucket"?"bucket":"deepest";
+    if(fallbackSelect.isConnected)fallbackSelect.value=["bucket","deepest"].includes(settings.simpleLabelFallback)?settings.simpleLabelFallback:"menu";
   }).catch(()=>{});
   bar.append(heading,note,fallback,form,status);return bar;
 }
