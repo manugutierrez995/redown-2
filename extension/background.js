@@ -1620,7 +1620,9 @@ async function buildMenus() {
   });
 
   const profiles = await getProfiles();
-  const storedMode=(await chrome.storage.local.get("rightClickMode")).rightClickMode;
+  const menuSettings=await chrome.storage.local.get(["rightClickMode","simpleLabelFallback"]);
+  const storedMode=menuSettings.rightClickMode;
+  const labelFallback=menuSettings.simpleLabelFallback==="bucket"?"bucket":"deepest";
   const mode=RedownNestedLocations.menuMode(storedMode,profiles);
   if(storedMode!=="simple" && storedMode!=="nested")await chrome.storage.local.set({rightClickMode:mode});
   const presets = profiles
@@ -1657,7 +1659,7 @@ async function buildMenus() {
         const explicit=String(label||"").trim();
         if(explicit)return explicit;
         const segments=String(prefix||"").split("/").filter(Boolean);
-        return segments.at(-1)||bucket||"Destination";
+        return labelFallback==="bucket" ? (bucket||segments.at(-1)||"Destination") : (segments.at(-1)||bucket||"Destination");
       };
       chrome.contextMenus.create({
         id:`quick:${p.id}`,parentId:ROOT_MENU_ID,
@@ -1693,7 +1695,7 @@ function addMenuControls(mode){
 chrome.runtime.onInstalled.addListener(rebuildMenus);
 chrome.runtime.onStartup.addListener(rebuildMenus);
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === "local" && (changes.profiles || changes.rightClickMode)) rebuildMenus();
+  if (area === "local" && (changes.profiles || changes.rightClickMode || changes.simpleLabelFallback)) rebuildMenus();
 });
 chrome.contextMenus.onClicked.addListener(async info => {
   if(info.menuItemId==='redown-nested-mode'){
