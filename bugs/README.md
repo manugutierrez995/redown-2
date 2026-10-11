@@ -389,6 +389,12 @@ In **Upload from computer**, after choosing the Cloudflare R2 bucket `works`, th
 
 **Scope:** This tightens BUG-013's wrong-bucket/mixed-prefix report. No implementation change or browser verification has yet occurred for this clarification.
 
+## Upload from Computer — tree connectors and bounded depth (visual testing pending)
+
+**Source styling committed:** `61b7069`, `5b0abb1`. The L-shaped guide for each Upload location level now spans **both** the existing-folder dropdown and its adjacent new-child input, visually treating them as one level. Directory levels step right for the first three child depths, then further depths have **no additional horizontal indentation** and their guide continues vertically. A path 150+ levels deep cannot disappear solely because of cumulative left padding; this is a visual indentation cap, **not** a cap on folder nesting or Cloudflare directory depth. Deeper levels still have selectable folders and creation fields.
+
+**Verification:** CSS/JavaScript source changes only; browser rendering at 1366×768, narrow windows, and very deep paths remains to be manually checked. No provider/transfer logic changed.
+
 ## Source patch — Upload from Computer location separation (human testing pending)
 
 **Status:** Source changes `79c90c4` and new regression tests `74896f4` committed; automated test execution and installed Chrome testing **pending**.
