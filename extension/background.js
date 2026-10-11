@@ -1622,7 +1622,7 @@ async function buildMenus() {
   const profiles = await getProfiles();
   const menuSettings=await chrome.storage.local.get(["rightClickMode","simpleLabelFallback"]);
   const storedMode=menuSettings.rightClickMode;
-  const labelFallback=menuSettings.simpleLabelFallback==="bucket"?"bucket":"deepest";
+  const labelFallback=["bucket","deepest"].includes(menuSettings.simpleLabelFallback)?menuSettings.simpleLabelFallback:"menu";
   const mode=RedownNestedLocations.menuMode(storedMode,profiles);
   if(storedMode!=="simple" && storedMode!=="nested")await chrome.storage.local.set({rightClickMode:mode});
   const presets = profiles
@@ -1657,8 +1657,8 @@ async function buildMenus() {
       const contexts=["link","image","video","audio","page"];
       const displayName=(label,prefix,bucket)=>{
         const explicit=String(label||"").trim();
-        if(explicit)return explicit;
         const segments=String(prefix||"").split("/").filter(Boolean);
+        if(labelFallback==="menu" && explicit)return explicit;
         return labelFallback==="bucket" ? (bucket||segments.at(-1)||"Destination") : (segments.at(-1)||bucket||"Destination");
       };
       chrome.contextMenus.create({
