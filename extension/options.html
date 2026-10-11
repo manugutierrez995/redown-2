@@ -163,6 +163,13 @@
       .upload-path-row .upload-path-add{grid-column:3;grid-row:1}
       .upload-path-row .upload-path-remove{grid-column:4;grid-row:1}
     }
+    /* Upload path tree: connectors span both selection and new-child input.
+       Levels 1-3 indent; deeper descendants continue vertically at the same inset. */
+    .upload-path-row:not(:first-child) .upload-path-connector{align-self:stretch;height:auto;min-height:88px}
+    .upload-path-row:not(:first-child) .upload-path-connector:before{top:-8px;bottom:0;left:6px}
+    .upload-path-row:not(:first-child) .upload-path-connector:after{top:20px;left:6px}
+    .upload-path-row.upload-path-continuation .upload-path-connector:after{display:none}
+    .upload-path-row.upload-path-continuation .upload-path-connector:before{top:-8px;bottom:-8px}
     /* Explorer pagination: fixed scrolling pane, stable controls below it. */
     .explorer-main{min-height:0;max-height:min(70vh,660px)}
     .file-list{min-height:0;max-height:100%;overflow-y:auto;overscroll-behavior:contain}
