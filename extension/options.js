@@ -1349,7 +1349,7 @@ async function uploadLocalFiles(fileList){
   const target=uploadTarget();
   if(!target?.accountId||!target?.bucketName)return setStatus("local-upload-status","Choose an R2 bucket first.","bad");
   const profile=uploadProfile();
-  const prefix=String($("local-prefix")?.value||"").trim().replace(/^\\/+|\\/+$/g,"");
+  const prefix=String($("local-prefix")?.value||"").trim().replace(/^\/+|\/+$/g,"");
   const status=$("local-upload-status");
   let completed=0;
   const failed=[];
