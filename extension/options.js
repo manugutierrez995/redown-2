@@ -1366,7 +1366,7 @@ async function uploadLocalFiles(fileList){
       for(let attempt=0;attempt<3;attempt++){
         const data=new FormData();
         data.append("body",file,file.name);
-        const response=await RedownCloudflareApi.request(path,{method:"PUT",body:data});
+        const response=await RedownCloudflareApi.request(path,{method:"PUT",body:data,timeoutMs:300000});
         const result=await response.json().catch(()=>null);
         if(response.ok&&result?.success&&result?.result){
           uploaded=result.result;
