@@ -36,3 +36,12 @@ Right-click a supported download button → select existing REDOWN R2 destinatio
 
 ## Agent handoff
 Implement this vertically in the repository rather than only scaffolding. Keep existing Simple/Nested right-click destinations and authentication flows working. Add architecture/API/debug documentation and runnable tests. Commit changes where permitted; if blocked, save complete diff/patch and handoff documenting uncommitted work.
+
+## Recovery evidence from historical merged PRs (verified October 12, 2026)
+- PR #14: https://github.com/thanks-cohn/remote-download-2-cloudfare/pull/14 — introduced opt-in download interception, downloads API watcher, remote ingest for public HTTPS, filename preservation, and left blob:/data:/file: downloads untouched.
+- PR #15: https://github.com/thanks-cohn/remote-download-2-cloudfare/pull/15 — paused downloads immediately on creation; resumed unsupported/failure cases, attempted to cancel when a supported HTTPS destination was found.
+- PR #16: https://github.com/thanks-cohn/remote-download-2-cloudfare/pull/16 — removed the interception because it could not reliably replace Chrome's native download destination; preserved explicit right-click behavior. It also removed downloads permission, although later code again uses it for R2-to-local downloads.
+
+**Migration requirement:** Study and reuse the tests/design from PRs 14–16, but **do not simply restore PR #14/#15 code**. Find and document the race or platform limitation demonstrated by the removal. Separate opt-in automatic browser download recognition from explicit right-click-to-R2; prioritize the explicit intent route for reliability. Native Chrome downloads cannot be redirected to R2 using only chrome.downloads.pause(); pausing does not expose bytes. The Worker is a different computer that can fetch independently, but it cannot read a tab-local Blob or inherit authenticated browser cookies. A generated-file bridge must be separately implemented and verified. Do not claim the browser no longer downloaded bytes unless network behavior is measured.
+
+**Operational next step:** Build the smallest functioning end-to-end vertical slice for a local fixture that uses a JavaScript click handler to build a ZIP. Demonstrate the ZIP reaches R2 and can be opened from the Explorer. Keep existing auth, Simple/Nested selection, source URL routing, and transfers intact. Make all cancel/discard behavior fail-safe and opt-in.
