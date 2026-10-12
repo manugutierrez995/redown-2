@@ -1,0 +1,21 @@
+TAP version 13
+
+  #  node[1188]: void node::InternalCallbackScope::Close() at ../src/api/callback.cc:165
+  #  Assertion failed: (env_->execution_async_id()) == (0)
+
+----- Native stack trace -----
+
+ 1: 0x921e57 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0x7f97ee node::InternalCallbackScope::Close() [node]
+ 3: 0x7f9821 node::InternalCallbackScope::~InternalCallbackScope() [node]
+ 4: 0x9cc01d  [node]
+ 5: 0x9ce75c node::PerIsolatePlatformData::FlushForegroundTasksInternal() [node]
+ 6: 0x19e2283  [node]
+ 7: 0x19f908a  [node]
+ 8: 0x19e34b7 uv_run [node]
+ 9: 0x7fd735 node::SpinEventLoopInternal(node::Environment*) [node]
+10: 0x982f8a node::NodeMainInstance::Run() [node]
+11: 0x8c12c5 node::Start(int, char**) [node]
+12: 0x7f93e45a0ca8  [/lib/x86_64-linux-gnu/libc.so.6]
+13: 0x7f93e45a0d65 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+14: 0x7e5f4e _start [node]

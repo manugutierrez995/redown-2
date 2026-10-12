@@ -1,0 +1,124 @@
+TAP version 13
+# Subtest: private WEBP preview reads nested keys without a Worker or background messaging
+ok 1 - private WEBP preview reads nested keys without a Worker or background messaging
+  ---
+  duration_ms: 24.558253
+  type: 'test'
+  ...
+# Subtest: downloads use a header, keep credentials out of URLs and sanitize filenames
+ok 2 - downloads use a header, keep credentials out of URLs and sanitize filenames
+  ---
+  duration_ms: 0.982729
+  type: 'test'
+  ...
+# Subtest: concurrent expired requests refresh rotating credentials once
+ok 3 - concurrent expired requests refresh rotating credentials once
+  ---
+  duration_ms: 1.589518
+  type: 'test'
+  ...
+# Subtest: 401 refresh retries a private read and denied reads report failure
+ok 4 - 401 refresh retries a private read and denied reads report failure
+  ---
+  duration_ms: 2.1227
+  type: 'test'
+  ...
+# Subtest: oversized preview stops without allocating an object URL
+ok 5 - oversized preview stops without allocating an object URL
+  ---
+  duration_ms: 2.565313
+  type: 'test'
+  ...
+# Subtest: preview failure replaces spinner and download rejection ends progress
+ok 6 - preview failure replaces spinner and download rejection ends progress
+  ---
+  duration_ms: 1.59597
+  type: 'test'
+  ...
+# Subtest: same-bucket transfers stream objects and preserve metadata
+ok 7 - same-bucket transfers stream objects and preserve metadata
+  ---
+  duration_ms: 9.245237
+  type: 'test'
+  ...
+# Subtest: cross-bucket transfers stay Worker-to-Worker and keep-both resolves conflicts
+ok 8 - cross-bucket transfers stay Worker-to-Worker and keep-both resolves conflicts
+  ---
+  duration_ms: 4.023508
+  type: 'test'
+  ...
+# Subtest: folder markers, properties, and batched deletes are real R2 operations
+ok 9 - folder markers, properties, and batched deletes are real R2 operations
+  ---
+  duration_ms: 3.195413
+  type: 'test'
+  ...
+# Subtest: private Explorer reads require auth while explicitly enabled public assets still work
+ok 10 - private Explorer reads require auth while explicitly enabled public assets still work
+  ---
+  duration_ms: 2.6227
+  type: 'test'
+  ...
+# Subtest: short-lived private preview URLs support ranges for text, PDF, and GLB
+ok 11 - short-lived private preview URLs support ranges for text, PDF, and GLB
+  ---
+  duration_ms: 9.228881
+  type: 'test'
+  ...
+# Subtest: ZIP and CBZ archives are listed as virtual folders and selected entries extract safely
+ok 12 - ZIP and CBZ archives are listed as virtual folders and selected entries extract safely
+  ---
+  duration_ms: 5.041773
+  type: 'test'
+  ...
+# Subtest: archive traversal and malformed archives are rejected
+ok 13 - archive traversal and malformed archives are rejected
+  ---
+  duration_ms: 2.017366
+  type: 'test'
+  ...
+# Subtest: BUG-014: selecting an existing child does not fill the new-folder input or create a directory
+ok 14 - BUG-014: selecting an existing child does not fill the new-folder input or create a directory
+  ---
+  duration_ms: 90.276687
+  type: 'test'
+  ...
+# Subtest: BUG-013: right-side root lists only immediate folders from the selected left bucket
+ok 15 - BUG-013: right-side root lists only immediate folders from the selected left bucket
+  ---
+  duration_ms: 14.800095
+  type: 'test'
+  ...
+# Subtest: BUG-013: stale earlier bucket results cannot overwrite newly selected bucket
+ok 16 - BUG-013: stale earlier bucket results cannot overwrite newly selected bucket
+  ---
+  duration_ms: 17.34303
+  type: 'test'
+  ...
+# Subtest: DBG-003 child requests released after bucket switch cannot contaminate current shared cache
+ok 17 - DBG-003 child requests released after bucket switch cannot contaminate current shared cache
+  ---
+  duration_ms: 17.197198
+  type: 'test'
+  ...
+# Subtest: DBG-003 late profile completion cannot alter the new bucket view
+ok 18 - DBG-003 late profile completion cannot alter the new bucket view
+  ---
+  duration_ms: 13.342175
+  type: 'test'
+  ...
+# Subtest: DBG-003 late creation completion cannot alter the new bucket view
+ok 19 - DBG-003 late creation completion cannot alter the new bucket view
+  ---
+  duration_ms: 10.767885
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 536.633542

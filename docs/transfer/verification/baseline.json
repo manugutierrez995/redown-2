@@ -1,0 +1,82 @@
+[
+  {
+    "command": "node agent/cli.mjs describe --json",
+    "exit": 0,
+    "log": "baseline-00.log"
+  },
+  {
+    "command": "node agent/cli.mjs projectOverview --json",
+    "exit": 0,
+    "log": "baseline-01.log"
+  },
+  {
+    "command": "node agent/cli.mjs explainOperation context-menu-transfer --json",
+    "exit": 0,
+    "log": "baseline-02.log"
+  },
+  {
+    "command": "node agent/debug/cli.mjs describe --json",
+    "exit": 0,
+    "log": "baseline-03.log"
+  },
+  {
+    "command": "node agent/debug/cli.mjs listIncidents",
+    "exit": 0,
+    "log": "baseline-04.log"
+  },
+  {
+    "command": "node agent/debug/cli.mjs getIncident DBG-004",
+    "exit": 2,
+    "log": "baseline-05.log"
+  },
+  {
+    "command": "node agent/debug/cli.mjs validateDebugRecords --json",
+    "exit": 0,
+    "log": "baseline-06.log"
+  },
+  {
+    "command": "node agent/semantic/cli.mjs describe --json",
+    "exit": 0,
+    "log": "baseline-07.log"
+  },
+  {
+    "command": "node agent/semantic/cli.mjs projectOverview --json",
+    "exit": 0,
+    "log": "baseline-08.log"
+  },
+  {
+    "command": "node agent/semantic/cli.mjs listEntities --input '{\"kind\":\"capability\",\"limit\":100}' --json",
+    "exit": 0,
+    "log": "baseline-09.log"
+  },
+  {
+    "command": "node agent/semantic/cli.mjs traceDependencies --input '{\"id\":\"redown.upload.destination.selection\",\"direction\":\"both\",\"depth\":3}' --json",
+    "exit": 0,
+    "log": "baseline-10.log"
+  },
+  {
+    "command": "node agent/semantic/cli.mjs explainChangeImpact --input '{\"changed\":[\"redown.upload.destination.selection\"]}' --json",
+    "exit": 0,
+    "log": "baseline-11.log"
+  },
+  {
+    "command": "node agent/semantic/cli.mjs planVerification --input '{\"id\":\"redown.upload.destination.selection\"}' --json",
+    "exit": 0,
+    "log": "baseline-12.log"
+  },
+  {
+    "command": "node agent/semantic/cli.mjs validateSemanticGraph --json",
+    "exit": 0,
+    "log": "baseline-13.log"
+  },
+  {
+    "command": "npm run check",
+    "exit": 0,
+    "log": "baseline-14.log"
+  },
+  {
+    "command": "npm test",
+    "exit": 1,
+    "log": "baseline-15.log"
+  }
+]

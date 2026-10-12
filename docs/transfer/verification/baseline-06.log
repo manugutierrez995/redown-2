@@ -1,0 +1,364 @@
+{
+  "debugApiVersion": "0.1",
+  "debugRecordVersion": "0.1",
+  "data": {
+    "valid": true,
+    "errors": [],
+    "warnings": [
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "**Agent API M0/M1 audit, subsequently merged:**"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "**Current conclusion:**"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "**DOM-preservation patches:**"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "**User symptom:**"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "03efcc07358f64970d6158831884c2d1431ebd66"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "Additional code risks; separate investigation required"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "Minimal reproduction and tests to add"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listFolderChildren"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "function addNestedLocations"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "M.setLocation(node,select.value)"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "add.disabled=!parentReady || !node.ready"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "async function run"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "el.disabled=previous[index]"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function folderRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "node.ready=Boolean(node.name) && known.includes(node.name)"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "Guard the shared cache"
+      },
+      {
+        "code": "stale-reference",
+        "path": "tests/nested-locations.test.mjs",
+        "symbol": "Add child and Create use the exact parent path; actual dropdown children stay scoped"
+      }
+    ],
+    "caseCount": 3,
+    "eventCount": 20
+  },
+  "sourceRefs": [
+    {
+      "path": "docs/agent/CHANGE_REPORT.md",
+      "symbol": "Baseline failures diagnosed, left unchanged",
+      "role": "document",
+      "sha256": "02910ed4fdd2f168225a283c786c784ab723051fb60f94ee1b96f453053fca45"
+    },
+    {
+      "path": "docs/agent/semantic/verification/child-race-before.json",
+      "symbol": "images/old-alpha-child",
+      "role": "document",
+      "sha256": "87dcc0ad4f0420cac70243221e344595e781c58871a23955f2de6d60ae3bedd9"
+    },
+    {
+      "path": "docs/agent/semantic/verification/upload-tests.txt",
+      "symbol": "# tests 10",
+      "role": "document",
+      "sha256": "6d0985c3512a6ac4cba02d592ce11fc341ccc36c38376d77ecca3c3dd4baae73"
+    },
+    {
+      "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+      "symbol": "**Agent API M0/M1 audit, subsequently merged:**",
+      "role": "document",
+      "sha256": "a30d9959bacc9c24e2d11df4fc66a9cc7b756e2ff6bcd0b81f33865806aa232a"
+    },
+    {
+      "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+      "symbol": "**Current conclusion:**",
+      "role": "document",
+      "sha256": "a30d9959bacc9c24e2d11df4fc66a9cc7b756e2ff6bcd0b81f33865806aa232a"
+    },
+    {
+      "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+      "symbol": "**DOM-preservation patches:**",
+      "role": "document",
+      "sha256": "a30d9959bacc9c24e2d11df4fc66a9cc7b756e2ff6bcd0b81f33865806aa232a"
+    },
+    {
+      "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+      "symbol": "**User symptom:**",
+      "role": "document",
+      "sha256": "a30d9959bacc9c24e2d11df4fc66a9cc7b756e2ff6bcd0b81f33865806aa232a"
+    },
+    {
+      "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+      "symbol": "03efcc07358f64970d6158831884c2d1431ebd66",
+      "role": "document",
+      "sha256": "a30d9959bacc9c24e2d11df4fc66a9cc7b756e2ff6bcd0b81f33865806aa232a"
+    },
+    {
+      "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+      "symbol": "Additional code risks; separate investigation required",
+      "role": "document",
+      "sha256": "a30d9959bacc9c24e2d11df4fc66a9cc7b756e2ff6bcd0b81f33865806aa232a"
+    },
+    {
+      "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+      "symbol": "Minimal reproduction and tests to add",
+      "role": "document",
+      "sha256": "a30d9959bacc9c24e2d11df4fc66a9cc7b756e2ff6bcd0b81f33865806aa232a"
+    },
+    {
+      "path": "docs/debug/PROPOSED_CHANGES.md",
+      "symbol": "2.1 Root-cause correction",
+      "role": "document",
+      "sha256": "bbd3ded9ba7c9835340ff2f58e182366860965a83b6f1cdc272d4c57b4f8619a"
+    },
+    {
+      "path": "extension/background.js",
+      "symbol": "async function listFolderChildren",
+      "role": "source",
+      "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66"
+    },
+    {
+      "path": "extension/background.js",
+      "symbol": "function addNestedLocations",
+      "role": "source",
+      "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66"
+    },
+    {
+      "path": "extension/nested-menu-editor.js",
+      "symbol": "M.setLocation(node,select.value)",
+      "role": "source",
+      "sha256": "e23f1c8572d1682812cf06c21c82873d52aa1f7e196dbf59ab83cfbcf6534635"
+    },
+    {
+      "path": "extension/nested-menu-editor.js",
+      "symbol": "add.disabled=!parentReady || !node.ready",
+      "role": "source",
+      "sha256": "e23f1c8572d1682812cf06c21c82873d52aa1f7e196dbf59ab83cfbcf6534635"
+    },
+    {
+      "path": "extension/nested-menu-editor.js",
+      "symbol": "async function run",
+      "role": "source",
+      "sha256": "e23f1c8572d1682812cf06c21c82873d52aa1f7e196dbf59ab83cfbcf6534635"
+    },
+    {
+      "path": "extension/nested-menu-editor.js",
+      "symbol": "el.disabled=previous[index]",
+      "role": "source",
+      "sha256": "e23f1c8572d1682812cf06c21c82873d52aa1f7e196dbf59ab83cfbcf6534635"
+    },
+    {
+      "path": "extension/nested-menu-editor.js",
+      "symbol": "function folderRow",
+      "role": "source",
+      "sha256": "e23f1c8572d1682812cf06c21c82873d52aa1f7e196dbf59ab83cfbcf6534635"
+    },
+    {
+      "path": "extension/nested-menu-editor.js",
+      "symbol": "node.ready=Boolean(node.name) && known.includes(node.name)",
+      "role": "source",
+      "sha256": "e23f1c8572d1682812cf06c21c82873d52aa1f7e196dbf59ab83cfbcf6534635"
+    },
+    {
+      "path": "extension/options.js",
+      "symbol": "Guard the shared cache",
+      "role": "source",
+      "sha256": "ddc2fdb39d8481c811f35a71e1e6181093498388dbb3b975ba134cd2ae81e9f3"
+    },
+    {
+      "path": "tests/nested-locations.test.mjs",
+      "symbol": "Add child and Create use the exact parent path; actual dropdown children stay scoped",
+      "role": "test",
+      "sha256": "0dc1ba13e361e7f175c5649d043840d27b200cc77ac0739780dfaaba7884ab37"
+    },
+    {
+      "path": "tests/upload-location-builder.test.mjs",
+      "symbol": "stale earlier bucket results",
+      "role": "test",
+      "sha256": "0509c9b7f6ad9468f2b2d7114f4cfc62fb5da39987586a78afc405527f838be7"
+    },
+    {
+      "path": "tests/upload-request-context.test.mjs",
+      "symbol": "DBG-003 child requests",
+      "role": "test",
+      "sha256": "e82e1b9f1c4384354bdecd467060e004dbc842c855e4e88b2d3f540699b32a9a"
+    }
+  ],
+  "recordRefs": [
+    {
+      "path": "debug/cases/DBG-001.events.jsonl",
+      "sha256": "72c8cbeb428e2e72d6e9a575124931104f413701f450868639fdb5320e5f183d"
+    },
+    {
+      "path": "debug/cases/DBG-001.json",
+      "sha256": "cc65ff2b037832d319b4cee7fd7043121c903be66cf8dca2cdaee7ca25a80508"
+    },
+    {
+      "path": "debug/cases/DBG-002.events.jsonl",
+      "sha256": "e014f35fedeb222fdb7203a165589558ddb59bf558ccb9b734d51ca89a6d8537"
+    },
+    {
+      "path": "debug/cases/DBG-002.json",
+      "sha256": "c7d9942b489b9a27d424b7f91e5c3b0fb93a5a4edaa05c62df3a83b748be3feb"
+    },
+    {
+      "path": "debug/cases/DBG-003.events.jsonl",
+      "sha256": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309"
+    },
+    {
+      "path": "debug/cases/DBG-003.json",
+      "sha256": "927527c8f8f0ff1bf1f66c6ccc5763b727b752a0d5fb0acb145b19fdef677adf"
+    },
+    {
+      "path": "debug/manifest.json",
+      "sha256": "8ac2be059dce840c9b0e09f77fc808f13d9302a1ef3a8812d148ddb12f9c3c19"
+    }
+  ],
+  "provenance": {
+    "sourceType": "historical",
+    "reviewStatus": "unreviewed"
+  },
+  "evidenceStatus": "unknown",
+  "freshness": {
+    "status": "stale",
+    "findings": [
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "**Agent API M0/M1 audit, subsequently merged:**"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "**Current conclusion:**"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "**DOM-preservation patches:**"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "**User symptom:**"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "03efcc07358f64970d6158831884c2d1431ebd66"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "Additional code risks; separate investigation required"
+      },
+      {
+        "code": "stale-reference",
+        "path": "docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md",
+        "symbol": "Minimal reproduction and tests to add"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listFolderChildren"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "function addNestedLocations"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "M.setLocation(node,select.value)"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "add.disabled=!parentReady || !node.ready"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "async function run"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "el.disabled=previous[index]"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function folderRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "node.ready=Boolean(node.name) && known.includes(node.name)"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "Guard the shared cache"
+      },
+      {
+        "code": "stale-reference",
+        "path": "tests/nested-locations.test.mjs",
+        "symbol": "Add child and Create use the exact parent path; actual dropdown children stay scoped"
+      }
+    ],
+    "scope": "Pinned record snapshot; source hashes and literal anchors only, never test or browser outcomes."
+  },
+  "explanation": "Records are structurally consistent. This does not prove hypotheses, author acceptance, test results or browser success."
+}

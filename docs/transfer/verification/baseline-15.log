@@ -1,0 +1,50 @@
+
+> remote-asset-ingest@0.1.0 test
+> node --test tests/*.test.mjs
+
+✖ tests/agent-api.test.mjs (530.567933ms)
+✔ tests/cloudflare-files.test.mjs (116.727987ms)
+✖ tests/cloudflare-login.test.mjs (149.241154ms)
+✖ tests/debug-api.test.mjs (280.772236ms)
+✔ tests/explorer-worker.test.mjs (133.170623ms)
+✖ tests/nested-locations.test.mjs (734.098429ms)
+✖ tests/semantic-api.test.mjs (745.496769ms)
+✔ tests/semantic-replacement.test.mjs (166.432006ms)
+✔ tests/simple-location-rows.test.mjs (467.892206ms)
+✖ tests/simple-menu-flat.test.mjs (71.061444ms)
+✔ tests/upload-location-builder.test.mjs (685.731326ms)
+✔ tests/upload-request-context.test.mjs (1040.49382ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 6
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5146.766645
+
+✖ failing tests:
+
+test at tests/agent-api.test.mjs:1:1
+✖ tests/agent-api.test.mjs (530.567933ms)
+  'test failed'
+
+test at tests/cloudflare-login.test.mjs:1:1
+✖ tests/cloudflare-login.test.mjs (149.241154ms)
+  'test failed'
+
+test at tests/debug-api.test.mjs:1:1
+✖ tests/debug-api.test.mjs (280.772236ms)
+  'test failed'
+
+test at tests/nested-locations.test.mjs:1:1
+✖ tests/nested-locations.test.mjs (734.098429ms)
+  'test failed'
+
+test at tests/semantic-api.test.mjs:1:1
+✖ tests/semantic-api.test.mjs (745.496769ms)
+  'test failed'
+
+test at tests/simple-menu-flat.test.mjs:1:1
+✖ tests/simple-menu-flat.test.mjs (71.061444ms)
+  'test failed'

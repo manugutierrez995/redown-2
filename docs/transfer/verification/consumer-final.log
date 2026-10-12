@@ -1,0 +1,1 @@
+{"version":"0.1.0","intent":{"sourceUrl":"https://example.com/file.bin","destination":{"accountId":"example","bucket":"assets","key":"files/file.bin"},"idempotencyKey":"independent-program-001","requestedMode":"automatic","policy":{"overwrite":"skip-existing","allowBrowserFallback":true},"actualMode":"cloud-to-cloud","resume":"restart-only","cleanup":"not-applicable"}}

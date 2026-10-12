@@ -1,0 +1,392 @@
+TAP version 13
+# Subtest: actual background ingestion uses remote control only, exact bucket/prefix; lost acknowledgment replays after browser restart
+ok 1 - actual background ingestion uses remote control only, exact bucket/prefix; lost acknowledgment replays after browser restart
+  ---
+  duration_ms: 8.948091
+  type: 'test'
+  ...
+# Subtest: feature gating, unsupported browser URL, fallback flags and Fully Remote missing executor never fetch source
+ok 2 - feature gating, unsupported browser URL, fallback flags and Fully Remote missing executor never fetch source
+  ---
+  duration_ms: 1.274226
+  type: 'test'
+  ...
+# Subtest: IndexedDB projection performs a single replace transaction and preserves authoritative job state
+ok 3 - IndexedDB projection performs a single replace transaction and preserves authoritative job state
+  ---
+  duration_ms: 1.588125
+  type: 'test'
+  ...
+{"evidence":"local-R2-fixture","bytes":11534353,"sha256":"9de4849bc539f85fd917d4109e7e0ccee6eb4308276991a6950927d18d0c49ea","sourceRequests":1,"parts":[5242880,5242880,1048593],"browserByteRelay":false,"ledger":{"schemaVersion":2,"jobId":"f8626a1d-69fd-4daa-9c15-b4198a2d379c","destination":{"accountId":"fixture-account","bucket":"fixture-bucket","key":"nested/exact/ground-truth.bin"},"idempotencyKey":"fixture-idempotency","requestedMode":"automatic","policy":{"overwrite":"skip-existing","allowBrowserFallback":true},"actualMode":"cloud-to-cloud","resume":"restart-only","cleanup":"not-applicable","state":"verified","createdAt":100000,"updatedAt":100000,"bytes":11534353,"attempt":1,"maxBytes":16777216,"maxAttempts":3,"cancel":false,"leaseUntil":0,"nextAttemptAt":0,"sequence":10,"transitionAt":100000,"contentLength":null,"part":3,"digest":"9de4849bc539f85fd917d4109e7e0ccee6eb4308276991a6950927d18d0c49ea","verification":{"method":"sha256-readback","sourceDigest":"9de4849bc539f85fd917d4109e7e0ccee6eb4308276991a6950927d18d0c49ea","destinationDigest":"9de4849bc539f85fd917d4109e7e0ccee6eb4308276991a6950927d18d0c49ea","bytes":11534353,"location":{"accountId":"fixture-account","bucket":"fixture-bucket","key":"nested/exact/ground-truth.bin"},"checkedAt":100000,"assurance":"content-readback"},"source":{"kind":"url","origin":"http://127.0.0.1:38845"},"validatorPresent":true}}
+# Subtest: production HTTP adapter -> executor -> actual gateway -> R2 fixture, multipart SHA256, browser closed, ledger restart
+ok 4 - production HTTP adapter -> executor -> actual gateway -> R2 fixture, multipart SHA256, browser closed, ledger restart
+  ---
+  duration_ms: 384.019533
+  type: 'test'
+  ...
+# Subtest: known length, empty object, short stream reset, byte quota, permanent statuses and retries
+    # Subtest: HTTP 401
+    ok 1 - HTTP 401
+      ---
+      duration_ms: 13.875804
+      type: 'test'
+      ...
+    # Subtest: HTTP 403
+    ok 2 - HTTP 403
+      ---
+      duration_ms: 9.562661
+      type: 'test'
+      ...
+    # Subtest: HTTP 404
+    ok 3 - HTTP 404
+      ---
+      duration_ms: 12.518094
+      type: 'test'
+      ...
+    # Subtest: HTTP 429
+    ok 4 - HTTP 429
+      ---
+      duration_ms: 39.589268
+      type: 'test'
+      ...
+    # Subtest: HTTP 503
+    ok 5 - HTTP 503
+      ---
+      duration_ms: 35.569775
+      type: 'test'
+      ...
+    # Subtest: empty
+    ok 6 - empty
+      ---
+      duration_ms: 24.451935
+      type: 'test'
+      ...
+    # Subtest: oversize preflight
+    ok 7 - oversize preflight
+      ---
+      duration_ms: 12.704806
+      type: 'test'
+      ...
+    # Subtest: short read
+    ok 8 - short read
+      ---
+      duration_ms: 18.655963
+      type: 'test'
+      ...
+    1..8
+ok 5 - known length, empty object, short stream reset, byte quota, permanent statuses and retries
+  ---
+  duration_ms: 168.24773
+  type: 'test'
+  ...
+# Subtest: SSRF, redirect, rebinding, range/encoding and changed validator fail closed
+    # Subtest: 206 without requested range rejected
+    ok 1 - 206 without requested range rejected
+      ---
+      duration_ms: 9.693568
+      type: 'test'
+      ...
+    # Subtest: source changed on retry
+    ok 2 - source changed on retry
+      ---
+      duration_ms: 30.934659
+      type: 'test'
+      ...
+    1..2
+ok 6 - SSRF, redirect, rebinding, range/encoding and changed validator fail closed
+  ---
+  duration_ms: 50.356094
+  type: 'test'
+  ...
+# Subtest: auth isolation, destination scope, quota, replay and projection redaction
+ok 7 - auth isolation, destination scope, quota, replay and projection redaction
+  ---
+  duration_ms: 11.672135
+  type: 'test'
+  ...
+# Subtest: lease fencing, concurrent claims, cancellation before completion, existing equal-size content never verified
+    # Subtest: skip unrelated content
+    ok 1 - skip unrelated content
+      ---
+      duration_ms: 10.182997
+      type: 'test'
+      ...
+    1..1
+ok 8 - lease fencing, concurrent claims, cancellation before completion, existing equal-size content never verified
+  ---
+  duration_ms: 20.749593
+  type: 'test'
+  ...
+# Subtest: readback hash mismatch and missing read permission preserve unverified outcome
+    # Subtest: corrupt
+    ok 1 - corrupt
+      ---
+      duration_ms: 26.44802
+      type: 'test'
+      ...
+    # Subtest: readDenied
+    ok 2 - readDenied
+      ---
+      duration_ms: 31.932833
+      type: 'test'
+      ...
+    1..2
+ok 9 - readback hash mismatch and missing read permission preserve unverified outcome
+  ---
+  duration_ms: 58.749952
+  type: 'test'
+  ...
+# Subtest: crash checkpoints recover through durable lease takeover and destination reconciliation
+    # Subtest: before:preflight
+    ok 1 - before:preflight
+      ---
+      duration_ms: 131.907028
+      type: 'test'
+      ...
+    # Subtest: after:preflight
+    ok 2 - after:preflight
+      ---
+      duration_ms: 109.383604
+      type: 'test'
+      ...
+    # Subtest: before:transferring
+    ok 3 - before:transferring
+      ---
+      duration_ms: 235.277107
+      type: 'test'
+      ...
+    # Subtest: after:transferring
+    ok 4 - after:transferring
+      ---
+      duration_ms: 533.179596
+      type: 'test'
+      ...
+    # Subtest: before:part
+    ok 5 - before:part
+      ---
+      duration_ms: 183.887571
+      type: 'test'
+      ...
+    # Subtest: after:part-effect
+    ok 6 - after:part-effect
+      ---
+      duration_ms: 183.987536
+      type: 'test'
+      ...
+    # Subtest: before:final-part
+    ok 7 - before:final-part
+      ---
+      duration_ms: 260.716045
+      type: 'test'
+      ...
+    # Subtest: after:final-part
+    ok 8 - after:final-part
+      ---
+      duration_ms: 185.05549
+      type: 'test'
+      ...
+    # Subtest: before:commit
+    ok 9 - before:commit
+      ---
+      duration_ms: 172.091526
+      type: 'test'
+      ...
+    # Subtest: after:commit
+    ok 10 - after:commit
+      ---
+      duration_ms: 141.021998
+      type: 'test'
+      ...
+    # Subtest: before:verifying
+    ok 11 - before:verifying
+      ---
+      duration_ms: 136.175695
+      type: 'test'
+      ...
+    # Subtest: after:verifying
+    ok 12 - after:verifying
+      ---
+      duration_ms: 114.593747
+      type: 'test'
+      ...
+    # Subtest: after:verified
+    ok 13 - after:verified
+      ---
+      duration_ms: 105.61464
+      type: 'test'
+      ...
+    1..13
+ok 10 - crash checkpoints recover through durable lease takeover and destination reconciliation
+  ---
+  duration_ms: 2495.428564
+  type: 'test'
+  ...
+# Subtest: independent plain JavaScript consumer requires no Chrome, Redown or build tools
+ok 11 - independent plain JavaScript consumer requires no Chrome, Redown or build tools
+  ---
+  duration_ms: 39.231276
+  type: 'test'
+  ...
+# Subtest: lost durable acknowledgment can be replayed without a duplicate job or transfer
+ok 12 - lost durable acknowledgment can be replayed without a duplicate job or transfer
+  ---
+  duration_ms: 29.655325
+  type: 'test'
+  ...
+# Subtest: cancellation after publication resolves as verified and never promises deletion
+ok 13 - cancellation after publication resolves as verified and never promises deletion
+  ---
+  duration_ms: 40.333839
+  type: 'test'
+  ...
+# Subtest: streamed unknown-length quota, network timeout, destination race and permission gates
+    # Subtest: stream quota
+    ok 1 - stream quota
+      ---
+      duration_ms: 33.99791
+      type: 'test'
+      ...
+    # Subtest: timeout
+    ok 2 - timeout
+      ---
+      duration_ms: 51.568867
+      type: 'test'
+      ...
+    # Subtest: race
+    ok 3 - race
+      ---
+      duration_ms: 39.205668
+      type: 'test'
+      ...
+    # Subtest: browser gate true
+    ok 4 - browser gate true
+      ---
+      duration_ms: 10.938943
+      type: 'test'
+      ...
+    # Subtest: browser gate false
+    ok 5 - browser gate false
+      ---
+      duration_ms: 9.475172
+      type: 'test'
+      ...
+    # Subtest: pending quota
+    ok 6 - pending quota
+      ---
+      duration_ms: 5.203373
+      type: 'test'
+      ...
+    1..6
+ok 14 - streamed unknown-length quota, network timeout, destination race and permission gates
+  ---
+  duration_ms: 151.335314
+  type: 'test'
+  ...
+{"evidence":"separate-process-local-R2-fixture","crashExit":86,"bytes":6291457,"sha256":"0f3f7f36934ed3b397f9fbffd76e34624a200ff8a47cea96324d9d72658cd6eb","sourceRequests":1,"browserDetached":true}
+# Subtest: separate remote executor process crashes after publication; browser detached and restarted executor verifies without re-fetch
+ok 15 - separate remote executor process crashes after publication; browser detached and restarted executor verifies without re-fetch
+  ---
+  duration_ms: 1099.679147
+  type: 'test'
+  ...
+# Subtest: later multipart and proof checkpoints also recover after crashes
+    # Subtest: before:transferring \#2
+    ok 1 - before:transferring \#2
+      ---
+      duration_ms: 147.597507
+      type: 'test'
+      ...
+    # Subtest: before:transferring \#3
+    ok 2 - before:transferring \#3
+      ---
+      duration_ms: 208.266903
+      type: 'test'
+      ...
+    # Subtest: before:transferring \#4
+    ok 3 - before:transferring \#4
+      ---
+      duration_ms: 167.707168
+      type: 'test'
+      ...
+    # Subtest: after:transferring \#2
+    ok 4 - after:transferring \#2
+      ---
+      duration_ms: 129.510264
+      type: 'test'
+      ...
+    # Subtest: after:transferring \#3
+    ok 5 - after:transferring \#3
+      ---
+      duration_ms: 143.463964
+      type: 'test'
+      ...
+    # Subtest: after:transferring \#4
+    ok 6 - after:transferring \#4
+      ---
+      duration_ms: 168.11743
+      type: 'test'
+      ...
+    1..6
+ok 16 - later multipart and proof checkpoints also recover after crashes
+  ---
+  duration_ms: 966.144615
+  type: 'test'
+  ...
+# Subtest: uncertain R2 create, multipart completion and final publication effects reconcile without false success
+    # Subtest: before-create
+    ok 1 - before-create
+      ---
+      duration_ms: 54.013833
+      type: 'test'
+      ...
+    # Subtest: after-create
+    ok 2 - after-create
+      ---
+      duration_ms: 26.529674
+      type: 'test'
+      ...
+    # Subtest: before-complete
+    ok 3 - before-complete
+      ---
+      duration_ms: 59.237772
+      type: 'test'
+      ...
+    # Subtest: after-complete
+    ok 4 - after-complete
+      ---
+      duration_ms: 50.389175
+      type: 'test'
+      ...
+    # Subtest: before-put
+    ok 5 - before-put
+      ---
+      duration_ms: 56.923962
+      type: 'test'
+      ...
+    # Subtest: after-put
+    ok 6 - after-put
+      ---
+      duration_ms: 28.223962
+      type: 'test'
+      ...
+    1..6
+ok 17 - uncertain R2 create, multipart completion and final publication effects reconcile without false success
+  ---
+  duration_ms: 276.157775
+  type: 'test'
+  ...
+# Subtest: optional unreviewed lessons pass pinned JS reference; published schema incompatibility remains explicit
+ok 18 - optional unreviewed lessons pass pinned JS reference; published schema incompatibility remains explicit
+  ---
+  duration_ms: 1.630684
+  type: 'test'
+  ...
+1..18
+# tests 62
+# suites 0
+# pass 62
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5861.412936

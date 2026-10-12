@@ -1,0 +1,443 @@
+TAP version 13
+# Subtest: offline discovery advertises only implemented operations and distinct versions
+not ok 1 - offline discovery advertises only implemented operations and distinct versions
+  ---
+  duration_ms: 15.166745
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/agent-api.test.mjs:13:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'stale' !== 'current'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'current'
+  actual: 'stale'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/agent-api.test.mjs:15:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.start (node:internal/test_runner/test:1242:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+# Subtest: operation descriptions retain exact destination, side effect and coverage limits
+ok 2 - operation descriptions retain exact destination, side effect and coverage limits
+  ---
+  duration_ms: 34.316968
+  type: 'test'
+  ...
+# Subtest: errors are deterministic, exact-id and version aware without echoing arbitrary input
+ok 3 - errors are deterministic, exact-id and version aware without echoing arbitrary input
+  ---
+  duration_ms: 196.266621
+  type: 'test'
+  ...
+# Subtest: unknown Forever mappings never become accepted records or a conformance claim
+ok 4 - unknown Forever mappings never become accepted records or a conformance claim
+  ---
+  duration_ms: 37.675508
+  type: 'test'
+  ...
+# Subtest: reference inspection detects content drift, missing anchors/files and unsafe paths
+ok 5 - reference inspection detects content drift, missing anchors/files and unsafe paths
+  ---
+  duration_ms: 1.100439
+  type: 'test'
+  ...
+# Subtest: CLI works outside checkout, emits one JSON envelope and uses exit 2 for errors
+not ok 6 - CLI works outside checkout, emits one JSON envelope and uses exit 2 for errors
+  ---
+  duration_ms: 82.874113
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/agent-api.test.mjs:81:1'
+  failureType: 'testCodeFailure'
+  error: 'Unexpected end of JSON input'
+  code: 'ERR_TEST_FAILURE'
+  name: 'SyntaxError'
+  stack: |-
+    JSON.parse (<anonymous>)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/agent-api.test.mjs:83:74)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: catalog IDs, evidence labels, source hashes and references are internally consistent
+not ok 7 - catalog IDs, evidence labels, source hashes and references are internally consistent
+  ---
+  duration_ms: 21.040304
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/agent-api.test.mjs:91:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + [
+    +   {
+    +     code: 'stale-source',
+    +     path: 'README.md'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'bugs/README.md'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/background.js'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/cloudflare-api.js'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/cloudflare-auth.js'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/manifest.json'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/nested-menu-editor.js'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/options.html'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/options.js'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/manifest.json',
+    +     symbol: '"service_worker"'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'const WORKER_SOURCE'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function createBucket'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'function simpleBucketCreator'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: '$("create-bucket").addEventListener'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/nested-menu-editor.js',
+    +     symbol: 'function rootRow'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function createExplorerFolder'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function callBucketWorker'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'body.action === "ensurePrefixes"'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'function beginNewFolder'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/nested-menu-editor.js',
+    +     symbol: 'function folderRow'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function listFolderChildren'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function listObjectsPage'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function fetchUploadBuilderChildren'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/nested-menu-editor.js',
+    +     symbol: 'function folderRow'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'tests/nested-locations.test.mjs',
+    +     symbol: 'Add child and Create use the exact parent path; actual dropdown children stay scoped'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'chrome.contextMenus.onClicked.addListener'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function ingestCloudflareAtPrefix'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function checkedFetch'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'const WORKER_SOURCE'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'tests/nested-locations.test.mjs',
+    +     symbol: 'native nested menu targets every verified depth and offers Send here for parents'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function goLocation'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function browseWorkspace'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function listObjectsPage'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/cloudflare-api.js',
+    +     symbol: 'async function preview'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function uploadLocalFiles'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function ensureUploadProfile'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function loadUploadLocations'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'request.headers.get("x-redown-action") === "upload-local"'
+    +   }
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0:
+      code: 'stale-source'
+      path: 'README.md'
+    1:
+      code: 'stale-source'
+      path: 'bugs/README.md'
+    2:
+      code: 'stale-source'
+      path: 'extension/background.js'
+    3:
+      code: 'stale-source'
+      path: 'extension/cloudflare-api.js'
+    4:
+      code: 'stale-source'
+      path: 'extension/cloudflare-auth.js'
+    5:
+      code: 'stale-source'
+      path: 'extension/manifest.json'
+    6:
+      code: 'stale-source'
+      path: 'extension/nested-menu-editor.js'
+    7:
+      code: 'stale-source'
+      path: 'extension/options.html'
+    8:
+      code: 'stale-source'
+      path: 'extension/options.js'
+    9:
+      code: 'stale-reference'
+      path: 'extension/manifest.json'
+      symbol: '"service_worker"'
+    10:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'const WORKER_SOURCE'
+    11:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function createBucket'
+    12:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'function simpleBucketCreator'
+    13:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: '$("create-bucket").addEventListener'
+    14:
+      code: 'stale-reference'
+      path: 'extension/nested-menu-editor.js'
+      symbol: 'function rootRow'
+    15:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function createExplorerFolder'
+    16:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function callBucketWorker'
+    17:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'body.action === "ensurePrefixes"'
+    18:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'function beginNewFolder'
+    19:
+      code: 'stale-reference'
+      path: 'extension/nested-menu-editor.js'
+      symbol: 'function folderRow'
+    20:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function listFolderChildren'
+    21:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function listObjectsPage'
+    22:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function fetchUploadBuilderChildren'
+    23:
+      code: 'stale-reference'
+      path: 'extension/nested-menu-editor.js'
+      symbol: 'function folderRow'
+    24:
+      code: 'stale-reference'
+      path: 'tests/nested-locations.test.mjs'
+      symbol: 'Add child and Create use the exact parent path; actual dropdown children stay scoped'
+    25:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'chrome.contextMenus.onClicked.addListener'
+    26:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function ingestCloudflareAtPrefix'
+    27:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function checkedFetch'
+    28:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'const WORKER_SOURCE'
+    29:
+      code: 'stale-reference'
+      path: 'tests/nested-locations.test.mjs'
+      symbol: 'native nested menu targets every verified depth and offers Send here for parents'
+    30:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function goLocation'
+    31:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function browseWorkspace'
+    32:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function listObjectsPage'
+    33:
+      code: 'stale-reference'
+      path: 'extension/cloudflare-api.js'
+      symbol: 'async function preview'
+    34:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function uploadLocalFiles'
+    35:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function ensureUploadProfile'
+    36:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function loadUploadLocations'
+    37:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'request.headers.get("x-redown-action") === "upload-local"'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/agent-api.test.mjs:93:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: portable request fixtures and JSON envelope contract
+ok 8 - portable request fixtures and JSON envelope contract
+  ---
+  duration_ms: 151.252629
+  type: 'test'
+  ...
+# Subtest: M0 inventory covers every literal message branch without inventing handlers
+ok 9 - M0 inventory covers every literal message branch without inventing handlers
+  ---
+  duration_ms: 2.100962
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 6
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 582.726721

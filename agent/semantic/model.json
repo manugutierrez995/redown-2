@@ -287,6 +287,21 @@
     },
     {
       "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "contracts/transfer-ledger/README.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "contracts/transfer-ledger/v1.schema.json"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "contracts/transfer-ledger/v2.schema.json"
+    },
+    {
+      "coverage": "partial",
       "owner": "redown.component.debug",
       "path": "debug/cases/DBG-001.events.jsonl"
     },
@@ -323,6 +338,21 @@
     {
       "coverage": "partial",
       "owner": "redown.project",
+      "path": "docs/CODEX_BROWSER_DOWNLOAD_HANDOFF_TO_R2.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.project",
+      "path": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.project",
+      "path": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION_REPORT.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.project",
       "path": "docs/CODEX_REDOWN_DEEP_AGENTIC_PROJECT_API_REQUEST.md"
     },
     {
@@ -339,6 +369,11 @@
       "coverage": "partial",
       "owner": "redown.project",
       "path": "docs/CODEX_TIMELESS_DEBUGGING_SYSTEM_REQUEST.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.project",
+      "path": "docs/HITOMI_CAPTURE_ACCEPTANCE.md"
     },
     {
       "coverage": "partial",
@@ -533,6 +568,16 @@
     {
       "coverage": "partial",
       "owner": "redown.component.debug",
+      "path": "docs/debug/DBG-004_LOCAL_UPLOAD_FETCH_FAILURE.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.component.debug",
+      "path": "docs/debug/DBG-005_HITOMI_CONTEXT_CAPTURE_REGRESSION.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.component.debug",
       "path": "docs/debug/DESIGN.md"
     },
     {
@@ -602,6 +647,251 @@
     },
     {
       "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/DEPLOYMENT.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/OPERATIONS.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/SECURITY.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-00.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-01.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-02.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-03.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-04.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-05.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-06.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-07.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-08.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-09.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-10.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-11.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-12.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-13.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-14.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-15.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-authorized-network.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-comparison.json"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline-isolation.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/baseline.json"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/check-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/consumer-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/debug-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/debug-post-append.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/debug-post-schema.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/debug-schema-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/emulator-acceptance.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/emulator-schema-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/engine-first.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/engine-second.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/engine-verified.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/final-commands.json"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/full-after-integration.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/gateway-build-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/ledger-schema-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/npm-test-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/npm-test-post-mapping-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/npm-test-post-mapping.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/regressions-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/semantic-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/semantic-inspect.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/semantic-post-mapping.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/semantic-post-schema.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/semantic-schema-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.remote",
+      "path": "docs/transfer/verification/targeted-final.log"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.core",
+      "path": "examples/transfer/consumer.mjs"
+    },
+    {
+      "coverage": "partial",
       "owner": "redown.component.background",
       "path": "extension/background.js"
     },
@@ -614,6 +904,11 @@
       "coverage": "partial",
       "owner": "redown.component.oauth",
       "path": "extension/cloudflare-auth.js"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.component.settings-markup",
+      "path": "extension/hitomi-capture.js"
     },
     {
       "coverage": "partial",
@@ -662,8 +957,18 @@
     },
     {
       "coverage": "partial",
+      "owner": "redown.transfer.presentation",
+      "path": "extension/remote-transfers.js"
+    },
+    {
+      "coverage": "partial",
       "owner": "redown.component.rfis",
       "path": "extension/rfis-index.js"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.presentation",
+      "path": "extension/transfer-projection.js"
     },
     {
       "coverage": "partial",
@@ -684,6 +989,71 @@
       "coverage": "partial",
       "owner": "redown.component.build",
       "path": "package.json"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.core",
+      "path": "packages/transfer-core/README.md"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.core",
+      "path": "packages/transfer-core/index.d.ts"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.core",
+      "path": "packages/transfer-core/index.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.core",
+      "path": "packages/transfer-core/package.json"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.executor",
+      "path": "remote/adapters/http-source.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.gateway",
+      "path": "remote/adapters/r2-gateway.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.executor",
+      "path": "remote/diagnose.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.executor",
+      "path": "remote/forever-lessons.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.gateway",
+      "path": "remote/gateway/index.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.gateway",
+      "path": "remote/gateway/wrangler.toml"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.executor",
+      "path": "remote/run.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.executor",
+      "path": "remote/service.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.executor",
+      "path": "remote/store.mjs"
     },
     {
       "coverage": "partial",
@@ -767,8 +1137,33 @@
     },
     {
       "coverage": "partial",
+      "owner": "redown.transfer.fixture-tests",
+      "path": "tests/helpers/executor-process.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.fixture-tests",
+      "path": "tests/helpers/transfer-fixtures.mjs"
+    },
+    {
+      "coverage": "partial",
       "owner": "redown.project",
       "path": "tests/nested-locations.test.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.fixture-tests",
+      "path": "tests/remote-browser.test.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.fixture-tests",
+      "path": "tests/remote-emulator.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.fixture-tests",
+      "path": "tests/remote-transfer.test.mjs"
     },
     {
       "coverage": "partial",
@@ -794,6 +1189,16 @@
       "coverage": "partial",
       "owner": "redown.project",
       "path": "tests/simple-menu-flat.test.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.fixture-tests",
+      "path": "tests/transfer-forever.test.mjs"
+    },
+    {
+      "coverage": "partial",
+      "owner": "redown.transfer.fixture-tests",
+      "path": "tests/transfer-schema-conformance.py"
     },
     {
       "coverage": "partial",
@@ -2558,6 +2963,126 @@
       "rationale": "Exact frozen debug event ID and authored provenance, never inferred verification.",
       "to": "redown.evidence.dbg-001.remediation-proposal",
       "type": "documents"
+    },
+    {
+      "from": "redown.transfer.remote",
+      "id": "redown.edge.transfer-1",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Domain semantics separate from vendor and UI.",
+      "to": "redown.transfer.core",
+      "type": "requires"
+    },
+    {
+      "from": "redown.transfer.remote",
+      "id": "redown.edge.transfer-2",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Execution survives browser closure under supervision.",
+      "to": "redown.transfer.executor",
+      "type": "requires"
+    },
+    {
+      "from": "redown.transfer.executor",
+      "id": "redown.edge.transfer-3",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Persist before acknowledgment and fence state.",
+      "to": "redown.transfer.ledger",
+      "type": "requires"
+    },
+    {
+      "from": "redown.transfer.executor",
+      "id": "redown.edge.transfer-4",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Destination effects use dedicated scoped R2 gateway.",
+      "to": "redown.transfer.gateway",
+      "type": "calls"
+    },
+    {
+      "from": "redown.transfer.presentation",
+      "id": "redown.edge.transfer-5",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Exact location control metadata only; no provisioning.",
+      "to": "redown.transfer.remote",
+      "type": "calls"
+    },
+    {
+      "from": "redown.transfer.remote",
+      "id": "redown.edge.transfer-6",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Metadata is not content proof.",
+      "to": "redown.transfer.independent-verification",
+      "type": "requires"
+    },
+    {
+      "from": "redown.transfer.fixture-tests",
+      "id": "redown.edge.transfer-7",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Positive local HTTP/fixture/emulator execution and fault proof.",
+      "to": "redown.transfer.remote",
+      "type": "verifies"
+    },
+    {
+      "from": "redown.transfer.live-gap",
+      "id": "redown.edge.transfer-8",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Local pass does not establish live/browser completion.",
+      "to": "redown.transfer.remote",
+      "type": "contradicts"
+    },
+    {
+      "from": "redown.transfer.remote",
+      "id": "redown.edge.transfer-9",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Gated branch before legacy remote ingest; preserve Hitomi/local/Explorer.",
+      "to": "redown.component.background",
+      "type": "affects"
+    },
+    {
+      "from": "redown.transfer.evidence.local",
+      "id": "redown.edge.transfer-proof",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION_REPORT.md",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Actual independent destination digest and durable recovery evidence.",
+      "to": "redown.transfer.remote",
+      "type": "supports"
     }
   ],
   "entities": [
@@ -5036,6 +5561,220 @@
       "testFile": "tests/explorer-worker.test.mjs"
     },
     {
+      "id": "redown.transfer.core",
+      "kind": "component",
+      "limits": [
+        "Unreviewed semantic navigation; inspect actual tests/evidence. No accepted Forever intent or live-cloud/installed-browser certification."
+      ],
+      "privacy": "public-sanitized",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": "Vendor/OS/browser independent injected-port engine; bounded multipart chunks, restart-only recovery and SHA-256 readback.",
+      "sourceRefs": [
+        {
+          "path": "packages/transfer-core/index.mjs",
+          "role": "source",
+          "sha256": "569c2b49dc4166accc815f1894122066e83144bbc0c27deb2d71000df3a6938b",
+          "symbol": "executeTransfer"
+        }
+      ],
+      "status": "implemented-local-proof"
+    },
+    {
+      "id": "redown.transfer.evidence.local",
+      "kind": "evidence",
+      "limits": [
+        "Simulated fault injection and local emulation only; no live-cloud or installed-Chrome closure."
+      ],
+      "privacy": "public-sanitized",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION_REPORT.md",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": "Executed local production-path transfer proof: 62 targeted checks pass, independent SHA256, separate executor recovery and browser-VM metadata replay; Wrangler/Miniflare binding acceptance separately recorded.",
+      "sourceRefs": [
+        {
+          "path": "docs/transfer/verification/targeted-final.log",
+          "role": "document",
+          "sha256": "cde1003275f9fae9a5ed5fff693d144c3e9b191c10d784716ee40f3eab6f6040",
+          "symbol": "# tests 62"
+        },
+        {
+          "path": "docs/transfer/verification/emulator-acceptance.log",
+          "role": "document",
+          "sha256": "f606f8b2e13da5d180dc5166e568d40a6ab53f89761c7f04417c06078fa28bde",
+          "symbol": "Wrangler-Miniflare-local-R2-and-Durable-Objects"
+        }
+      ],
+      "status": "verified-by-local-test"
+    },
+    {
+      "id": "redown.transfer.executor",
+      "kind": "component",
+      "limits": [
+        "Unreviewed semantic navigation; inspect actual tests/evidence. No accepted Forever intent or live-cloud/installed-browser certification."
+      ],
+      "privacy": "public-sanitized",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": "Supervised external Node coordinator/executor; source is checked/pinned public IPv4, never browser cookies.",
+      "sourceRefs": [
+        {
+          "path": "remote/service.mjs",
+          "role": "source",
+          "sha256": "446898631c7284b890eb26b5d7554b16a93f9bb6cd979b547d7aa428e9bcf5fc",
+          "symbol": "createService"
+        },
+        {
+          "path": "remote/adapters/http-source.mjs",
+          "role": "source",
+          "sha256": "a95789603354e7a16910d98cd5455c72a7a014f35780f9c80b10800715b8f34a",
+          "symbol": "export class HttpSource"
+        }
+      ],
+      "status": "implemented-local-proof"
+    },
+    {
+      "id": "redown.transfer.fixture-tests",
+      "kind": "test",
+      "limits": [
+        "Unreviewed semantic navigation; inspect actual tests/evidence. No accepted Forever intent or live-cloud/installed-browser certification."
+      ],
+      "privacy": "public-sanitized",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": "Production-port HTTP/R2 fixture, separate executor crash/restart, browser VM replay, corruption and lease faults; simulated cloud evidence.",
+      "sourceRefs": [
+        {
+          "path": "tests/remote-transfer.test.mjs",
+          "role": "test",
+          "sha256": "ab32cc675c1c9040f2a303aae7f20ad075b92ea6a73d6fe0dc6d86230ecdab86",
+          "symbol": "production HTTP adapter"
+        },
+        {
+          "path": "tests/remote-browser.test.mjs",
+          "role": "test",
+          "sha256": "4eed722c99e14b542ad1585166a0a5ad045927001d1694d8b11607bdaf46c586",
+          "symbol": "actual background ingestion"
+        },
+        {
+          "path": "tests/remote-emulator.mjs",
+          "role": "test",
+          "sha256": "43cf48931bb5fc065bfc08949ba38fcc75f23d3988191103467ff22410743bdb",
+          "symbol": "Wrangler-Miniflare-local-R2"
+        }
+      ],
+      "status": "implemented-local-proof"
+    },
+    {
+      "id": "redown.transfer.gateway",
+      "kind": "component",
+      "limits": [
+        "Unreviewed semantic navigation; inspect actual tests/evidence. No accepted Forever intent or live-cloud/installed-browser certification."
+      ],
+      "privacy": "public-sanitized",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": "Dedicated bound R2 gateway and upload-session Durable Object; stage multipart then conditionally create final object.",
+      "sourceRefs": [
+        {
+          "path": "remote/gateway/index.mjs",
+          "role": "source",
+          "sha256": "e6ecbf96359d170fccf08f4217304cc61308c95578f48c0bd687638bf267a8a4",
+          "symbol": "export class UploadSession"
+        },
+        {
+          "path": "remote/adapters/r2-gateway.mjs",
+          "role": "source",
+          "sha256": "fc64adffd03507e71389bce6cd5a17b97097f9b3d688610bba6b0bb7aa74b9b5",
+          "symbol": "export class R2Gateway"
+        }
+      ],
+      "status": "implemented-local-proof"
+    },
+    {
+      "id": "redown.transfer.independent-verification",
+      "kind": "invariant",
+      "limits": [
+        "Unreviewed semantic navigation; inspect actual tests/evidence. No accepted Forever intent or live-cloud/installed-browser certification."
+      ],
+      "privacy": "public-sanitized",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": "Reported verification requires exact location/identity/size and independently retrieved matching content digest; no local deletion permission.",
+      "sourceRefs": [
+        {
+          "path": "packages/transfer-core/index.mjs",
+          "role": "source",
+          "sha256": "569c2b49dc4166accc815f1894122066e83144bbc0c27deb2d71000df3a6938b",
+          "symbol": "const verify = async"
+        }
+      ],
+      "status": "implemented-local-proof"
+    },
+    {
+      "id": "redown.transfer.ledger",
+      "kind": "component",
+      "limits": [
+        "Unreviewed semantic navigation; inspect actual tests/evidence. No accepted Forever intent or live-cloud/installed-browser certification."
+      ],
+      "privacy": "public-sanitized",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": "Canonical transactional SQLite job/event/checkpoint ledger, fenced claims and tenant idempotency; browser cache is disposable.",
+      "sourceRefs": [
+        {
+          "path": "remote/store.mjs",
+          "role": "source",
+          "sha256": "ce45d16e94fd02827cd219aa6a81619814d32ff21945140aea158bce5525fb80",
+          "symbol": "export class Ledger"
+        }
+      ],
+      "status": "implemented-local-proof"
+    },
+    {
+      "id": "redown.transfer.live-gap",
+      "kind": "evidence",
+      "limits": [
+        "Unreviewed semantic navigation; inspect actual tests/evidence. No accepted Forever intent or live-cloud/installed-browser certification."
+      ],
+      "privacy": "public-sanitized",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": "Live R2, installed Chrome, firewall, throughput and peak RSS remain unobserved; mock/emulator results cannot close them.",
+      "sourceRefs": [
+        {
+          "path": "docs/transfer/DEPLOYMENT.md",
+          "role": "document",
+          "sha256": "329c07807b58865ba2959971a4c76aa6287ef7a23f203fafdca5435049fae3ec",
+          "symbol": "Live acceptance checklist"
+        }
+      ],
+      "status": "unknown-live"
+    },
+    {
       "id": "redown.transfer.pipeline",
       "kind": "capability",
       "knownLimits": [
@@ -5065,6 +5804,64 @@
           "symbol": "async function recordTransfer"
         }
       ]
+    },
+    {
+      "id": "redown.transfer.presentation",
+      "kind": "component",
+      "limits": [
+        "Unreviewed semantic navigation; inspect actual tests/evidence. No accepted Forever intent or live-cloud/installed-browser certification."
+      ],
+      "privacy": "public-sanitized",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": "Feature-gated remote control, replayable browser metadata outbox and disposable IndexedDB projection. No autonomous browser fallback or deletion.",
+      "sourceRefs": [
+        {
+          "path": "extension/remote-transfers.js",
+          "role": "source",
+          "sha256": "94581f12bbf1d4424ae822e174c72c9e94542813a0ddc6523aad36e459eddc6e",
+          "symbol": "async function reconcile"
+        },
+        {
+          "path": "extension/transfer-projection.js",
+          "role": "source",
+          "sha256": "84e7d3b25e5b20d04bca3dea8b310dfa048a1916461413a1f9eb9258998945d7",
+          "symbol": "async function reconcile"
+        }
+      ],
+      "status": "implemented-local-proof"
+    },
+    {
+      "id": "redown.transfer.remote",
+      "kind": "capability",
+      "limits": [
+        "Unreviewed semantic navigation; inspect actual tests/evidence. No accepted Forever intent or live-cloud/installed-browser certification."
+      ],
+      "privacy": "public-sanitized",
+      "provenance": {
+        "reviewStatus": "unreviewed",
+        "sourceReference": "docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION.md",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": "Submit authenticated remote URL jobs at an exact selected R2 destination; independently read back bytes without browser relay.",
+      "sourceRefs": [
+        {
+          "path": "packages/transfer-core/index.mjs",
+          "role": "source",
+          "sha256": "569c2b49dc4166accc815f1894122066e83144bbc0c27deb2d71000df3a6938b",
+          "symbol": "executeTransfer"
+        },
+        {
+          "path": "extension/remote-transfers.js",
+          "role": "source",
+          "sha256": "94581f12bbf1d4424ae822e174c72c9e94542813a0ddc6523aad36e459eddc6e",
+          "symbol": "async function submit"
+        }
+      ],
+      "status": "implemented-local-proof"
     },
     {
       "id": "redown.upload.destination.selection",
@@ -5294,6 +6091,7 @@
   "sourceContext": {
     "baselineCommit": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
     "graphRevision": "this commit; located SHA-256 references include reviewed working-tree additions",
-    "runtimePatchCommit": "949a5dcef126dcf596c38b2208268439cb2edecc"
+    "runtimePatchCommit": "949a5dcef126dcf596c38b2208268439cb2edecc",
+    "transferBaseCommit": "73c76b69b704858e462312acf33ea8a9c8817212"
   }
 }

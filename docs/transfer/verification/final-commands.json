@@ -1,0 +1,57 @@
+[
+  {
+    "command": "node --test --test-isolation=none --test-reporter=tap tests/remote-transfer.test.mjs tests/remote-browser.test.mjs tests/transfer-forever.test.mjs",
+    "exit": 0,
+    "log": "targeted-final.log"
+  },
+  {
+    "command": "npm test",
+    "exit": 1,
+    "log": "npm-test-final.log"
+  },
+  {
+    "command": "npm run check",
+    "exit": 0,
+    "log": "check-final.log"
+  },
+  {
+    "command": "node --test --test-isolation=none --test-reporter=tap tests/upload-request-context.test.mjs tests/upload-location-builder.test.mjs tests/cloudflare-files.test.mjs tests/explorer-worker.test.mjs",
+    "exit": 0,
+    "log": "regressions-final.log"
+  },
+  {
+    "command": "python tests/transfer-schema-conformance.py work/transfer-evidence/targeted-final.log",
+    "exit": 0,
+    "log": "ledger-schema-final.log"
+  },
+  {
+    "command": "python tests/transfer-schema-conformance.py work/transfer-evidence/emulator-acceptance.log",
+    "exit": 0,
+    "log": "emulator-schema-final.log"
+  },
+  {
+    "command": "python tests/semantic-schema-conformance.py",
+    "exit": 0,
+    "log": "semantic-schema-final.log"
+  },
+  {
+    "command": "python tests/debug-schema-conformance.py",
+    "exit": 0,
+    "log": "debug-schema-final.log"
+  },
+  {
+    "command": "node agent/semantic/cli.mjs validateSemanticGraph --json",
+    "exit": 0,
+    "log": "semantic-final.log"
+  },
+  {
+    "command": "node agent/debug/cli.mjs validateDebugRecords --json",
+    "exit": 0,
+    "log": "debug-final.log"
+  },
+  {
+    "command": "node examples/transfer/consumer.mjs",
+    "exit": 0,
+    "log": "consumer-final.log"
+  }
+]

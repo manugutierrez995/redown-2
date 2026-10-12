@@ -1,0 +1,18 @@
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+
+
+
+ ⛅️ wrangler 4.86.0
+───────────────────
+Total Upload: 6.87 KiB / gzip: 2.28 KiB
+Your Worker has access to the following bindings:
+Binding                                              Resource            
+env.UPLOADS (UploadSession)                          Durable Object      
+env.TRANSFER_BUCKET (replace-with-exact-bucket)      R2 Bucket           
+
+--dry-run: exiting now.
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

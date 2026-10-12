@@ -6,6 +6,12 @@ import {safePath,serialize,compare} from './io.mjs';
 const model=JSON.parse(readFileSync(resolve(ROOT,'agent/semantic/model.json'),'utf8'));
 const paths=[];function walk(dir=''){for(const e of readdirSync(resolve(ROOT,dir),{withFileTypes:true})){const p=dir?dir+'/'+e.name:e.name;if(!safePath(p)||e.name==='.wrangler')continue;if(e.isDirectory())walk(p);else if(e.isFile())paths.push(p);if(paths.length>5000)throw Error('inventory-too-large');}}walk();
 function owner(p){
+ if(p.startsWith('packages/transfer-core/')||p.startsWith('examples/transfer/'))return 'redown.transfer.core';
+ if(p.startsWith('remote/gateway/')||p==='remote/adapters/r2-gateway.mjs')return 'redown.transfer.gateway';
+ if(p.startsWith('remote/'))return 'redown.transfer.executor';
+ if(p.startsWith('docs/transfer/')||p.startsWith('contracts/transfer-ledger/'))return 'redown.transfer.remote';
+ if(p.startsWith('tests/remote-')||p.startsWith('tests/transfer-')||p.startsWith('tests/helpers/'))return 'redown.transfer.fixture-tests';
+ if(['extension/remote-transfers.js','extension/transfer-projection.js'].includes(p))return 'redown.transfer.presentation';
  if(p.startsWith('agent/semantic/')||p.includes('semantic'))return 'redown.component.semantic';
  if(p.startsWith('agent/debug/')||p.startsWith('debug/')||p.startsWith('docs/debug/'))return 'redown.component.debug';
  if(p.startsWith('agent/')||p.startsWith('docs/agent/')||p.includes('agent-api'))return 'redown.component.inspection';

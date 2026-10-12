@@ -1,0 +1,1772 @@
+TAP version 13
+# Subtest: offline discovery advertises only implemented operations and distinct versions
+not ok 1 - offline discovery advertises only implemented operations and distinct versions
+  ---
+  duration_ms: 18.112741
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/agent-api.test.mjs:13:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'stale' !== 'current'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'current'
+  actual: 'stale'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/agent-api.test.mjs:15:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.start (node:internal/test_runner/test:1242:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+# Subtest: operation descriptions retain exact destination, side effect and coverage limits
+ok 2 - operation descriptions retain exact destination, side effect and coverage limits
+  ---
+  duration_ms: 37.357137
+  type: 'test'
+  ...
+# Subtest: errors are deterministic, exact-id and version aware without echoing arbitrary input
+ok 3 - errors are deterministic, exact-id and version aware without echoing arbitrary input
+  ---
+  duration_ms: 139.906237
+  type: 'test'
+  ...
+# Subtest: unknown Forever mappings never become accepted records or a conformance claim
+ok 4 - unknown Forever mappings never become accepted records or a conformance claim
+  ---
+  duration_ms: 15.570655
+  type: 'test'
+  ...
+# Subtest: reference inspection detects content drift, missing anchors/files and unsafe paths
+ok 5 - reference inspection detects content drift, missing anchors/files and unsafe paths
+  ---
+  duration_ms: 1.03307
+  type: 'test'
+  ...
+# Subtest: CLI works outside checkout, emits one JSON envelope and uses exit 2 for errors
+ok 6 - CLI works outside checkout, emits one JSON envelope and uses exit 2 for errors
+  ---
+  duration_ms: 279.206939
+  type: 'test'
+  ...
+# Subtest: catalog IDs, evidence labels, source hashes and references are internally consistent
+not ok 7 - catalog IDs, evidence labels, source hashes and references are internally consistent
+  ---
+  duration_ms: 11.266004
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/agent-api.test.mjs:91:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + [
+    +   {
+    +     code: 'stale-source',
+    +     path: 'README.md'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'bugs/README.md'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/background.js'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/cloudflare-api.js'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/cloudflare-auth.js'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/manifest.json'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/nested-menu-editor.js'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/options.html'
+    +   },
+    +   {
+    +     code: 'stale-source',
+    +     path: 'extension/options.js'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/manifest.json',
+    +     symbol: '"service_worker"'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'const WORKER_SOURCE'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function createBucket'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'function simpleBucketCreator'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: '$("create-bucket").addEventListener'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/nested-menu-editor.js',
+    +     symbol: 'function rootRow'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function createExplorerFolder'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function callBucketWorker'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'body.action === "ensurePrefixes"'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'function beginNewFolder'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/nested-menu-editor.js',
+    +     symbol: 'function folderRow'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function listFolderChildren'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function listObjectsPage'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function fetchUploadBuilderChildren'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/nested-menu-editor.js',
+    +     symbol: 'function folderRow'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'tests/nested-locations.test.mjs',
+    +     symbol: 'Add child and Create use the exact parent path; actual dropdown children stay scoped'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'chrome.contextMenus.onClicked.addListener'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function ingestCloudflareAtPrefix'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function checkedFetch'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'const WORKER_SOURCE'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'tests/nested-locations.test.mjs',
+    +     symbol: 'native nested menu targets every verified depth and offers Send here for parents'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function goLocation'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function browseWorkspace'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'async function listObjectsPage'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/cloudflare-api.js',
+    +     symbol: 'async function preview'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function uploadLocalFiles'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function ensureUploadProfile'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/options.js',
+    +     symbol: 'async function loadUploadLocations'
+    +   },
+    +   {
+    +     code: 'stale-reference',
+    +     path: 'extension/background.js',
+    +     symbol: 'request.headers.get("x-redown-action") === "upload-local"'
+    +   }
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0:
+      code: 'stale-source'
+      path: 'README.md'
+    1:
+      code: 'stale-source'
+      path: 'bugs/README.md'
+    2:
+      code: 'stale-source'
+      path: 'extension/background.js'
+    3:
+      code: 'stale-source'
+      path: 'extension/cloudflare-api.js'
+    4:
+      code: 'stale-source'
+      path: 'extension/cloudflare-auth.js'
+    5:
+      code: 'stale-source'
+      path: 'extension/manifest.json'
+    6:
+      code: 'stale-source'
+      path: 'extension/nested-menu-editor.js'
+    7:
+      code: 'stale-source'
+      path: 'extension/options.html'
+    8:
+      code: 'stale-source'
+      path: 'extension/options.js'
+    9:
+      code: 'stale-reference'
+      path: 'extension/manifest.json'
+      symbol: '"service_worker"'
+    10:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'const WORKER_SOURCE'
+    11:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function createBucket'
+    12:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'function simpleBucketCreator'
+    13:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: '$("create-bucket").addEventListener'
+    14:
+      code: 'stale-reference'
+      path: 'extension/nested-menu-editor.js'
+      symbol: 'function rootRow'
+    15:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function createExplorerFolder'
+    16:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function callBucketWorker'
+    17:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'body.action === "ensurePrefixes"'
+    18:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'function beginNewFolder'
+    19:
+      code: 'stale-reference'
+      path: 'extension/nested-menu-editor.js'
+      symbol: 'function folderRow'
+    20:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function listFolderChildren'
+    21:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function listObjectsPage'
+    22:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function fetchUploadBuilderChildren'
+    23:
+      code: 'stale-reference'
+      path: 'extension/nested-menu-editor.js'
+      symbol: 'function folderRow'
+    24:
+      code: 'stale-reference'
+      path: 'tests/nested-locations.test.mjs'
+      symbol: 'Add child and Create use the exact parent path; actual dropdown children stay scoped'
+    25:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'chrome.contextMenus.onClicked.addListener'
+    26:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function ingestCloudflareAtPrefix'
+    27:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function checkedFetch'
+    28:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'const WORKER_SOURCE'
+    29:
+      code: 'stale-reference'
+      path: 'tests/nested-locations.test.mjs'
+      symbol: 'native nested menu targets every verified depth and offers Send here for parents'
+    30:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function goLocation'
+    31:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function browseWorkspace'
+    32:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'async function listObjectsPage'
+    33:
+      code: 'stale-reference'
+      path: 'extension/cloudflare-api.js'
+      symbol: 'async function preview'
+    34:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function uploadLocalFiles'
+    35:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function ensureUploadProfile'
+    36:
+      code: 'stale-reference'
+      path: 'extension/options.js'
+      symbol: 'async function loadUploadLocations'
+    37:
+      code: 'stale-reference'
+      path: 'extension/background.js'
+      symbol: 'request.headers.get("x-redown-action") === "upload-local"'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/agent-api.test.mjs:93:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: portable request fixtures and JSON envelope contract
+ok 8 - portable request fixtures and JSON envelope contract
+  ---
+  duration_ms: 86.266419
+  type: 'test'
+  ...
+# Subtest: M0 inventory covers every literal message branch without inventing handlers
+ok 9 - M0 inventory covers every literal message branch without inventing handlers
+  ---
+  duration_ms: 1.031983
+  type: 'test'
+  ...
+# Subtest: private WEBP preview reads nested keys without a Worker or background messaging
+ok 10 - private WEBP preview reads nested keys without a Worker or background messaging
+  ---
+  duration_ms: 34.59647
+  type: 'test'
+  ...
+# Subtest: downloads use a header, keep credentials out of URLs and sanitize filenames
+ok 11 - downloads use a header, keep credentials out of URLs and sanitize filenames
+  ---
+  duration_ms: 1.051515
+  type: 'test'
+  ...
+# Subtest: concurrent expired requests refresh rotating credentials once
+ok 12 - concurrent expired requests refresh rotating credentials once
+  ---
+  duration_ms: 1.8127
+  type: 'test'
+  ...
+# Subtest: 401 refresh retries a private read and denied reads report failure
+ok 13 - 401 refresh retries a private read and denied reads report failure
+  ---
+  duration_ms: 1.770581
+  type: 'test'
+  ...
+# Subtest: oversized preview stops without allocating an object URL
+ok 14 - oversized preview stops without allocating an object URL
+  ---
+  duration_ms: 1.264553
+  type: 'test'
+  ...
+# Subtest: preview failure replaces spinner and download rejection ends progress
+ok 15 - preview failure replaces spinner and download rejection ends progress
+  ---
+  duration_ms: 1.745648
+  type: 'test'
+  ...
+# Subtest: click creates a visible window before network navigation; repeated clicks focus it
+not ok 16 - click creates a visible window before network navigation; repeated clicks focus it
+  ---
+  duration_ms: 3.588943
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:102:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:103:13)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: successful callback exchanges PKCE and verifies access before saving token
+not ok 17 - successful callback exchanges PKCE and verifies access before saving token
+  ---
+  duration_ms: 1.050133
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:123:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:124:13)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: callback resumes after service worker restart from session state
+not ok 18 - callback resumes after service worker restart from session state
+  ---
+  duration_ms: 1.039155
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:145:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:146:17)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: unrelated tab, subframe, lookalike host, and wrong callback path are ignored
+not ok 19 - unrelated tab, subframe, lookalike host, and wrong callback path are ignored
+  ---
+  duration_ms: 0.954289
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:154:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:155:13)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: state mismatch fails without token exchange and allows a fresh retry
+not ok 20 - state mismatch fails without token exchange and allows a fresh retry
+  ---
+  duration_ms: 0.909702
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:165:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:166:13)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: denied consent and missing authorization code fail cleanly
+not ok 21 - denied consent and missing authorization code fail cleanly
+  ---
+  duration_ms: 1.054611
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:174:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:176:15)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: closed popup releases attempt and stale window is replaced on next click
+not ok 22 - closed popup releases attempt and stale window is replaced on next click
+  ---
+  duration_ms: 1.054988
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:185:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:186:13)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: expired attempt clears secrets, closes popup, and permits retry
+not ok 23 - expired attempt clears secrets, closes popup, and permits retry
+  ---
+  duration_ms: 0.821272
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:197:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:198:13)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: failed API verification never stores an access token
+not ok 24 - failed API verification never stores an access token
+  ---
+  duration_ms: 0.846281
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:208:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:209:13)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: duplicate navigation events exchange a code only once
+not ok 25 - duplicate navigation events exchange a code only once
+  ---
+  duration_ms: 0.947586
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:217:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:218:13)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: verification network stall aborts and releases the attempt
+not ok 26 - verification network stall aborts and releases the attempt
+  ---
+  duration_ms: 0.934542
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:224:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:225:13)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: popup creation errors are returned instead of leaving an in-flight lock
+not ok 27 - popup creation errors are returned instead of leaving an in-flight lock
+  ---
+  duration_ms: 0.883791
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:236:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:237:13)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: settings opens and completes Cloudflare login with no background worker or messaging
+ok 28 - settings opens and completes Cloudflare login with no background worker or messaging
+  ---
+  duration_ms: 9.291957
+  type: 'test'
+  ...
+# Subtest: settings and worker observing the same callback exchange the code once across contexts
+not ok 29 - settings and worker observing the same callback exchange the code once across contexts
+  ---
+  duration_ms: 0.972814
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:263:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:264:18)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: two settings contexts share one visible sign-in window
+ok 30 - two settings contexts share one visible sign-in window
+  ---
+  duration_ms: 3.246664
+  type: 'test'
+  ...
+# Subtest: Worker deployments cannot overlap and a failed deployment releases the lock
+not ok 31 - Worker deployments cannot overlap and a failed deployment releases the lock
+  ---
+  duration_ms: 0.852555
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:281:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'rfis-index.js'
+    - 'cloudflare-api.js'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'cloudflare-api.js'
+  actual: 'rfis-index.js'
+  operator: 'strictEqual'
+  stack: |-
+    context.importScripts (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:73:19)
+    evalmachine.<anonymous>:751:1
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:76:11)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/cloudflare-login.test.mjs:282:11)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: real discovery, case, history, filters and validation are deterministic and honest
+not ok 32 - real discovery, case, history, filters and validation are deterministic and honest
+  ---
+  duration_ms: 12.412378
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/debug-api.test.mjs:44:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      {
+    +   caseCount: 3,
+    -   caseCount: 1,
+        errors: [],
+    +   eventCount: 20,
+    -   eventCount: 9,
+        valid: true,
+    +   warnings: [
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md',
+    +       symbol: '**Agent API M0/M1 audit, subsequently merged:**'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md',
+    +       symbol: '**Current conclusion:**'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md',
+    +       symbol: '**DOM-preservation patches:**'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md',
+    +       symbol: '**User symptom:**'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md',
+    +       symbol: '03efcc07358f64970d6158831884c2d1431ebd66'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md',
+    +       symbol: 'Additional code risks; separate investigation required'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md',
+    +       symbol: 'Minimal reproduction and tests to add'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'extension/background.js',
+    +       symbol: 'async function listFolderChildren'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'extension/background.js',
+    +       symbol: 'function addNestedLocations'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'extension/nested-menu-editor.js',
+    +       symbol: 'M.setLocation(node,select.value)'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'extension/nested-menu-editor.js',
+    +       symbol: 'add.disabled=!parentReady || !node.ready'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'extension/nested-menu-editor.js',
+    +       symbol: 'async function run'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'extension/nested-menu-editor.js',
+    +       symbol: 'el.disabled=previous[index]'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'extension/nested-menu-editor.js',
+    +       symbol: 'function folderRow'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'extension/nested-menu-editor.js',
+    +       symbol: 'node.ready=Boolean(node.name) && known.includes(node.name)'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'extension/options.js',
+    +       symbol: 'Guard the shared cache'
+    +     },
+    +     {
+    +       code: 'stale-reference',
+    +       path: 'tests/nested-locations.test.mjs',
+    +       symbol: 'Add child and Create use the exact parent path; actual dropdown children stay scoped'
+    +     }
+    +   ]
+    -   warnings: []
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    valid: true
+    errors:
+    warnings:
+    caseCount: 1
+    eventCount: 9
+  actual:
+    valid: true
+    errors:
+    warnings:
+      0:
+        code: 'stale-reference'
+        path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md'
+        symbol: '**Agent API M0/M1 audit, subsequently merged:**'
+      1:
+        code: 'stale-reference'
+        path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md'
+        symbol: '**Current conclusion:**'
+      2:
+        code: 'stale-reference'
+        path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md'
+        symbol: '**DOM-preservation patches:**'
+      3:
+        code: 'stale-reference'
+        path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md'
+        symbol: '**User symptom:**'
+      4:
+        code: 'stale-reference'
+        path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md'
+        symbol: '03efcc07358f64970d6158831884c2d1431ebd66'
+      5:
+        code: 'stale-reference'
+        path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md'
+        symbol: 'Additional code risks; separate investigation required'
+      6:
+        code: 'stale-reference'
+        path: 'docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md'
+        symbol: 'Minimal reproduction and tests to add'
+      7:
+        code: 'stale-reference'
+        path: 'extension/background.js'
+        symbol: 'async function listFolderChildren'
+      8:
+        code: 'stale-reference'
+        path: 'extension/background.js'
+        symbol: 'function addNestedLocations'
+      9:
+        code: 'stale-reference'
+        path: 'extension/nested-menu-editor.js'
+        symbol: 'M.setLocation(node,select.value)'
+      10:
+        code: 'stale-reference'
+        path: 'extension/nested-menu-editor.js'
+        symbol: 'add.disabled=!parentReady || !node.ready'
+      11:
+        code: 'stale-reference'
+        path: 'extension/nested-menu-editor.js'
+        symbol: 'async function run'
+      12:
+        code: 'stale-reference'
+        path: 'extension/nested-menu-editor.js'
+        symbol: 'el.disabled=previous[index]'
+      13:
+        code: 'stale-reference'
+        path: 'extension/nested-menu-editor.js'
+        symbol: 'function folderRow'
+      14:
+        code: 'stale-reference'
+        path: 'extension/nested-menu-editor.js'
+        symbol: 'node.ready=Boolean(node.name) && known.includes(node.name)'
+      15:
+        code: 'stale-reference'
+        path: 'extension/options.js'
+        symbol: 'Guard the shared cache'
+      16:
+        code: 'stale-reference'
+        path: 'tests/nested-locations.test.mjs'
+        symbol: 'Add child and Create use the exact parent path; actual dropdown children stay scoped'
+    caseCount: 3
+    eventCount: 20
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/debug-api.test.mjs:52:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: original case and proposal Markdown bytes are retained from pinned upstream
+not ok 33 - original case and proposal Markdown bytes are retained from pinned upstream
+  ---
+  duration_ms: 0.47117
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/debug-api.test.mjs:79:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'a4e3b488a669bc7d13956f315e9ca5fef074d935'
+    - 'ff3a22e9107292da01985e390ebe0b19eaf0eed3'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'ff3a22e9107292da01985e390ebe0b19eaf0eed3'
+  actual: 'a4e3b488a669bc7d13956f315e9ca5fef074d935'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/debug-api.test.mjs:80:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: archived 0.1 semantic golden, unknown fields and inferred provenance survive JSON round trips
+ok 34 - archived 0.1 semantic golden, unknown fields and inferred provenance survive JSON round trips
+  ---
+  duration_ms: 1.046055
+  type: 'test'
+  ...
+# Subtest: portable structural fixtures and frozen schema assertions match the lightweight evaluator
+ok 35 - portable structural fixtures and frozen schema assertions match the lightweight evaluator
+  ---
+  duration_ms: 0.81479
+  type: 'test'
+  ...
+# Subtest: new unknown optional fields are retained without reinterpreting lifecycle or evidence
+ok 36 - new unknown optional fields are retained without reinterpreting lifecycle or evidence
+  ---
+  duration_ms: 0.887282
+  type: 'test'
+  ...
+# Subtest: missing case, bad requests, unsupported operations/versions have stable sanitized errors
+ok 37 - missing case, bad requests, unsupported operations/versions have stable sanitized errors
+  ---
+  duration_ms: 8.331439
+  type: 'test'
+  ...
+# Subtest: malformed JSON, non-UTF8, blank lines and truncated JSONL never yield partial query success
+ok 38 - malformed JSON, non-UTF8, blank lines and truncated JSONL never yield partial query success
+  ---
+  duration_ms: 5.590096
+  type: 'test'
+  ...
+# Subtest: required fields, types, enum values, bounds and array uniqueness are actually checked
+ok 39 - required fields, types, enum values, bounds and array uniqueness are actually checked
+  ---
+  duration_ms: 3.67054
+  type: 'test'
+  ...
+# Subtest: every record format version is rejected explicitly; missing versions are structural failures
+ok 40 - every record format version is rejected explicitly; missing versions are structural failures
+  ---
+  duration_ms: 1.078455
+  type: 'test'
+  ...
+# Subtest: duplicate case/event IDs and paths, mismatched case IDs and missing event links are not hidden
+ok 41 - duplicate case/event IDs and paths, mismatched case IDs and missing event links are not hidden
+  ---
+  duration_ms: 3.577567
+  type: 'test'
+  ...
+# Subtest: recorded chronology and exact physical sequence are validated; dates are never invented or sorted
+ok 42 - recorded chronology and exact physical sequence are validated; dates are never invented or sorted
+  ---
+  duration_ms: 3.045836
+  type: 'test'
+  ...
+# Subtest: deterministic list ordering and filter semantics do not depend on manifest order
+ok 43 - deterministic list ordering and filter semantics do not depend on manifest order
+  ---
+  duration_ms: 1.031839
+  type: 'test'
+  ...
+# Subtest: source hash drift, missing anchors and absence are freshness warnings, not falsified historical claims
+ok 44 - source hash drift, missing anchors and absence are freshness warnings, not falsified historical claims
+  ---
+  duration_ms: 5.012595
+  type: 'test'
+  ...
+# Subtest: path traversal, absolute/Windows paths, NUL and escaping symlinks are rejected for records and evidence
+ok 45 - path traversal, absolute/Windows paths, NUL and escaping symlinks are rejected for records and evidence
+  ---
+  duration_ms: 3.018129
+  type: 'test'
+  ...
+# Subtest: internal symlinks work; directories, unavailable roots/files and oversized records fail deterministically
+ok 46 - internal symlinks work; directories, unavailable roots/files and oversized records fail deterministically
+  ---
+  duration_ms: 5.48521
+  type: 'test'
+  ...
+# Subtest: operation references resolve exactly; Forever mappings remain unknown rather than invented
+ok 47 - operation references resolve exactly; Forever mappings remain unknown rather than invented
+  ---
+  duration_ms: 1.487491
+  type: 'test'
+  ...
+# Subtest: source confirmation is scoped and requires proof; test pointers never imply test success
+ok 48 - source confirmation is scoped and requires proof; test pointers never imply test success
+  ---
+  duration_ms: 3.26659
+  type: 'test'
+  ...
+# Subtest: hypothesis revisions and counterevidence preserve earlier beliefs and latest projection
+ok 49 - hypothesis revisions and counterevidence preserve earlier beliefs and latest projection
+  ---
+  duration_ms: 1.980294
+  type: 'test'
+  ...
+# Subtest: closure requires recorded automation and browser outcomes; reopening retains closure evidence
+ok 50 - closure requires recorded automation and browser outcomes; reopening retains closure evidence
+  ---
+  duration_ms: 3.540137
+  type: 'test'
+  ...
+# Subtest: invalid hypothesis, outcome and lifecycle payloads cannot masquerade as verified results
+ok 51 - invalid hypothesis, outcome and lifecycle payloads cannot masquerade as verified results
+  ---
+  duration_ms: 2.963526
+  type: 'test'
+  ...
+# Subtest: immutable API snapshots avoid rescans and refresh only when a new reader is created
+ok 52 - immutable API snapshots avoid rescans and refresh only when a new reader is created
+  ---
+  duration_ms: 1.211179
+  type: 'test'
+  ...
+# Subtest: CLI adapter emits one JSON envelope, legible summaries and exact error/validation exits
+ok 53 - CLI adapter emits one JSON envelope, legible summaries and exact error/validation exits
+  ---
+  duration_ms: 21.129869
+  type: 'test'
+  ...
+# Subtest: actual CLI entry point works outside the checkout and exits 2 for invalid corpus validation
+ok 54 - actual CLI entry point works outside the checkout and exits 2 for invalid corpus validation
+  ---
+  duration_ms: 168.676629
+  type: 'test'
+  ...
+# Subtest: queries never modify the canonical corpus or cited historical evidence
+ok 55 - queries never modify the canonical corpus or cited historical evidence
+  ---
+  duration_ms: 6.829746
+  type: 'test'
+  ...
+# Subtest: same-bucket transfers stream objects and preserve metadata
+ok 56 - same-bucket transfers stream objects and preserve metadata
+  ---
+  duration_ms: 32.220439
+  type: 'test'
+  ...
+# Subtest: cross-bucket transfers stay Worker-to-Worker and keep-both resolves conflicts
+ok 57 - cross-bucket transfers stay Worker-to-Worker and keep-both resolves conflicts
+  ---
+  duration_ms: 3.104664
+  type: 'test'
+  ...
+# Subtest: folder markers, properties, and batched deletes are real R2 operations
+ok 58 - folder markers, properties, and batched deletes are real R2 operations
+  ---
+  duration_ms: 7.76054
+  type: 'test'
+  ...
+# Subtest: private Explorer reads require auth while explicitly enabled public assets still work
+ok 59 - private Explorer reads require auth while explicitly enabled public assets still work
+  ---
+  duration_ms: 2.384792
+  type: 'test'
+  ...
+# Subtest: short-lived private preview URLs support ranges for text, PDF, and GLB
+ok 60 - short-lived private preview URLs support ranges for text, PDF, and GLB
+  ---
+  duration_ms: 8.120395
+  type: 'test'
+  ...
+# Subtest: ZIP and CBZ archives are listed as virtual folders and selected entries extract safely
+ok 61 - ZIP and CBZ archives are listed as virtual folders and selected entries extract safely
+  ---
+  duration_ms: 9.835705
+  type: 'test'
+  ...
+# Subtest: archive traversal and malformed archives are rejected
+ok 62 - archive traversal and malformed archives are rejected
+  ---
+  duration_ms: 2.354254
+  type: 'test'
+  ...
+# Subtest: selection never fills the new-name field, and preserves an independently typed draft
+ok 63 - selection never fills the new-name field, and preserves an independently typed draft
+  ---
+  duration_ms: 113.112946
+  type: 'test'
+  ...
+# Subtest: Add child and Create use the exact parent path; actual dropdown children stay scoped
+ok 64 - Add child and Create use the exact parent path; actual dropdown children stay scoped
+  ---
+  duration_ms: 26.085244
+  type: 'test'
+  ...
+# Subtest: hiding a nested menu preserves its hierarchy and failed creation preserves the draft
+ok 65 - hiding a nested menu preserves its hierarchy and failed creation preserves the draft
+  ---
+  duration_ms: 18.492571
+  type: 'test'
+  ...
+# Subtest: native nested menu targets every verified depth and offers Send here for parents
+ok 66 - native nested menu targets every verified depth and offers Send here for parents
+  ---
+  duration_ms: 1.2274
+  type: 'test'
+  ...
+# Subtest: legacy paths migrate without modifying old configuration or writing remote folders
+ok 67 - legacy paths migrate without modifying old configuration or writing remote folders
+  ---
+  duration_ms: 13.842942
+  type: 'test'
+  ...
+# Subtest: nested saving retains provisioned worker credentials and new Explorer profiles through autosave
+ok 68 - nested saving retains provisioned worker credentials and new Explorer profiles through autosave
+  ---
+  duration_ms: 2.068357
+  type: 'test'
+  ...
+# Subtest: one global mode prevents Simple/Nested collisions and puts nested buckets directly under REDOWN
+not ok 69 - one global mode prevents Simple/Nested collisions and puts nested buckets directly under REDOWN
+  ---
+  duration_ms: 1.513043
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/nested-locations.test.mjs:113:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'onAlarm')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    evalmachine.<anonymous>:139:15
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/nested-locations.test.mjs:117:6)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: settings mode checkbox saves only the active mode and keeps both destination configurations
+not ok 70 - settings mode checkbox saves only the active mode and keeps both destination configurations
+  ---
+  duration_ms: 13.14521
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/nested-locations.test.mjs:133:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of null (reading 'addEventListener')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    eval (eval at <anonymous> (file:///workspace/remote-download-2-cloudfare/tests/nested-locations.test.mjs:140:14), <anonymous>:27:21)
+    eval (<anonymous>)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/nested-locations.test.mjs:140:14)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: native menu mode checkbox changes the same saved setting without downloading anything
+not ok 71 - native menu mode checkbox changes the same saved setting without downloading anything
+  ---
+  duration_ms: 1.61588
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/nested-locations.test.mjs:149:1'
+  failureType: 'testCodeFailure'
+  error: "Unexpected token '}'"
+  code: 'ERR_TEST_FAILURE'
+  name: 'SyntaxError'
+  stack: |-
+    new Script (node:vm:117:7)
+    createScript (node:vm:269:10)
+    Object.runInContext (node:vm:300:10)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/nested-locations.test.mjs:154:6)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: DBG-001: selecting a new deep child enables its next child without bucket reselection
+ok 72 - DBG-001: selecting a new deep child enables its next child without bucket reselection
+  ---
+  duration_ms: 20.164683
+  type: 'test'
+  ...
+# Subtest: DBG-001: create-new folder enables repeated + Child through five levels
+ok 73 - DBG-001: create-new folder enables repeated + Child through five levels
+  ---
+  duration_ms: 34.639122
+  type: 'test'
+  ...
+# Subtest: DBG-001: selecting existing child enables + Child after the async save lock releases
+ok 74 - DBG-001: selecting existing child enables + Child after the async save lock releases
+  ---
+  duration_ms: 25.475893
+  type: 'test'
+  ...
+# Subtest: central discovery is deterministic and versions and authority remain separate
+ok 75 - central discovery is deterministic and versions and authority remain separate
+  ---
+  duration_ms: 1.175962
+  type: 'test'
+  ...
+# Subtest: real vertical contract resolves intent, three upload invariants, handlers, current source and regression
+not ok 76 - real vertical contract resolves intent, three upload invariants, handlers, current source and regression
+  ---
+  duration_ms: 31.852436
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/semantic-api.test.mjs:21:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'stale' !== 'current'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'current'
+  actual: 'stale'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/semantic-api.test.mjs:22:130)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: pagination is sorted, exhaustive and rejects invalid limits or depths
+ok 77 - pagination is sorted, exhaustive and rejects invalid limits or depths
+  ---
+  duration_ms: 65.206027
+  type: 'test'
+  ...
+# Subtest: independent DFS agrees with reader bidirectional traversal on cyclic portable golden
+ok 78 - independent DFS agrees with reader bidirectional traversal on cyclic portable golden
+  ---
+  duration_ms: 2.504309
+  type: 'test'
+  ...
+# Subtest: reverse direction and supporting/counterevidence remain explicit
+ok 79 - reverse direction and supporting/counterevidence remain explicit
+  ---
+  duration_ms: 58.739209
+  type: 'test'
+  ...
+# Subtest: exact debug events, unknown optional fields and original provenance survive semantic evidence queries
+ok 80 - exact debug events, unknown optional fields and original provenance survive semantic evidence queries
+  ---
+  duration_ms: 25.552554
+  type: 'test'
+  ...
+# Subtest: duplicate IDs, endpoints, aliases, ownership, coverage and forged proof fail closed
+ok 81 - duplicate IDs, endpoints, aliases, ownership, coverage and forged proof fail closed
+  ---
+  duration_ms: 9.643426
+  type: 'test'
+  ...
+# Subtest: traversal attempts, secret-like content and symlinks cannot expose private files
+ok 82 - traversal attempts, secret-like content and symlinks cannot expose private files
+  ---
+  duration_ms: 9.375808
+  type: 'test'
+  ...
+# Subtest: changed bytes and moved anchors yield stale warnings; cached snapshots stay pinned
+ok 83 - changed bytes and moved anchors yield stale warnings; cached snapshots stay pinned
+  ---
+  duration_ms: 2.198927
+  type: 'test'
+  ...
+# Subtest: real change impact is possible and unknown changes never get invented proof
+ok 84 - real change impact is possible and unknown changes never get invented proof
+  ---
+  duration_ms: 64.195665
+  type: 'test'
+  ...
+# Subtest: full finite public coverage inventory resolves strata and all canonical case links
+not ok 85 - full finite public coverage inventory resolves strata and all canonical case links
+  ---
+  duration_ms: 26.496824
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/semantic-api.test.mjs:71:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    81 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 81
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/semantic-api.test.mjs:72:111)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: lesson is a portable proposal validated by actual upstream reference API, without acceptance
+ok 86 - lesson is a portable proposal validated by actual upstream reference API, without acceptance
+  ---
+  duration_ms: 47.277891
+  type: 'test'
+  ...
+# Subtest: missing normative references fail independent upstream validation and future fields survive
+ok 87 - missing normative references fail independent upstream validation and future fields survive
+  ---
+  duration_ms: 25.814409
+  type: 'test'
+  ...
+# Subtest: archived graph/golden remains readable; normalization preserves bytes, optional fields and stable identity across rewrite
+ok 88 - archived graph/golden remains readable; normalization preserves bytes, optional fields and stable identity across rewrite
+  ---
+  duration_ms: 1.503146
+  type: 'test'
+  ...
+# Subtest: aliases resolve deterministically, deprecation metadata stays visible and no guessed split
+ok 89 - aliases resolve deterministically, deprecation metadata stays visible and no guessed split
+  ---
+  duration_ms: 0.868444
+  type: 'test'
+  ...
+# Subtest: oversized models and graph depths are bounded and errors do not echo unsafe input
+ok 90 - oversized models and graph depths are bounded and errors do not echo unsafe input
+  ---
+  duration_ms: 34.642203
+  type: 'test'
+  ...
+# Subtest: workflow is dry-run by default and arbitrary commands cannot be supplied
+ok 91 - workflow is dry-run by default and arbitrary commands cannot be supplied
+  ---
+  duration_ms: 98.005371
+  type: 'test'
+  ...
+# Subtest: DOM observer requires independent consent and reads structure only, not values/storage
+ok 92 - DOM observer requires independent consent and reads structure only, not values/storage
+  ---
+  duration_ms: 0.258144
+  type: 'test'
+  ...
+# Subtest: CLI works from outside checkout, emits one JSON result and rejects malformed flags
+ok 93 - CLI works from outside checkout, emits one JSON result and rejects malformed flags
+  ---
+  duration_ms: 241.834441
+  type: 'test'
+  ...
+# Subtest: innocent internal symlink aliases cannot read excluded credential paths
+ok 94 - innocent internal symlink aliases cannot read excluded credential paths
+  ---
+  duration_ms: 1.27977
+  type: 'test'
+  ...
+# Subtest: aggregate frozen-debug corpus has a semantic-reader memory budget before delegation
+ok 95 - aggregate frozen-debug corpus has a semantic-reader memory budget before delegation
+  ---
+  duration_ms: 28.723284
+  type: 'test'
+  ...
+# Subtest: archived hostile fixtures produce stable errors on the released decoder
+ok 96 - archived hostile fixtures produce stable errors on the released decoder
+  ---
+  duration_ms: 2.2711
+  type: 'test'
+  ...
+# Subtest: replacement relational reader preserves directed depth semantics across rewrite fixtures
+ok 97 - replacement relational reader preserves directed depth semantics across rewrite fixtures
+  ---
+  duration_ms: 4.105919
+  type: 'test'
+  ...
+# Subtest: replacement evaluation remains partial when browser evidence is absent; failure dominates
+ok 98 - replacement evaluation remains partial when browser evidence is absent; failure dominates
+  ---
+  duration_ms: 0.513368
+  type: 'test'
+  ...
+# Subtest: large reachable graph stops at visited budget and pagination never hides truncation
+ok 99 - large reachable graph stops at visited budget and pagination never hides truncation
+  ---
+  duration_ms: 29.829357
+  type: 'test'
+  ...
+# Subtest: frozen APIs/fixtures stay byte-identical and all original incident journal prefixes survive
+ok 100 - frozen APIs/fixtures stay byte-identical and all original incident journal prefixes survive
+  ---
+  duration_ms: 0.63384
+  type: 'test'
+  ...
+# Subtest: vendored actual upstream sources and schemas retain pinned hashes
+ok 101 - vendored actual upstream sources and schemas retain pinned hashes
+  ---
+  duration_ms: 0.730028
+  type: 'test'
+  ...
+# Subtest: Simple: removing an ancestor preserves reusable blank descendant rows and does not delete R2 folders
+ok 102 - Simple: removing an ancestor preserves reusable blank descendant rows and does not delete R2 folders
+  ---
+  duration_ms: 22.7355
+  type: 'test'
+  ...
+# Subtest: Simple: selecting existing folder does not populate creation draft
+ok 103 - Simple: selecting existing folder does not populate creation draft
+  ---
+  duration_ms: 17.783682
+  type: 'test'
+  ...
+# Subtest: Simple: new directory is created under the exact parent only after Create
+ok 104 - Simple: new directory is created under the exact parent only after Create
+  ---
+  duration_ms: 17.403253
+  type: 'test'
+  ...
+# Subtest: Simple menu places default and extra destinations immediately under REDOWN, never inside a preset submenu
+not ok 105 - Simple menu places default and extra destinations immediately under REDOWN, never inside a preset submenu
+  ---
+  duration_ms: 1.440511
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:26:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'onAlarm')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    evalmachine.<anonymous>:117:15
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:22:6)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:27:11)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+  ...
+# Subtest: Simple blank labels honor bucket fallback without adding a submenu or changing explicit names
+not ok 106 - Simple blank labels honor bucket fallback without adding a submenu or changing explicit names
+  ---
+  duration_ms: 1.147552
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:47:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'onAlarm')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    evalmachine.<anonymous>:117:15
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:22:6)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:48:11)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+  ...
+# Subtest: Menu Label is default for existing profiles without a saved preference
+not ok 107 - Menu Label is default for existing profiles without a saved preference
+  ---
+  duration_ms: 0.881259
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:65:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'onAlarm')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    evalmachine.<anonymous>:117:15
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:22:6)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:66:11)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+  ...
+# Subtest: Lowest directory preference selects location name rather than a manually entered label
+not ok 108 - Lowest directory preference selects location name rather than a manually entered label
+  ---
+  duration_ms: 1.504435
+  type: 'test'
+  location: '/workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:73:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'onAlarm')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    evalmachine.<anonymous>:117:15
+    Script.runInContext (node:vm:149:12)
+    Object.runInContext (node:vm:301:6)
+    harness (file:///workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:22:6)
+    TestContext.<anonymous> (file:///workspace/remote-download-2-cloudfare/tests/simple-menu-flat.test.mjs:74:11)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+  ...
+# Subtest: BUG-014: selecting an existing child does not fill the new-folder input or create a directory
+ok 109 - BUG-014: selecting an existing child does not fill the new-folder input or create a directory
+  ---
+  duration_ms: 28.724647
+  type: 'test'
+  ...
+# Subtest: BUG-013: right-side root lists only immediate folders from the selected left bucket
+ok 110 - BUG-013: right-side root lists only immediate folders from the selected left bucket
+  ---
+  duration_ms: 8.406974
+  type: 'test'
+  ...
+# Subtest: BUG-013: stale earlier bucket results cannot overwrite newly selected bucket
+ok 111 - BUG-013: stale earlier bucket results cannot overwrite newly selected bucket
+  ---
+  duration_ms: 7.889004
+  type: 'test'
+  ...
+# Subtest: DBG-003 child requests released after bucket switch cannot contaminate current shared cache
+ok 112 - DBG-003 child requests released after bucket switch cannot contaminate current shared cache
+  ---
+  duration_ms: 11.976907
+  type: 'test'
+  ...
+# Subtest: DBG-003 late profile completion cannot alter the new bucket view
+ok 113 - DBG-003 late profile completion cannot alter the new bucket view
+  ---
+  duration_ms: 10.317496
+  type: 'test'
+  ...
+# Subtest: DBG-003 late creation completion cannot alter the new bucket view
+ok 114 - DBG-003 late creation completion cannot alter the new bucket view
+  ---
+  duration_ms: 9.199327
+  type: 'test'
+  ...
+1..114
+# tests 114
+# suites 0
+# pass 87
+# fail 27
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2587.395473

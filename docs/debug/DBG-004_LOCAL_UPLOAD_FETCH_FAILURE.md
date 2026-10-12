@@ -61,3 +61,14 @@ Source commits `efb82701139328635b13ec1ba5064c161205702e` and `641b9553cf5073ba4
 ## 2026-10-12 — Cloudflare OAuth login follow-up GET aborted
 
 A reported `Failed to fetch` during Cloudflare sign-in was investigated in `extension/cloudflare-auth.js`. The callback exchanges a single-use OAuth code for a token and then independently calls the Cloudflare `/accounts` endpoint. Previously any transient fetch failure on that second request caused `finishCloudflareLogin(..., "failed")` and discarded the successfully exchanged token. Commit `1b8d855e9f53fa985efaeecbe1f68343c9e071db` retries transport-only failures on the optional account-listing verification up to three times, then preserves the issued token and concludes OAuth login if that API request remains unreachable; HTTP permission errors still fail verification. A failed token exchange itself is not masked. This does not cure underlying `ERR_NETWORK_CHANGED`, and further API operations may fail until connectivity recovers. Source syntax checked; end-to-end Chrome and live Cloudflare OAuth not verified.
+
+## 2026-10-12 — separately gated remote URL engine evidence
+
+The new [portable remote engine report](../CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION_REPORT.md)
+records actual local HTTP→R2-compatible fixture and Wrangler/Miniflare transfers,
+independent digest readback and separate executor-process recovery. Deliberate
+crash/transport faults are **simulations**. This route transfers remote URLs on
+server infrastructure and does not repair browser `ERR_NETWORK_CHANGED` for
+Upload from Computer. Nineteen existing Upload/provider/Explorer local fixtures
+passed; installed Chrome and live R2 verification remain pending. No incident
+closure, local-byte persistence or local-file deletion is inferred.

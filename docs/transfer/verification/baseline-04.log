@@ -1,0 +1,22 @@
+Incidents sorted by exact case ID. Filters use documented severity and derived lifecycle, not duplicate-report counts.
+Record freshness: stale; overall behavioral evidence: unknown
+DBG-001 [open, high] Nested editor cannot reliably append deeper children without ancestor reselection
+DBG-002 [open, medium] Simple right-click menu location editor must support redirection and explicit creation without losing child rows
+DBG-003 [open, high] Upload from Computer mixes existing selection and creation draft; folder listings can mix bucket data
+Freshness warning: stale-reference docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md
+Freshness warning: stale-reference docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md
+Freshness warning: stale-reference docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md
+Freshness warning: stale-reference docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md
+Freshness warning: stale-reference docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md
+Freshness warning: stale-reference docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md
+Freshness warning: stale-reference docs/debug/DBG-001_NESTED_CHILD_DEPTH_DISABLED_STATE.md
+Freshness warning: stale-reference extension/background.js
+Freshness warning: stale-reference extension/background.js
+Freshness warning: stale-reference extension/nested-menu-editor.js
+Freshness warning: stale-reference extension/nested-menu-editor.js
+Freshness warning: stale-reference extension/nested-menu-editor.js
+Freshness warning: stale-reference extension/nested-menu-editor.js
+Freshness warning: stale-reference extension/nested-menu-editor.js
+Freshness warning: stale-reference extension/nested-menu-editor.js
+Freshness warning: stale-reference extension/options.js
+Freshness warning: stale-reference tests/nested-locations.test.mjs

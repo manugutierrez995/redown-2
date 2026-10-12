@@ -54,3 +54,13 @@
 **Unknown unless specifically noted:** individual handler integration coverage, cloud permission propagation, full pagination under caps, browser suspension and destructive-operation recovery. `tests/explorer-worker.test.mjs` executes embedded Worker operations against MemoryBucket; it does not exercise background message routing or Cloudflare REST. `tests/nested-locations.test.mjs` mocks message responses for selection/Create and menu generation. `tests/cloudflare-files.test.mjs` tests direct API reads/downloads. Login tests contain a stale importScripts harness and currently fail before most login behavior can execute.
 
 Important **verified-in-source** paths bypass messages: native context-menu transfers call background ingest directly; Settings Connect Cloudflare uses the shared auth controller; `uploadLocalFiles` posts File bodies directly to Worker; `showWorkspacePreview/explorerDownload` use `RedownCloudflareApi.preview/download` directly; menu mode/profile settings write local storage and trigger `chrome.storage.onChanged`. These paths are why enumerating messages alone does not establish full architecture coverage.
+
+## Gated remote-transfer namespace (additive, outside frozen v0.1 inventory)
+
+`remoteTransferJobs` dispatches through `RedownRemoteTransfers.handle` in
+`extension/remote-transfers.js`: replay retained metadata submissions with their
+original idempotency keys, then authenticated job listing; writes only disposable
+local/IndexedDB projections. It never prepares or deploys a Worker.
+`remoteTransferCancel` requests cancellation of one authenticated tenant job.
+These are control-plane messages; no source byte stream or credentials are returned.
+The original 33 literal handlers and frozen project/debug API contracts are retained.

@@ -1,0 +1,223 @@
+{
+  "apiVersion": "0.1",
+  "data": {
+    "agentApiVersion": "0.1",
+    "catalogVersion": "0.1",
+    "operations": [
+      "describe",
+      "explainOperation",
+      "getForeverLinks",
+      "listOperations",
+      "projectOverview"
+    ],
+    "readOnly": true,
+    "forever": {
+      "referencedStandardVersion": "0.1",
+      "referencedPublicApiVersion": "0.1",
+      "supportedModelVersions": [],
+      "adapterImplemented": false
+    },
+    "sourceCommit": "75ffcf5b775e48f893126083b51890c730c9c3b4",
+    "discoveryLimits": [
+      "Six representative operations; remaining messages inventoried in docs/agent/MESSAGE_INVENTORY.md",
+      "Source hashes and literal symbol anchors detect reference drift, not semantic correctness or executed test outcomes",
+      "Browser/OAuth/cloud deployment and Windows execution not verified",
+      "No accepted Forever Works model; links remain unknown"
+    ]
+  },
+  "sourceRefs": [],
+  "provenance": {
+    "authority": "implementation observations; not accepted durable intent",
+    "reviewStatus": "unreviewed",
+    "sourceType": "agent-proposed"
+  },
+  "evidenceStatus": "unknown",
+  "freshness": {
+    "status": "stale",
+    "scope": "catalogued files and literal anchors only; test outcomes and semantic completeness are unknown",
+    "findings": [
+      {
+        "code": "stale-source",
+        "path": "README.md"
+      },
+      {
+        "code": "stale-source",
+        "path": "bugs/README.md"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/background.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/cloudflare-api.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/cloudflare-auth.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/manifest.json"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/nested-menu-editor.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/options.html"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/options.js"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/manifest.json",
+        "symbol": "\"service_worker\""
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "const WORKER_SOURCE"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function createBucket"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "function simpleBucketCreator"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "$(\"create-bucket\").addEventListener"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function rootRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function createExplorerFolder"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function callBucketWorker"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "body.action === \"ensurePrefixes\""
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "function beginNewFolder"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function folderRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listFolderChildren"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listObjectsPage"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function fetchUploadBuilderChildren"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function folderRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "tests/nested-locations.test.mjs",
+        "symbol": "Add child and Create use the exact parent path; actual dropdown children stay scoped"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "chrome.contextMenus.onClicked.addListener"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function ingestCloudflareAtPrefix"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function checkedFetch"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "const WORKER_SOURCE"
+      },
+      {
+        "code": "stale-reference",
+        "path": "tests/nested-locations.test.mjs",
+        "symbol": "native nested menu targets every verified depth and offers Send here for parents"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function goLocation"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function browseWorkspace"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listObjectsPage"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/cloudflare-api.js",
+        "symbol": "async function preview"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function uploadLocalFiles"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function ensureUploadProfile"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function loadUploadLocations"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "request.headers.get(\"x-redown-action\") === \"upload-local\""
+      }
+    ]
+  },
+  "explanation": "Offline read-only project inspection. Discover supported operations here; Forever Works model integration is absent."
+}

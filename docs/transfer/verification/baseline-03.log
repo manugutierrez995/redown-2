@@ -1,0 +1,44 @@
+{
+  "debugApiVersion": "0.1",
+  "debugRecordVersion": "0.1",
+  "data": {
+    "debugApiVersion": "0.1",
+    "supportedRecordVersions": [
+      "0.1"
+    ],
+    "operations": [
+      "describe",
+      "getHistory",
+      "getIncident",
+      "listIncidents",
+      "validateDebugRecords"
+    ],
+    "readOnly": true,
+    "snapshot": "lazy, immutable per API instance; recreate to refresh",
+    "limits": {
+      "bytesPerFile": 4194304,
+      "eventsPerCase": 10000,
+      "cases": 1000
+    },
+    "forever": {
+      "standardVersion": "0.1",
+      "publicApiVersion": "0.1",
+      "supportedModelVersions": [],
+      "adapterImplemented": false
+    },
+    "coverage": "One curated incident; no similarity, impact graph, runtime import, live tests or remediation execution."
+  },
+  "sourceRefs": [],
+  "recordRefs": [],
+  "provenance": {
+    "sourceType": "historical",
+    "reviewStatus": "unreviewed"
+  },
+  "evidenceStatus": "unknown",
+  "freshness": {
+    "status": "unknown",
+    "findings": [],
+    "scope": "Pinned record snapshot; source hashes and literal anchors only, never test or browser outcomes."
+  },
+  "explanation": "Offline incident inspection. Discover operations here; record validation and runtime verification are separate."
+}

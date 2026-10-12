@@ -1,0 +1,111 @@
+{
+  "authority": "proposed",
+  "certified": false,
+  "foreverPublishedSchema": {
+    "errorCount": 19,
+    "errors": [
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.component.background",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.component.settings",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.evidence.dbg-003.child-cache-guard",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.evidence.dbg-003.child-cache-reproduced",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.evidence.dbg-003.local-fixture-verification",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.evidence.dbg-003.remediation",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.evidence.dbg-003.report",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.evidence.dbg-003.source-investigation",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.evidence.dbg-003.verification-pending",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.evidence.upload-existing-root-guard",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.intent.destination.fidelity",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.lesson.request-context-freshness",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.nested.editor",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.simple.menu.flat",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.transfer.pipeline",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.upload.destination.selection",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.upload.invariant.immediate-children",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.upload.invariant.request-freshness",
+        "validator": "pattern"
+      },
+      {
+        "path": "$.foreverVersion",
+        "record": "redown.upload.invariant.separate-draft",
+        "validator": "pattern"
+      }
+    ],
+    "status": "blocked-by-upstream-version-pattern",
+    "valid": false
+  },
+  "semanticSchema": {
+    "models": 2,
+    "valid": true
+  },
+  "upstreamCommit": "230c67fa7e27577c53b6f7895df442a2ab24e4cb"
+}

@@ -1,0 +1,284 @@
+{
+  "apiVersion": "0.1",
+  "data": {
+    "boundaries": [
+      "Forever Works: accepted durable why (not yet integrated)",
+      "agent/: static current-how inspection; never execute transfers",
+      "Simple programmer API/native CLI: proposed; current extension messages are not that public API",
+      "Existing extension/Worker execution remains untouched"
+    ],
+    "commands": [
+      "npm ci --cache /workspace/.npm-cache --no-audit --no-fund",
+      "npm run check",
+      "npm test",
+      "node --test tests/agent-api.test.mjs",
+      "node agent/cli.mjs describe --json"
+    ],
+    "entryPoints": [
+      "extension/manifest.json → background.js, popup.html, options.html",
+      "WORKER_SOURCE embedded in extension/background.js: primary per-bucket runtime",
+      "worker/src/index.js: separate smaller ASSETS ingest sample",
+      "local/bridge.mjs: optional legacy bridge; not used by current popup",
+      "windows/CMakeLists.txt: native source windows/src/main.c absent"
+    ],
+    "evidenceStatus": "verified-in-source",
+    "sourceRefs": [
+      {
+        "path": "extension/manifest.json",
+        "sha256": "8641423d779dd6af942bfea0bad9d369b0755f7b23c4df7bb6d37cc3f64ae6ca",
+        "symbol": "\"service_worker\""
+      },
+      {
+        "path": "extension/background.js",
+        "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66",
+        "symbol": "const WORKER_SOURCE"
+      },
+      {
+        "path": "extension/rfis-index.js",
+        "sha256": "9f5a18349521a398ea2f0e85b1a1978830fc8aa5caf06e93f1806502e14d8f1f",
+        "symbol": "async function observe"
+      },
+      {
+        "path": "worker/src/index.js",
+        "sha256": "b354b3dc77d6f1b4196f137c02dd040ca8f143579b4765595546d751929f17a4",
+        "symbol": "async fetch(request, env)"
+      }
+    ],
+    "status": [
+      {
+        "claim": "Context menus, OAuth, direct preview/download, upload UI and Explorer are present",
+        "evidenceStatus": "verified-in-source"
+      },
+      {
+        "claim": "RFIS opt-in IndexedDB observations/export exist; no move lineage or crash-safe transfer journal demonstrated",
+        "evidenceStatus": "verified-in-source"
+      },
+      {
+        "claim": "Unified public API, native CLI, paid tiers and durable recovery are proposals",
+        "evidenceStatus": "proposed"
+      },
+      {
+        "claim": "Installed Wrangler runtime supports 2026-05-03; repository requests 2026-09-26",
+        "evidenceStatus": "unknown",
+        "note": "Local startup blocked in baseline; do not silently change runtime semantics."
+      }
+    ],
+    "summary": "REDOWN 0.5.12 browser extension sends remote HTTPS files to R2 through per-bucket Workers or dispatches GitHub Actions; options also uploads local files and browses R2."
+  },
+  "sourceRefs": [
+    {
+      "path": "extension/manifest.json",
+      "sha256": "8641423d779dd6af942bfea0bad9d369b0755f7b23c4df7bb6d37cc3f64ae6ca",
+      "symbol": "\"service_worker\""
+    },
+    {
+      "path": "extension/background.js",
+      "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66",
+      "symbol": "const WORKER_SOURCE"
+    },
+    {
+      "path": "extension/rfis-index.js",
+      "sha256": "9f5a18349521a398ea2f0e85b1a1978830fc8aa5caf06e93f1806502e14d8f1f",
+      "symbol": "async function observe"
+    },
+    {
+      "path": "worker/src/index.js",
+      "sha256": "b354b3dc77d6f1b4196f137c02dd040ca8f143579b4765595546d751929f17a4",
+      "symbol": "async fetch(request, env)"
+    }
+  ],
+  "provenance": {
+    "authority": "implementation observations; not accepted durable intent",
+    "reviewStatus": "unreviewed",
+    "sourceType": "agent-proposed"
+  },
+  "evidenceStatus": "unknown",
+  "freshness": {
+    "status": "stale",
+    "scope": "catalogued files and literal anchors only; test outcomes and semantic completeness are unknown",
+    "findings": [
+      {
+        "code": "stale-source",
+        "path": "README.md"
+      },
+      {
+        "code": "stale-source",
+        "path": "bugs/README.md"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/background.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/cloudflare-api.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/cloudflare-auth.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/manifest.json"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/nested-menu-editor.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/options.html"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/options.js"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/manifest.json",
+        "symbol": "\"service_worker\""
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "const WORKER_SOURCE"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function createBucket"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "function simpleBucketCreator"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "$(\"create-bucket\").addEventListener"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function rootRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function createExplorerFolder"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function callBucketWorker"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "body.action === \"ensurePrefixes\""
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "function beginNewFolder"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function folderRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listFolderChildren"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listObjectsPage"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function fetchUploadBuilderChildren"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function folderRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "tests/nested-locations.test.mjs",
+        "symbol": "Add child and Create use the exact parent path; actual dropdown children stay scoped"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "chrome.contextMenus.onClicked.addListener"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function ingestCloudflareAtPrefix"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function checkedFetch"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "const WORKER_SOURCE"
+      },
+      {
+        "code": "stale-reference",
+        "path": "tests/nested-locations.test.mjs",
+        "symbol": "native nested menu targets every verified depth and offers Send here for parents"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function goLocation"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function browseWorkspace"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listObjectsPage"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/cloudflare-api.js",
+        "symbol": "async function preview"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function uploadLocalFiles"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function ensureUploadProfile"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function loadUploadLocations"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "request.headers.get(\"x-redown-action\") === \"upload-local\""
+      }
+    ]
+  },
+  "explanation": "REDOWN 0.5.12 browser extension sends remote HTTPS files to R2 through per-bucket Workers or dispatches GitHub Actions; options also uploads local files and browses R2."
+}

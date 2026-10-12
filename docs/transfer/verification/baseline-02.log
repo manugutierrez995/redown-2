@@ -1,0 +1,307 @@
+{
+  "apiVersion": "0.1",
+  "data": {
+    "coverage": "partial: nested menu routing fixture tests exist; full event → network ingest/R2 write and interruption tests absent.",
+    "errors": [
+      "Missing destination or unprepared selected Simple bucket",
+      "Invalid source/path, remote HTTP failure, size limit, authorization, provisioning or R2 failure",
+      "Nested parent uses Send here due to native menu constraints"
+    ],
+    "evidenceStatus": "verified-in-source",
+    "foreverLinks": {
+      "links": [],
+      "reason": "No accepted ReDown Forever Works model or stable entity mapping is present.",
+      "status": "unknown",
+      "supportedModelVersions": []
+    },
+    "id": "context-menu-transfer",
+    "input": "Chrome context-menu event: menuItemId, srcUrl/linkUrl/pageUrl; persisted profile and selected prefix.",
+    "output": "Notification and a capped local transferHistory entry; R2 Worker returns key/publicUrl, while GitHub dispatch is only an acknowledgement.",
+    "path": [
+      "chrome.contextMenus.onClicked",
+      "selectedUrl",
+      "RedownNestedLocations.destinations or Simple profile lookup",
+      "ingestCloudflareAtPrefix",
+      "preparedProfile (may deploy/repair)",
+      "WORKER_SOURCE.fetch → checkedFetch → STORAGE.put",
+      "recordTransfer → notify"
+    ],
+    "security": [
+      "Bearer secret on deployed Worker",
+      "HTTPS, obvious private-host blocking and redirect revalidation in checkedFetch",
+      "cleanExplorerPrefix/cleanName; source validation is not full DNS-rebinding protection"
+    ],
+    "sideEffects": [
+      "May deploy Worker, enable subdomain and create prefix markers before transfer",
+      "R2 object write; same key can overwrite",
+      "GitHub branch may install workflow and dispatch Actions; dispatch does not verify final commit"
+    ],
+    "sourceRefs": [
+      {
+        "path": "extension/background.js",
+        "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66",
+        "symbol": "chrome.contextMenus.onClicked.addListener"
+      },
+      {
+        "path": "extension/background.js",
+        "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66",
+        "symbol": "async function ingestCloudflareAtPrefix"
+      },
+      {
+        "path": "extension/background.js",
+        "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66",
+        "symbol": "async function checkedFetch"
+      },
+      {
+        "path": "extension/background.js",
+        "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66",
+        "symbol": "const WORKER_SOURCE"
+      },
+      {
+        "path": "extension/nested-locations.js",
+        "sha256": "663a0cb8b08f7cddcf7274ccc1c424becb6e9c2ea0e8949b25c3183d9f005f73",
+        "symbol": "function destinations"
+      }
+    ],
+    "state": [
+      "profiles/rightClickMode in chrome.storage.local",
+      "Worker secret in profile plus session provisioning cache",
+      "transferHistory capped at 50; no crash-safe journal"
+    ],
+    "summary": "Send a selected HTTPS source to the saved Simple or Nested destination.",
+    "testRefs": [
+      {
+        "path": "tests/nested-locations.test.mjs",
+        "sha256": "0dc1ba13e361e7f175c5649d043840d27b200cc77ac0739780dfaaba7884ab37",
+        "symbol": "native nested menu targets every verified depth and offers Send here for parents"
+      }
+    ],
+    "uiOrigin": "Native REDOWN context menu built by buildMenus/addNestedLocations."
+  },
+  "sourceRefs": [
+    {
+      "path": "extension/background.js",
+      "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66",
+      "symbol": "chrome.contextMenus.onClicked.addListener"
+    },
+    {
+      "path": "extension/background.js",
+      "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66",
+      "symbol": "async function ingestCloudflareAtPrefix"
+    },
+    {
+      "path": "extension/background.js",
+      "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66",
+      "symbol": "async function checkedFetch"
+    },
+    {
+      "path": "extension/background.js",
+      "sha256": "6ce053548a011d61bf714c0b889562d34a79782bc9aa4953c9f68dcf30769c66",
+      "symbol": "const WORKER_SOURCE"
+    },
+    {
+      "path": "extension/nested-locations.js",
+      "sha256": "663a0cb8b08f7cddcf7274ccc1c424becb6e9c2ea0e8949b25c3183d9f005f73",
+      "symbol": "function destinations"
+    },
+    {
+      "path": "tests/nested-locations.test.mjs",
+      "sha256": "0dc1ba13e361e7f175c5649d043840d27b200cc77ac0739780dfaaba7884ab37",
+      "symbol": "native nested menu targets every verified depth and offers Send here for parents"
+    }
+  ],
+  "provenance": {
+    "authority": "implementation observations; not accepted durable intent",
+    "reviewStatus": "unreviewed",
+    "sourceType": "agent-proposed"
+  },
+  "evidenceStatus": "unknown",
+  "freshness": {
+    "status": "stale",
+    "scope": "catalogued files and literal anchors only; test outcomes and semantic completeness are unknown",
+    "findings": [
+      {
+        "code": "stale-source",
+        "path": "README.md"
+      },
+      {
+        "code": "stale-source",
+        "path": "bugs/README.md"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/background.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/cloudflare-api.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/cloudflare-auth.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/manifest.json"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/nested-menu-editor.js"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/options.html"
+      },
+      {
+        "code": "stale-source",
+        "path": "extension/options.js"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/manifest.json",
+        "symbol": "\"service_worker\""
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "const WORKER_SOURCE"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function createBucket"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "function simpleBucketCreator"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "$(\"create-bucket\").addEventListener"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function rootRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function createExplorerFolder"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function callBucketWorker"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "body.action === \"ensurePrefixes\""
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "function beginNewFolder"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function folderRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listFolderChildren"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listObjectsPage"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function fetchUploadBuilderChildren"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/nested-menu-editor.js",
+        "symbol": "function folderRow"
+      },
+      {
+        "code": "stale-reference",
+        "path": "tests/nested-locations.test.mjs",
+        "symbol": "Add child and Create use the exact parent path; actual dropdown children stay scoped"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "chrome.contextMenus.onClicked.addListener"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function ingestCloudflareAtPrefix"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function checkedFetch"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "const WORKER_SOURCE"
+      },
+      {
+        "code": "stale-reference",
+        "path": "tests/nested-locations.test.mjs",
+        "symbol": "native nested menu targets every verified depth and offers Send here for parents"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function goLocation"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function browseWorkspace"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "async function listObjectsPage"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/cloudflare-api.js",
+        "symbol": "async function preview"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function uploadLocalFiles"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function ensureUploadProfile"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/options.js",
+        "symbol": "async function loadUploadLocations"
+      },
+      {
+        "code": "stale-reference",
+        "path": "extension/background.js",
+        "symbol": "request.headers.get(\"x-redown-action\") === \"upload-local\""
+      }
+    ]
+  },
+  "explanation": "Send a selected HTTPS source to the saved Simple or Nested destination. Evidence: partial: nested menu routing fixture tests exist; full event → network ingest/R2 write and interruption tests absent."
+}
