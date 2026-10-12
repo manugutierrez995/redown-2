@@ -1,9 +1,9 @@
 # ReDown semantic project access implementation report
 
-**Recorded:** 2026-10-11, America/Chicago (execution artifacts retain actual UTC timestamps).  
-**ReDown baseline:** `bcbbe10452773ad5e2794f99e66a39de0d1cef69`, current main fetched before work.  
-**Branch:** `main`; runtime correction commit `949a5dc`; framework/source evidence is committed with this report.  
-**Forever Works baseline:** `230c67fa7e27577c53b6f7895df442a2ab24e4cb`.  
+**Recorded:** 2026-10-11, America/Chicago (execution artifacts retain actual UTC timestamps).
+**ReDown baseline:** `bcbbe10452773ad5e2794f99e66a39de0d1cef69`, current main fetched before work.
+**Branch:** `main`; runtime correction commit `949a5dc`; framework/source evidence commit `3488d8cf10cf477c6524dc8798bbe1e17b910f41`.
+**Forever Works baseline:** `230c67fa7e27577c53b6f7895df442a2ab24e4cb`.
 **Environment:** Linux x64, Node `v24.19.0`, jsdom 26; local checkout and sanitized fixtures. CI, installed Chrome, live R2 and deployment were not observed.
 
 A working independently versioned semantic framework now provides discovery, entity/contract navigation, bidirectional dependency tracing, source/debug evidence, conservative change impact, public artifact coverage, dry-run verification plans and portable learning proposals. The documented cold-agent session was executed through the real CLI. A scoped Upload child-cache defect was reproduced and corrected, with new regression tests. This is a functional local framework, not merely a schema or planned adapter.

@@ -1,6 +1,7 @@
 {
   "baselineCommit": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
   "excludedSelf": "docs/agent/semantic/verification/implementation-files.json",
+  "frameworkCommit": "3488d8cf10cf477c6524dc8798bbe1e17b910f41",
   "runtimePatchCommit": "949a5dc",
   "sha256": {
     ".gitignore": "d7179fcc708b0f20c11a0f4720c9e78b52f4d4a252d0020ead34b7801eeb4387",
@@ -39,7 +40,7 @@
     "agent/semantic/vendor/forever-works-0.1/src/node.js": "9db21b71f494a8e0f5b4fef5c54704db34641bc5e46e873aa11b915c62f5d58e",
     "agent/semantic/workflow.mjs": "b3a2e60ba4f7e45a1cd064def9ce433e972d6ae414a11b15c5a3b54488ee4ed5",
     "debug/cases/DBG-003.events.jsonl": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
-    "docs/CODEX_SEMANTIC_PROJECT_ACCESS_IMPLEMENTATION_REPORT.md": "ebce76a9e1ab5cb78f3b968d487f9b40ce1c0d592fb1713fa0235cddc423dc9b",
+    "docs/CODEX_SEMANTIC_PROJECT_ACCESS_IMPLEMENTATION_REPORT.md": "bc7ccaa9e27ab605d1451ab9a0e1c498130b8b3f3a2ae3e66eda6507ee60fd0b",
     "docs/agent/API.md": "f16d384aab4e9ab02b7b840a3a6ad6c6515d517cfeda3895f95441f0036bf1a4",
     "docs/agent/FOREVER_WORKS_COMPATIBILITY.md": "9b23142959d70a5a494c04b4715099e57bc6cc880348186f7674477d7a6a23b7",
     "docs/agent/semantic/ACCEPTANCE.md": "32c86c603572dbbfc018ac65a1e67e613fe360fa87641b824274a901fb338973",
