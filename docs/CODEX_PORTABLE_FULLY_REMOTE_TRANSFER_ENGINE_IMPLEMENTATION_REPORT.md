@@ -136,3 +136,23 @@ checks pass, with the separate published Forever version-regex failure unchanged
 The invalid intermediate graph and suite output are retained for audit; after
 correction the final suite again reports 176 tests, 149 pass, 27 fail, and the
 failure-name set equals the preimplementation baseline.
+
+## Publication blocked; durable handoff
+
+The runtime implementation is committed as `503c515`, and its proof/mapping as
+`c9e5936`, on local main. An automatic approval reviewer rejected the attempted
+direct push of these two commits to remote main: it interpreted the instruction
+as permission to commit locally, without clear permission to update the shared
+default branch. The combined push command did not execute. A subsequent read-only
+fetch confirms remote main still points to `73c76b69b704858e462312acf33ea8a9c8817212`.
+Do not claim remote landing or bypass the review through an alternate write tool.
+Explicit approval of the remote main update is required.
+
+The managed environment does not mount the projectless `/codex/.../output` path;
+its root filesystem is read-only. Recovery artifacts are therefore preserved in
+`work/handoff/` inside the existing isolated checkout: a binary Git patch over the
+base, a verified Git bundle retaining the local commits, a metadata/checksum file
+and a verification/runbook archive. This tracked report and all source/test proof
+are also committed. A next agent can inspect local main and the complete directive,
+verify the bundle against the required base, or reverse-check the patch against
+this checkout, then request the precise shared-branch publication approval.
