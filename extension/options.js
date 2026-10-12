@@ -1373,8 +1373,9 @@ async function uploadLocalFiles(fileList){
     status.textContent=`Checking R2 for ${file.name} (${index+1}/${files.length})…`;
     const key=prefix?`${prefix}/${file.name}`:file.name;
     let existed="unknown";
+    let firstLookupError="";
     try{existed=await inspectLocalUploadObject(target,key);}
-    catch{existed="unknown (lookup failed)";}
+    catch(error){existed="unknown (lookup failed)";firstLookupError=error?.name||"lookup-error";}
     status.textContent=`Uploading ${file.name} (${index+1}/${files.length}) · already exists: ${existed}…`;
     try{
       if(file.size>300*1000*1000)throw new Error("Cloudflare's direct upload API has a 300 MB per-file limit.");
@@ -1382,19 +1383,31 @@ async function uploadLocalFiles(fileList){
       // Slashes in object keys must remain literal; encode each path component.
       const path=`/accounts/${encodeURIComponent(target.accountId)}/r2/buckets/${encodeURIComponent(target.bucketName)}/objects/${key.split("/").map(encodeURIComponent).join("/")}`;
       let uploaded;
+      let lastFailureStage="request";
       for(let attempt=0;attempt<3;attempt++){
-        const response=await RedownCloudflareApi.request(path,{
-          method:"PUT",
-          headers:{"content-type":file.type||"application/octet-stream"},
-          body:file,
-          timeoutMs:300000
-        });
+        let response;
+        const started=Date.now();
+        try{
+          response=await RedownCloudflareApi.request(path,{
+            method:"PUT",
+            headers:{"content-type":file.type||"application/octet-stream"},
+            body:file,
+            timeoutMs:300000
+          });
+        }catch(error){
+          const kind=error?.name==="TimeoutError"?"timeout":error?.name==="AbortError"?"aborted":"network-or-browser";
+          lastFailureStage=kind;
+          // Fetch TypeErrors provide no HTTP response. Browser DevTools is
+          // needed to distinguish CORS, connectivity, and transport failures.
+          throw new Error(`Upload ${kind} after ${Date.now()-started} ms: ${error?.message||String(error)} (no HTTP response)`);
+        }
         const result=await response.json().catch(()=>null);
         if(response.ok&&result?.success&&result?.result){
           uploaded=result.result;
           if(uploaded.size!=null&&Number(uploaded.size)!==file.size)throw new Error("Uploaded object size did not match the local file.");
           break;
         }
+        lastFailureStage=`HTTP ${response.status}`;
         const transient=[429,500,502,503,504].includes(response.status);
         const reason=result?.errors?.map(e=>e.message).filter(Boolean).join("; ")||`Cloudflare direct upload failed (HTTP ${response.status})`;
         if(!transient||attempt===2)throw new Error(`${reason}${transient?" after 3 attempts":""}`);
@@ -1410,11 +1423,22 @@ async function uploadLocalFiles(fileList){
       status.className="status ok";
       status.textContent=`Uploaded ${completed}/${files.length} · ${file.name}`;
     }catch(error){
-      failed.push({name:file.name,error:error?.message||String(error),existed});
+      let after="unknown";
+      let afterSize=null;
+      try{
+        const verification=await send({type:"cfObjects",accountId:target.accountId,bucketName:target.bucketName,prefix:key});
+        if(!verification?.ok)throw new Error("lookup unavailable");
+        const match=(verification.objects||[]).find(object=>object.key===key);
+        after=match?"yes":verification.cursor?"unknown (listing incomplete)":"no";
+        if(match&&Number.isFinite(Number(match.size)))afterSize=Number(match.size);
+      }catch{after="unknown (lookup failed)";}
+      const possibleWrite=after==="yes"&&afterSize===file.size;
+      const detail=`${error?.message||String(error)}; before=${existed}; after=${after}; afterSize=${afterSize??"unavailable"}; localSize=${file.size}; ${possibleWrite?"matching object size, completion unconfirmed":""}${firstLookupError?"; initial lookup "+firstLookupError:""}`;
+      failed.push({name:file.name,error:detail,existed});
       diagnostics.push({name:file.name,existed,uploaded:false});
-      await send({type:"recordLocalTransfer",ok:false,profileId:profile?.id||"",profileName:profile?.name||target.bucketName,category:categoryFromPrefix(prefix),error:error?.message||String(error)}).catch(()=>{});
+      await send({type:"recordLocalTransfer",ok:false,profileId:profile?.id||"",profileName:profile?.name||target.bucketName,category:categoryFromPrefix(prefix),error:detail}).catch(()=>{});
       status.className="status bad";
-      status.textContent=`Failed ${file.name} (already exists: ${existed}): ${error?.message||String(error)}. Continuing (${index+1}/${files.length})…`;
+      status.textContent=`Failed ${file.name} (already exists: ${existed}): ${detail}. Continuing (${index+1}/${files.length})…`;
     }
   }
   await renderHistory();
