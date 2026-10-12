@@ -1755,7 +1755,7 @@ async function initiateHitomiCapture(info, tab, profiles) {
         document.addEventListener("click",onClick,true);
         URL.createObjectURL=function(object){
           const url=original.apply(this,arguments);
-          if(!captured && object instanceof Blob && object.size>0){
+          if(!captured && object instanceof Blob && object.size>0 && /(?:zip|octet-stream)/i.test(object.type||"application/zip")){
             captured=true;
             window.postMessage({kind:"redown-hitomi-blob-ready",url,filename:document.querySelector("#gallery-brand")?.textContent?.trim()||"hitomi-gallery"},"*");
           }
