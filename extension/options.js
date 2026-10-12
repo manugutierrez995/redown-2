@@ -1370,7 +1370,7 @@ async function uploadLocalFiles(fileList){
         const result=await response.json().catch(()=>null);
         if(response.ok&&result?.success&&result?.result){
           uploaded=result.result;
-          if(Number(uploaded.size)!==file.size)throw new Error("Uploaded object size did not match the local file.");
+          if(uploaded.size!=null&&Number(uploaded.size)!==file.size)throw new Error("Uploaded object size did not match the local file.");
           break;
         }
         const transient=[429,500,502,503,504].includes(response.status);
