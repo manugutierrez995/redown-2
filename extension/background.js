@@ -1890,7 +1890,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // anchor href), and capture generated ZIP bytes for R2 destinations.
   const pageUrl=String(info.pageUrl||tab?.url||"");
   const onHitomiGallery=/^https:\/\/hitomi\.la\//i.test(pageUrl);
-  const isGalleryDocument=/^https:\/\/hitomi\.la\/(?:doujinshi|manga|cg|gamecg|artistcg|galleries|reader|tag|series|character|group|type)\//i.test(pageUrl) &&
+  const isGalleryDocument=/^https:\/\/hitomi\.la\/(?:imageset|doujinshi|manga|cg|gamecg|artistcg|galleries|reader|tag|series|character|group|type)\//i.test(pageUrl) &&
     !/\/(?:index|popular|search)\.html(?:[?#]|$)/i.test(pageUrl);
   const chosenDestination=/^(quick:|simple-option:|nested:|tree:)/.test(String(info.menuItemId));
   if(onHitomiGallery && isGalleryDocument && chosenDestination && !info.srcUrl){
