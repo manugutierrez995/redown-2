@@ -81,3 +81,19 @@ REDOWN can install its generic ingest workflow into the selected repository when
 No runtime behavior depends on this repository's name. Destination repository names, Cloudflare accounts, buckets, paths, menu trees, and labels are user configuration.
 
 See `SETUP.md` and `DESTINATIONS.md`.
+
+## Upload from Computer — resilient retry queue
+
+Local files use a separate transfer route from remote right-click downloads:
+
+```text
+computer file -> authenticated Cloudflare R2 Object API -> selected bucket/key
+```
+
+No REDOWN bucket Worker is involved in **Upload from Computer**. Each file is sent as a raw request body. A matching object key is overwritten on a successful PUT; existing-object checks are diagnostic, not skip rules.
+
+The local upload batch uses a **round-robin retry queue**. A file that succeeds leaves the queue. A transient failure (for example, a browser network change, lost response, timeout, HTTP 429 or temporary HTTP 5xx) moves that file to the back while the remaining files get a turn. When all pending files are cooling down, the queue waits until the next becomes eligible. Delays increase with repeated failures and are capped at roughly 60 seconds, plus small jitter. A retryable file has no fixed three-attempt cutoff. Recognized permanent failures (such as authorization failures or oversize files) are reported separately rather than retried forever.
+
+**Keep the REDOWN settings page open during the entire upload.** The queue holds browser `File` objects in page memory; it is not persisted and cannot resume after the settings page/browser closes or reloads. Files do not upload in the background after that. Persistent restart recovery and chunk-level resume are not implemented.
+
+If a request loses its response, REDOWN may not know whether R2 committed the object. The existence check and matching size are **not integrity verification** and must not be treated as proof of a successful overwrite. A later retry may overwrite that key again. For persistent `Failed to fetch` errors, inspect the browser Console/Network logs (for example, `net::ERR_NETWORK_CHANGED`) and stabilize the network. Source implementation exists, but live Cloudflare/Chrome acceptance and interruption tests remain pending.
