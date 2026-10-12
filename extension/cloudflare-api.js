@@ -2,8 +2,9 @@
 (() => {
   const API = "https://api.cloudflare.com/client/v4";
   async function boundedFetch(url, options = {}) {
-    return fetch(url, {...options, signal: AbortSignal.any([
-      ...(options.signal ? [options.signal] : []), AbortSignal.timeout(30000)
+    const {timeoutMs = 30000, ...fetchOptions} = options;
+    return fetch(url, {...fetchOptions, signal: AbortSignal.any([
+      ...(fetchOptions.signal ? [fetchOptions.signal] : []), AbortSignal.timeout(timeoutMs)
     ])});
   }
   async function auth(rejectedToken) {
