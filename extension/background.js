@@ -1773,7 +1773,13 @@ async function handleHitomiCaptureMessage(message,sender) {
   const intent=hitomiIntents.get(tabId);
   if(!intent||Date.now()-intent.at>180000)throw new Error("No active gallery transfer; retry the right-click action");
   if(!String(sender.url||"").startsWith("https://hitomi.la/"))throw new Error("Unexpected gallery origin");
-  if(message.type==="hitomiCaptureError"){hitomiIntents.delete(tabId);await notify("REDOWN gallery failed",message.error||"Capture failed");return {ok:true};}
+  if(message.type==="hitomiCaptureError"){
+    hitomiIntents.delete(tabId);
+    const error=String(message.error||"Capture failed");
+    await recordTransfer({ok:false,sourceUrl:sender.url,profileId:intent.profile?.id,profileName:intent.profile?.name||"Hitomi gallery",category:"files",error}).catch(()=>{});
+    await notify("REDOWN gallery failed",error);
+    return {ok:true};
+  }
   if(message.type==="hitomiCaptureStart"){
     if(intent.state!=="armed")throw new Error("Capture already started");
     if(!Number.isSafeInteger(message.size)||message.size<=0||message.size>HITOMI_MAX_BYTES)throw new Error("Gallery ZIP exceeds the 64 MiB initial capture limit");
@@ -1830,8 +1836,11 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // Hitomi gallery Download is an anchor and can expose a javascript: or
   // same-page link. Do not mistake it for a remote downloadable asset.
   const onHitomiGallery=/^https:\/\/hitomi\.la\//.test(String(info.pageUrl||tab?.url||""));
-  const hitomiDownloadLink=!info.linkUrl || info.linkUrl==="#" || info.linkUrl.endsWith("#") || /^javascript:/i.test(info.linkUrl) || /(?:download_gallery|#dl-button)/i.test(info.linkUrl);
-  if(onHitomiGallery && hitomiDownloadLink && /^(quick:|simple-option:|nested:|tree:)/.test(String(info.menuItemId))) {
+  // Hitomi gallery Download controls may expose generated or same-page links.
+  const hitomiGalleryPage=/^https:\/\/hitomi\.la\/(?:doujinshi|manga|cg|gamecg|artistcg)\//.test(String(info.pageUrl||tab?.url||""));
+  const hitomiLink=String(info.linkUrl||"");
+  const hitomiDownloadLink=!hitomiLink || /^(?:javascript:|blob:|#)/i.test(hitomiLink) || /(?:download_gallery|#dl-button)/i.test(hitomiLink) || hitomiLink===String(info.pageUrl||tab?.url||"");
+  if(onHitomiGallery && hitomiGalleryPage && hitomiDownloadLink && /^(quick:|simple-option:|nested:|tree:)/.test(String(info.menuItemId))) {
     try { await initiateHitomiCapture(info,tab,profiles); }
     catch(e){
       console.error("REDOWN Hitomi capture start failed",e);
