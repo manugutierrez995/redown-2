@@ -1698,6 +1698,42 @@ function addMenuControls(mode){
  * persistent streaming/multipart R2 upload, not unbounded MV3 service worker RAM.
  */
 const hitomiIntents = new Map();
+const HITOMI_QUEUE_KEY="redownHitomiQueueV1";
+async function readHitomiQueue(){
+  const data=await chrome.storage.local.get(HITOMI_QUEUE_KEY);
+  return Array.isArray(data[HITOMI_QUEUE_KEY])?data[HITOMI_QUEUE_KEY]:[];
+}
+async function markHitomiQueue(id,patch){
+  const jobs=await readHitomiQueue();
+  const index=jobs.findIndex(job=>job.id===id);
+  if(index<0)return;
+  jobs[index]={...jobs[index],...patch,updatedAt:Date.now()};
+  await chrome.storage.local.set({[HITOMI_QUEUE_KEY]:jobs});
+}
+async function retryPendingHitomi(){
+  const jobs=await readHitomiQueue();
+  for(const job of jobs){
+    if(job.status==="complete"||job.status==="needs-tab"||job.nextAt>Date.now())continue;
+    if(job.status==="capturing"&&Date.now()-(job.updatedAt||job.createdAt)<180000)continue;
+    const tab=await chrome.tabs.get(job.tabId).catch(()=>null);
+    if(!tab||tab.url!==job.url){
+      await markHitomiQueue(job.id,{status:"needs-tab",lastError:"Reopen the original gallery and retry the right-click action; request retained."});
+      continue;
+    }
+    const profiles=await getProfiles();
+    try{
+      await initiateHitomiCapture({menuItemId:job.menuId,pageUrl:job.url},tab,profiles,job.id);
+    }catch(error){
+      const retries=(job.retries||0)+1;
+      await markHitomiQueue(job.id,{status:"pending",retries,nextAt:Date.now()+Math.min(300000,5000*Math.pow(2,Math.min(retries,6))),lastError:error?.message||String(error)});
+    }
+  }
+}
+chrome.alarms.onAlarm.addListener(alarm=>{
+  if(alarm.name==="redown-hitomi-queue")retryPendingHitomi().catch(error=>console.warn("Hitomi queued retry",error));
+});
+chrome.runtime.onStartup.addListener(()=>retryPendingHitomi().catch(()=>{}));
+
 const HITOMI_MAX_BYTES = 64 * 1024 * 1024;
 function hitomiDestination(menuId, profiles) {
   const id=String(menuId);
@@ -1732,13 +1768,21 @@ function hitomiDestination(menuId, profiles) {
   }
   return null;
 }
-async function initiateHitomiCapture(info, tab, profiles) {
+async function initiateHitomiCapture(info, tab, profiles,existingJobId=null) {
   const target=hitomiDestination(info.menuItemId,profiles);
   if(!target)throw new Error("Choose a prepared Cloudflare R2 destination");
   if(!tab?.id)throw new Error("No source tab found");
   const existing=hitomiIntents.get(tab.id);
   if(existing && Date.now()-existing.at<180000)throw new Error("A gallery capture is already active in this tab");
-  hitomiIntents.set(tab.id,{...target,at:Date.now(),chunks:[],size:0,state:"armed"});
+  const jobId=existingJobId||crypto.randomUUID();
+  if(!existingJobId){
+    const jobs=await readHitomiQueue();
+    jobs.push({id:jobId,menuId:String(info.menuItemId),url:tab.url,tabId:tab.id,status:"pending",createdAt:Date.now(),updatedAt:Date.now(),retries:0,nextAt:0});
+    await chrome.storage.local.set({[HITOMI_QUEUE_KEY]:jobs.slice(-250)});
+  }
+  hitomiIntents.set(tab.id,{...target,jobId,at:Date.now(),chunks:[],size:0,state:"armed"});
+  await markHitomiQueue(jobId,{status:"capturing"});
+  chrome.alarms.create("redown-hitomi-queue",{periodInMinutes:1});
   try {
     await chrome.scripting.executeScript({target:{tabId:tab.id},files:["hitomi-capture.js"],world:"ISOLATED"});
     await chrome.scripting.executeScript({
@@ -1766,16 +1810,17 @@ async function initiateHitomiCapture(info, tab, profiles) {
       }
     });
     await notify("REDOWN","Hitomi is preparing the gallery ZIP for your chosen R2 bucket.");
-  }catch(e){hitomiIntents.delete(tab.id);throw e;}
+  }catch(e){hitomiIntents.delete(tab.id);await markHitomiQueue(jobId,{status:"pending",nextAt:Date.now()+15000,lastError:e?.message||String(e)});throw e;}
 }
 async function handleHitomiCaptureMessage(message,sender) {
   const tabId=sender.tab?.id;
   const intent=hitomiIntents.get(tabId);
-  if(!intent||Date.now()-intent.at>180000)throw new Error("No active gallery transfer; retry the right-click action");
+  if(!intent)throw new Error("No active gallery capture. The queued request is retained; retry the right-click action.");
   if(!String(sender.url||"").startsWith("https://hitomi.la/"))throw new Error("Unexpected gallery origin");
   if(message.type==="hitomiCaptureError"){
     hitomiIntents.delete(tabId);
     const error=String(message.error||"Capture failed");
+    await markHitomiQueue(intent.jobId,{status:"pending",nextAt:Date.now()+15000,lastError:error});
     await recordTransfer({ok:false,sourceUrl:sender.url,profileId:intent.profile?.id,profileName:intent.profile?.name||"Hitomi gallery",category:"files",error}).catch(()=>{});
     await notify("REDOWN gallery failed",error);
     return {ok:true};
@@ -1813,8 +1858,12 @@ async function handleHitomiCaptureMessage(message,sender) {
     if(!response.ok||!body.ok)throw new Error(body.error||`R2 upload failed (${response.status})`);
     const location=body.publicUrl||publicAssetUrl(prepared,body.key);
     await recordTransfer({ok:true,sourceUrl:sender.url,profileId:intent.profile.id,profileName:intent.profile.name,category:"files",location});
+    await markHitomiQueue(intent.jobId,{status:"complete",location});
     await notify("REDOWN gallery complete",location);
     return {ok:true,location};
+  }catch(error){
+    await markHitomiQueue(intent.jobId,{status:"pending",nextAt:Date.now()+30000,lastError:error?.message||String(error)});
+    throw error;
   }finally{hitomiIntents.delete(tabId);}
 }
 
