@@ -62,3 +62,14 @@ For eventual export/import: JSON Lines (one record per line) for large sets, a J
 4. False positive upload confirmation, wrong bucket/key, size mismatch, digest mismatch, and missing read permissions all prevent cleanup.
 5. Browser closure / restart / 60+ minute interval preserves job record and truthful recoverability state.
 6. User-confirmed Hitomi baseline remains unchanged, including `/imageset/` context-menu behavior.
+
+## Implemented additive remote v2 slice (2026-10-12)
+
+The historical v1 contract above is retained unchanged. The feature-gated remote
+URL engine now uses a canonical SQLite job/event/checkpoint store and a disposable
+IndexedDB projection; [v2.schema.json](v2.schema.json) describes redacted public
+remote-job evidence. See [operations](../../docs/transfer/OPERATIONS.md) and the
+[actual report](../../docs/CODEX_PORTABLE_FULLY_REMOTE_TRANSFER_ENGINE_IMPLEMENTATION_REPORT.md).
+The original NOT-implemented statement describes the earlier v1 design snapshot;
+it is not evidence about v2. No local deletion, protected-gallery remote engine,
+byte-offset resume, installed Chrome or live R2 acceptance is claimed.

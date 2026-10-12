@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://redown.dev/contracts/transfer-ledger/v2.schema.json",
+  "title": "Remote transfer public evidence projection v2",
+  "description": "Not executable intent. Signed source URLs and credentials are held separately in the restricted canonical SQLite store, never in this export. v1 remains unchanged.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "jobId",
+    "state",
+    "source",
+    "destination",
+    "requestedMode",
+    "actualMode",
+    "bytes",
+    "createdAt",
+    "updatedAt",
+    "sequence",
+    "cleanup"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "jobId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "state": {
+      "enum": [
+        "queued",
+        "preflight",
+        "transferring",
+        "retry-wait",
+        "verifying",
+        "verified",
+        "unverified",
+        "terminal-failed",
+        "needs-browser",
+        "needs-auth",
+        "skipped",
+        "cancellation-pending",
+        "cancelled"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "kind",
+        "origin"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "url",
+            "hitomi-gallery",
+            "local-file",
+            "other"
+          ]
+        },
+        "origin": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "sourceUrl": false,
+    "tenant": false,
+    "lease": false,
+    "multipart": false,
+    "validator": false,
+    "partReceipt": false,
+    "destination": {
+      "type": "object",
+      "required": [
+        "accountId",
+        "bucket",
+        "key"
+      ],
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "bucket": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "requestedMode": {
+      "enum": [
+        "automatic",
+        "fully-remote",
+        "browser-assisted"
+      ]
+    },
+    "actualMode": {
+      "enum": [
+        "cloud-to-cloud",
+        "browser-assisted",
+        "unknown"
+      ]
+    },
+    "bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "createdAt": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "updatedAt": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "cleanup": {
+      "const": "not-applicable"
+    },
+    "verification": {
+      "type": "object",
+      "required": [
+        "method",
+        "sourceDigest",
+        "destinationDigest",
+        "location",
+        "bytes",
+        "checkedAt",
+        "assurance"
+      ],
+      "properties": {
+        "method": {
+          "const": "sha256-readback"
+        },
+        "sourceDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "destinationDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "assurance": {
+          "const": "content-readback"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "checkedAt": {
+          "type": "integer"
+        },
+        "location": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "verified"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "verification"
+        ]
+      }
+    }
+  ],
+  "additionalProperties": true
+}

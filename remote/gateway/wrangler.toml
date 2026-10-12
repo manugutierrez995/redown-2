@@ -1,0 +1,15 @@
+name = "redown-transfer-gateway"
+main = "index.mjs"
+compatibility_date = "2025-03-01"
+
+[[r2_buckets]]
+binding = "TRANSFER_BUCKET"
+bucket_name = "replace-with-exact-bucket"
+
+[[durable_objects.bindings]]
+name = "UPLOADS"
+class_name = "UploadSession"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["UploadSession"]

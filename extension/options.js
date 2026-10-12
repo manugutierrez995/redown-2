@@ -3702,7 +3702,12 @@ async function renderHistory({markSeen=true}={}){
   root.replaceChildren();
   const items=(result?.transferHistory||[]).slice().sort((a,b)=>new Date(b?.at||0)-new Date(a?.at||0));
   const successes=items.filter(item=>item?.ok);
-  const errors=items.filter(item=>!item?.ok);
+  const errors=items.filter(item=>!item?.ok && !item?.remoteJobId);
+  for(const item of items.filter(item=>item?.remoteJobId)){
+    const pending=document.createElement("div");pending.className="meta";
+    pending.textContent="Remote job accepted — see Transfer methods for current state: "+item.remoteJobId;
+    root.append(pending);
+  }
   if(!items.length){
     const empty=document.createElement("div");
     empty.className="meta";
@@ -4048,7 +4053,7 @@ async function initTransferPolicyControls(){
   const data=await chrome.storage.local.get(TRANSFER_POLICY_KEY);
   const saved=data[TRANSFER_POLICY_KEY]||{};
   const policy={...TRANSFER_POLICY_DEFAULTS,...saved};
-  mode.value=["cloud-to-cloud","browser-assisted"].includes(policy.preferredMode)?policy.preferredMode:"browser-assisted";
+  mode.value=["automatic","fully-remote","browser-assisted"].includes(policy.preferredMode)?policy.preferredMode:policy.preferredMode==="cloud-to-cloud"?"automatic":"browser-assisted";
   fallback.checked=Boolean(policy.allowBrowserFallback);
   cleanup.checked=Boolean(policy.deleteLocalAfterVerification);
   const onChange=async()=>{
@@ -4057,7 +4062,7 @@ async function initTransferPolicyControls(){
     try{
       await chrome.storage.local.set({[TRANSFER_POLICY_KEY]:next});
       status.className="status ok";
-      status.textContent="Preferences saved. Current Hitomi transfers remain Browser-Assisted; remote transfer and automatic deletion are not yet implemented.";
+      status.textContent="Preferences saved. Remote URL jobs require an enabled executor. Cleanup needs a native helper and remains inactive.";
     }catch(error){
       status.className="status bad";
       status.textContent="Could not save transfer preferences: "+(error?.message||String(error));
@@ -4066,7 +4071,7 @@ async function initTransferPolicyControls(){
   mode.addEventListener("change",onChange);
   fallback.addEventListener("change",onChange);
   cleanup.addEventListener("change",onChange);
-  status.textContent="Current Hitomi transfers remain Browser-Assisted. Cloud-to-Cloud and automatic cleanup are planned, not active.";
+  status.textContent="Remote jobs require an enabled executor. No local files are deleted.";
 }
 
 (async()=>{
@@ -4085,3 +4090,37 @@ async function initTransferPolicyControls(){
   if(auth?.accessToken)await loadExplorerInventory().catch(error=>{$("explorer-status").textContent=friendlyError(error,"load Cloudflare storage");});
   await renderHistory();
 })();
+
+async function initRemoteExecutorControls(){
+  const data=await chrome.storage.local.get("redownRemoteExecutorV1");const config=data.redownRemoteExecutorV1||{};
+  const enabled=$("remote-executor-enabled"),url=$("remote-executor-url"),token=$("remote-executor-token"),status=$("transfer-policy-status"),root=$("remote-jobs");
+  if(!enabled||!url||!token||!root)return;
+  enabled.checked=Boolean(config.enabled);url.value=config.url||"";token.value=config.token||"";
+  $("remote-executor-save").addEventListener("click",async()=>{
+    try{
+      const origin=new URL(url.value);if(origin.protocol!=="https:"||origin.username||origin.password||origin.search||origin.hash)throw Error("Enter an HTTPS origin");
+      const permission=await chrome.permissions.request({origins:[origin.origin+"/*"]});if(!permission)throw Error("Executor host permission was not granted");
+      if(enabled.checked&&!token.value)throw Error("A scoped token is required");
+      await chrome.storage.local.set({redownRemoteExecutorV1:{enabled:enabled.checked,url:origin.origin,token:token.value}});
+      status.textContent="Executor settings saved. Connection is unverified until Refresh succeeds.";
+    }catch(error){status.textContent=error.message;}
+  });
+  async function refresh(){
+    try{const result=await send({type:"remoteTransferJobs"});if(!result?.ok)throw Error(result?.error||"Remote state unavailable");
+      root.replaceChildren();for(const job of result.jobs){
+        const row=document.createElement("div"),text=document.createElement("span");
+        text.textContent=job.destination.bucket+"/"+job.destination.key+" — "+job.state+" — "+job.bytes+" bytes"+(job.errorCode?" ("+job.errorCode+")":"");row.append(text);
+        if(!["verified","unverified","terminal-failed","cancelled","skipped","needs-auth","needs-browser"].includes(job.state)){
+          const cancel=document.createElement("button");cancel.textContent="Cancel";cancel.onclick=async()=>{await send({type:"remoteTransferCancel",jobId:job.jobId});await refresh();};row.append(cancel);
+        }
+        if(job.state==="needs-browser"||job.state==="needs-auth"){
+          const note=document.createElement("div");note.textContent="Needs explicit access or permission. No browser fallback has started; reopen the source and choose the permitted workflow.";row.append(note);
+        }
+        root.append(row);
+      }
+      status.textContent="Remote state reconciled. Verified means independent SHA-256 readback; skipped files are unverified.";
+    }catch(error){status.textContent="Remote state unknown: "+error.message;}
+  }
+  $("remote-jobs-refresh").addEventListener("click",refresh);
+}
+initRemoteExecutorControls().catch(()=>{});

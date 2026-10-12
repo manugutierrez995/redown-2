@@ -298,27 +298,37 @@
 
   <section id="transfer-policy-settings" class="section">
     <div class="section-head">
-      <div><h2>Transfer methods &amp; safety</h2><div class="section-note">Future remote-transfer preferences. The existing Hitomi browser-assisted workflow remains unchanged.</div></div>
+      <div><h2>Transfer methods &amp; safety</h2><div class="section-note">Remote URL jobs use your separately deployed executor. Hitomi remains browser-assisted.</div></div>
     </div>
     <div class="card">
       <label for="transfer-preferred-mode">Preferred transfer method</label>
       <select id="transfer-preferred-mode">
-        <option value="browser-assisted">Browser-Assisted Transfer (available)</option>
-        <option value="cloud-to-cloud">Cloud-to-Cloud Transfer (planned; not operational yet)</option>
+        <option value="browser-assisted">Browser-Assisted Only (existing workflow)</option>
+        <option value="automatic">Automatic (prefer fully remote)</option>
+        <option value="fully-remote">Fully Remote Only</option>
       </select>
-      <div class="meta">Cloud-to-Cloud is a saved preference only until the remote transfer engine is implemented. Selecting it does not change active Hitomi downloads.</div>
+      <div class="meta">Enable the executor below for durable remote URL transfers. Without it the existing route remains active. Fully Remote Only blocks browser-generated gallery capture.</div>
       <label style="display:flex;align-items:flex-start;gap:10px;margin-top:14px">
         <input id="transfer-allow-fallback" type="checkbox" checked style="width:auto;margin-top:3px">
-        <span>Allow automatic fallback to Browser-Assisted Transfer if Cloud-to-Cloud fails
-          <span class="meta" style="display:block">Saved for the future remote engine; no fallback is triggered by this setting today.</span>
+        <span>Allow browser-assisted fallback if remote fails
+          <span class="meta" style="display:block">Fallback requiring browser access needs an explicit new action. No automatic page capture is started.</span>
         </span>
       </label>
       <label style="display:flex;align-items:flex-start;gap:10px;margin-top:14px">
         <input id="transfer-delete-local" type="checkbox" style="width:auto;margin-top:3px">
-        <span>Delete local copy after verified remote upload
+        <span>Delete temporary local copy after independently verified upload
           <span class="meta" style="display:block">Saved preference only. Automatic deletion is not implemented. A future desktop helper must verify the exact R2 object and obtain filesystem permission first.</span>
         </span>
       </label>
+      <label><input type="checkbox" checked disabled style="width:auto"> Verify completed remote transfer (SHA-256 readback required)</label>
+      <label><input type="checkbox" disabled style="width:auto"> Resume from byte checkpoint (unsupported; remote retry restarts from zero)</label>
+      <hr>
+      <label><input id="remote-executor-enabled" type="checkbox" style="width:auto"> Enable my remote executor</label>
+      <label for="remote-executor-url">Executor HTTPS origin</label><input id="remote-executor-url" type="url" placeholder="https://transfers.example.com">
+      <label for="remote-executor-token">Scoped executor token</label><input id="remote-executor-token" type="password" autocomplete="off">
+      <button id="remote-executor-save" type="button">Save executor connection</button>
+      <button id="remote-jobs-refresh" type="button">Refresh remote jobs</button>
+      <div id="remote-jobs" aria-live="polite"></div>
       <div id="transfer-policy-status" class="status" role="status">Preferences do not change currently working transfer behavior.</div>
     </div>
   </section>

@@ -8,7 +8,8 @@
     "deploy": "wrangler deploy",
     "dev:worker": "wrangler dev",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check extension/cloudflare-api.js && node --check extension/cloudflare-auth.js && node --check extension/background.js && node --check extension/nested-locations.js && node --check extension/nested-menu-editor.js && node --check extension/options.js && node --check worker/src/index.js"
+    "check": "node --check extension/cloudflare-api.js && node --check extension/cloudflare-auth.js && node --check extension/background.js && node --check extension/nested-locations.js && node --check extension/nested-menu-editor.js && node --check extension/options.js && node --check worker/src/index.js && node --check extension/remote-transfers.js && node --check extension/transfer-projection.js && node --check packages/transfer-core/index.mjs && node --check remote/store.mjs && node --check remote/service.mjs && node --check remote/run.mjs && node --check remote/diagnose.mjs && node --check remote/adapters/http-source.mjs && node --check remote/adapters/r2-gateway.mjs && node --check remote/gateway/index.mjs && node --check remote/forever-lessons.mjs",
+    "test:transfer": "node --test tests/remote-transfer.test.mjs tests/remote-browser.test.mjs tests/transfer-forever.test.mjs"
   },
   "devDependencies": {
     "jsdom": "^26.1.0",

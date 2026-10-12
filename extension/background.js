@@ -697,6 +697,8 @@ async function setProfiles(profiles) {
   await chrome.storage.local.set({ profiles });
 }
 async function recordTransfer(entry) {
+  if (String(entry?.location || "").startsWith("remote-job:"))
+    entry = {...entry, ok:null, status:"queued", remoteJobId:entry.location.slice(11), error:null};
   const { transferHistory = [] } = await chrome.storage.local.get("transferHistory");
   const history = Array.isArray(transferHistory) ? transferHistory : [];
   const now = new Date().toISOString();
@@ -721,6 +723,10 @@ async function recordTransfer(entry) {
   await chrome.storage.local.set({ transferHistory: next });
 }
 async function notify(title, message) {
+  if (String(message || "").startsWith("remote-job:")) {
+    title = "REDOWN accepted";
+    message = "Remote job durably queued. You can close Chrome; check Transfer methods for progress and verification.";
+  }
   try {
     await chrome.notifications.create({
       type: "basic", iconUrl: "icon.svg", title, message: String(message || "")
@@ -749,6 +755,8 @@ importScripts("cloudflare-auth.js");
 importScripts("cloudflare-api.js");
 importScripts("nested-locations.js");
 importScripts("rfis-index.js");
+importScripts("transfer-projection.js");
+importScripts("remote-transfers.js");
 async function connectCloudflare() { return RedownCloudflareAuth.connect(); }
 async function disconnectCloudflare() {
   const { cloudflareAuth } = await chrome.storage.local.get("cloudflareAuth");
@@ -1505,6 +1513,10 @@ async function ensureGitHubWorkflow(profile) {
   if (!create.ok) throw new Error(`Could not install GitHub ingest workflow (${create.status})`);
 }
 async function ingestCloudflareAtPrefix(profile, sourceUrl, prefix, filename) {
+  if (typeof RedownRemoteTransfers !== "undefined") {
+    const accepted = await RedownRemoteTransfers.submit(profile, sourceUrl, prefix, filename);
+    if (accepted) return accepted;
+  }
   const prepared = await preparedProfile(
     profile.accountId,
     profile.bucketName,
@@ -1894,6 +1906,11 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     !/\/(?:index|popular|search)\.html(?:[?#]|$)/i.test(pageUrl);
   const chosenDestination=/^(quick:|simple-option:|nested:|tree:)/.test(String(info.menuItemId));
   if(onHitomiGallery && isGalleryDocument && chosenDestination && !info.srcUrl){
+    const {redownTransferPolicyV1:policy={}}=await chrome.storage.local.get("redownTransferPolicyV1");
+    if(policy.preferredMode==="fully-remote" || ["automatic","cloud-to-cloud"].includes(policy.preferredMode) && policy.allowBrowserFallback===false) {
+      await notify("REDOWN needs browser", "This gallery generates a browser ZIP and cannot run Fully Remote. Select Browser-Assisted explicitly to capture it.");
+      return;
+    }
     try { await initiateHitomiCapture(info,tab,profiles); }
     catch(error){
       console.error("REDOWN Hitomi capture failed to start",error);
@@ -2045,6 +2062,8 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   (async () => {
     try {
       if (/^hitomiCapture(Start|Chunk|Finish|Error)$/.test(message?.type||"")) return sendResponse(await handleHitomiCaptureMessage(message,_sender));
+      if (typeof RedownRemoteTransfers!=="undefined" && RedownRemoteTransfers.handles(message))
+        return sendResponse(await RedownRemoteTransfers.handle(message));
       if (message?.type === "ingest") {
         const profiles = await getProfiles();
         const profile = profiles.find(p => p.id === message.profileId);
@@ -2161,3 +2180,12 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   })();
   return true;
 });
+
+chrome.alarms.onAlarm.addListener(alarm=>{
+  if(alarm.name==="redown-remote-jobs" && typeof RedownRemoteTransfers!=="undefined")
+    RedownRemoteTransfers.reconcile().catch(()=>{});
+});
+chrome.runtime.onStartup.addListener(()=>{
+  if(typeof RedownRemoteTransfers!=="undefined")RedownRemoteTransfers.reconcile().catch(()=>{});
+});
+if(typeof chrome.alarms.create==="function")chrome.alarms.create("redown-remote-jobs",{periodInMinutes:1});
