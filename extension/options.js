@@ -2436,17 +2436,30 @@ async function browseWorkspace({ append = false } = {}) {
   const maxAttempts=7;
 
   for(let attempt=0;attempt<maxAttempts;attempt++){
-    result = await send({
-      type: "cfObjects",
-      accountId: workspaceTarget.accountId,
-      bucketName: workspaceTarget.bucketName,
-      prefix: workspacePrefix,
-      cursor: append ? explorerNextCursor : "",
-    });
+    try {
+      result = await send({
+        type: "cfObjects",
+        accountId: workspaceTarget.accountId,
+        bucketName: workspaceTarget.bucketName,
+        prefix: workspacePrefix,
+        cursor: append ? explorerNextCursor : "",
+      });
+    } catch(error) {
+      result={ok:false,error:error?.message||String(error)};
+    }
 
     if(result?.ok)break;
 
     lastError=new Error(result?.error||"Cloudflare access is still propagating");
+    const networkInterrupted=/failed to fetch|network.changed|network changed|networkerror|connection.reset|connection reset|timeout/i.test(lastError.message);
+    if(networkInterrupted){
+      if(!append){
+        root.innerHTML='<div class="file-empty"><span class="operation-spinner"></span><strong>Reconnecting…</strong>Cloudflare request was interrupted. Retrying without redeploying the Worker.</div>';
+        $("explorer-status").textContent="Network interrupted — retrying bucket listing…";
+      }
+      if(attempt<maxAttempts-1)await new Promise(resolve=>setTimeout(resolve,Math.min(12000,1200*Math.pow(2,attempt))));
+      continue;
+    }
 
     if(!isTransientBucketAccessError(lastError))break;
 
@@ -2479,10 +2492,10 @@ async function browseWorkspace({ append = false } = {}) {
       $("explorer-status").textContent =
         "REDOWN is still waiting for Cloudflare to finish preparing this bucket.";
     }else{
-      $("explorer-status").textContent = safeUiMessage(friendlyError(
-        lastError || new Error(result?.error || ""),
-        "load this folder",
-      ));
+      const networkInterrupted=/failed to fetch|network.changed|network changed|networkerror|connection.reset|connection reset|timeout/i.test(lastError?.message||"");
+      $("explorer-status").textContent = networkInterrupted
+        ? "Network interrupted while opening the bucket. Refresh to retry; your bucket was not removed."
+        : safeUiMessage(friendlyError(lastError || new Error(result?.error || ""), "load this folder"));
     }
   } else {
     explorerRawObjects.push(...(result.objects || []));
