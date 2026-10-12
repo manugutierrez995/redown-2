@@ -184,12 +184,32 @@ async function completeCloudflareLogin(details) {
       })
     });
     if (!tokenRes.ok || !token.access_token) throw new Error(cloudflareErrorMessage(token, "Cloudflare token exchange failed. Try again."));
+    // OAuth token issuance is the sign-in boundary. Account listing is a
+    // separate API connectivity check, not a reason to throw away a valid
+    // token when a browser network change interrupts the follow-up GET.
     const headers = { authorization: `Bearer ${token.access_token}` };
-    const { response: verifyRes, body: verifyBody } = await cloudflareLoginJson(`${CF_API}/accounts?per_page=50`, { headers });
-    if (!verifyRes.ok || verifyBody.success === false) {
-      throw new Error(cloudflareErrorMessage(verifyBody, `Cloudflare API verification failed (HTTP ${verifyRes.status}). Try again.`));
+    let verified = false;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const { response: verifyRes, body: verifyBody } = await cloudflareLoginJson(`${CF_API}/accounts?per_page=50`, { headers });
+        if (!verifyRes.ok || verifyBody.success === false) {
+          // Real Cloudflare authorization failures are not transient and
+          // must not be silently treated as a successful API verification.
+          throw new Error(cloudflareErrorMessage(verifyBody, `Cloudflare API verification failed (HTTP ${verifyRes.status}).`));
+        }
+        verified = true;
+        break;
+      } catch (error) {
+        // fetch TypeError/AbortError are transport failures without an HTTP
+        // response; leave API verification pending rather than losing login.
+        const transient = error instanceof TypeError ||
+          error?.name === "AbortError" ||
+          /failed to fetch|did not respond|network changed|networkerror/i.test(error?.message || "");
+        if (!transient) throw error;
+        if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+      }
     }
-    // Optional identity metadata must never block an otherwise valid login.
+    if (!verified) console.warn("REDOWN Cloudflare token received; account API verification deferred after network interruption.");
     const user = null;
     await navigator.locks.request(CF_LOGIN_STATE_LOCK, async () => {
       const current = (await chrome.storage.session.get(CF_LOGIN_SESSION))[CF_LOGIN_SESSION];
