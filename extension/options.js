@@ -1346,10 +1346,10 @@ function categoryFromPrefix(prefix){
 async function uploadLocalFiles(fileList){
   const files=Array.from(fileList||[]);
   if(!files.length)return;
-  let profile;
-  try{profile=await ensureUploadProfile();}
-  catch(error){return setStatus("local-upload-status",error?.message||"Choose an R2 bucket first.","bad");}
-  const prefix=String($("local-prefix")?.value || "").trim();
+  const target=uploadTarget();
+  if(!target?.accountId||!target?.bucketName)return setStatus("local-upload-status","Choose an R2 bucket first.","bad");
+  const profile=uploadProfile();
+  const prefix=String($("local-prefix")?.value||"").trim().replace(/^\\/+|\\/+$/g,"");
   const status=$("local-upload-status");
   let completed=0;
   const failed=[];
@@ -1357,59 +1357,40 @@ async function uploadLocalFiles(fileList){
     status.className="status";
     status.textContent=`Uploading ${file.name} (${index+1}/${files.length})…`;
     try{
-      // Retry only transient HTTP failures. Re-send the original File rather than
-      // buffering it in extension memory. Permanent failures are never retried.
-      let body;
+      if(file.size>300*1000*1000)throw new Error("Cloudflare's direct upload API has a 300 MB per-file limit.");
+      const key=prefix?`${prefix}/${file.name}`:file.name;
+      // The Cloudflare management API uses OAuth and does not require our Worker.
+      // Slashes in object keys must remain literal; encode each path component.
+      const path=`/accounts/${encodeURIComponent(target.accountId)}/r2/buckets/${encodeURIComponent(target.bucketName)}/objects/${key.split("/").map(encodeURIComponent).join("/")}`;
+      let uploaded;
       for(let attempt=0;attempt<3;attempt++){
-        const response=await fetch(profile.workerUrl,{
-          method:"POST",
-          headers:{
-            authorization:`Bearer ${profile.token||""}`,
-            "content-type":file.type||"application/octet-stream",
-            "x-redown-action":"upload-local",
-            "x-redown-filename":encodeURIComponent(file.name),
-            "x-redown-folder":prefix,
-            "x-redown-public-base":profile.publicBaseUrl||`${profile.workerUrl}/assets`
-          },
-          body:file
-        });
-        body=await response.json().catch(()=>({}));
-        if(response.ok&&body?.ok)break;
-        const transient=[429,500,502,503,504].includes(response.status);
-        if(!transient||attempt===2){
-          const reason=body?.error||`Upload failed (HTTP ${response.status})`;
-          throw new Error(`${reason}${transient?" after 3 attempts":""}`);
+        const data=new FormData();
+        data.append("body",file,file.name);
+        const response=await RedownCloudflareApi.request(path,{method:"PUT",body:data});
+        const result=await response.json().catch(()=>null);
+        if(response.ok&&result?.success&&result?.result){
+          uploaded=result.result;
+          if(Number(uploaded.size)!==file.size)throw new Error("Uploaded object size did not match the local file.");
+          break;
         }
+        const transient=[429,500,502,503,504].includes(response.status);
+        const reason=result?.errors?.map(e=>e.message).filter(Boolean).join("; ")||`Cloudflare direct upload failed (HTTP ${response.status})`;
+        if(!transient||attempt===2)throw new Error(`${reason}${transient?" after 3 attempts":""}`);
         const retryAfter=Number(response.headers.get("retry-after"));
-        const delay=Number.isFinite(retryAfter)&&retryAfter>0
-          ?Math.min(retryAfter*1000,10000):Math.min(1000*2**attempt,10000);
-        status.textContent=`Temporary server error (${response.status}) uploading ${file.name}. Retrying ${attempt+2}/3…`;
+        const delay=Number.isFinite(retryAfter)&&retryAfter>0?Math.min(retryAfter*1000,10000):1000*2**attempt;
+        status.textContent=`Temporary Cloudflare error (${response.status}) uploading ${file.name}. Retrying ${attempt+2}/3…`;
         await new Promise(resolve=>setTimeout(resolve,delay));
       }
+      if(!uploaded)throw new Error("Cloudflare did not confirm this upload.");
       completed++;
-      await send({
-        type:"recordLocalTransfer",
-        ok:true,
-        profileId:profile.id,
-        profileName:profile.name,
-        category:categoryFromPrefix(prefix),
-        location:body.publicUrl
-      });
+      await send({type:"recordLocalTransfer",ok:true,profileId:profile?.id||"",profileName:profile?.name||target.bucketName,category:categoryFromPrefix(prefix),location:profile?publicObjectUrl(profile,key):`R2: ${target.bucketName}/${key}`}).catch(()=>{});
       status.className="status ok";
-      status.textContent=`Uploaded ${completed}/${files.length} · ${body.publicUrl}`;
+      status.textContent=`Uploaded ${completed}/${files.length} · ${file.name}`;
     }catch(error){
-      await send({
-        type:"recordLocalTransfer",
-        ok:false,
-        profileId:profile.id,
-        profileName:profile.name,
-        category:categoryFromPrefix(prefix),
-        error:error?.message||String(error)
-      });
-      status.className="status bad";
       failed.push({name:file.name,error:error?.message||String(error)});
+      await send({type:"recordLocalTransfer",ok:false,profileId:profile?.id||"",profileName:profile?.name||target.bucketName,category:categoryFromPrefix(prefix),error:error?.message||String(error)}).catch(()=>{});
+      status.className="status bad";
       status.textContent=`Failed ${file.name}: ${error?.message||String(error)}. Continuing (${index+1}/${files.length})…`;
-      continue;
     }
   }
   await renderHistory();
@@ -1417,7 +1398,7 @@ async function uploadLocalFiles(fileList){
   status.textContent=failed.length
     ?`Batch finished: ${completed} uploaded, ${failed.length} failed of ${files.length}. Failed files: ${failed.map(item=>`${item.name} (${item.error})`).join("; ")}`
     :`Batch finished: all ${completed} files uploaded.`;
-  if(workspaceTarget?.accountId===profile.accountId&&workspaceTarget?.bucketName===profile.bucketName){workspacePrefix=normalizePrefix(prefix);await browseWorkspace();}
+  if(workspaceTarget?.accountId===target.accountId&&workspaceTarget?.bucketName===target.bucketName){workspacePrefix=normalizePrefix(prefix);await browseWorkspace();}
 }
 function objectContentType(obj,key){
   const explicit=String(obj?.httpMetadata?.contentType||obj?.contentType||"").toLowerCase();
