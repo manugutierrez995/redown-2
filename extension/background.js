@@ -1884,37 +1884,30 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   const profiles = await getProfiles();
   // Hitomi gallery Download is an anchor and can expose a javascript: or
   // same-page link. Do not mistake it for a remote downloadable asset.
-  const onHitomiGallery=/^https:\/\/hitomi\.la\//.test(String(info.pageUrl||tab?.url||""));
-  // Hitomi gallery Download controls may expose generated or same-page links.
-  const hitomiGalleryPage=/^https:\/\/hitomi\.la\/(?:doujinshi|manga|cg|gamecg|artistcg|galleries|reader)\//.test(String(info.pageUrl||tab?.url||""));
-  const hitomiLink=String(info.linkUrl||"");
-  // An HTML link on Hitomi's gallery page is NOT a downloadable gallery ZIP.
-  // The real ZIP is assembled in the page by JSZip/FileSaver. When the user
-  // invokes REDOWN from a gallery without a direct media URL, always capture
-  // the generated ZIP instead of ingesting the HTML link.
-  const hitomiDownloadLink=!info.srcUrl && (
-    !hitomiLink ||
-    /^(?:javascript:|blob:|#)/i.test(hitomiLink) ||
-    /(?:download_gallery|#dl-button)/i.test(hitomiLink) ||
-    hitomiLink===String(info.pageUrl||tab?.url||"") ||
-    /^https:\/\/hitomi\.la\/[^?#]+\.html(?:[?#]|$)/i.test(hitomiLink)
-  );
-  if(onHitomiGallery && hitomiGalleryPage && hitomiDownloadLink && /^(quick:|simple-option:|nested:|tree:)/.test(String(info.menuItemId))) {
+  // Hitomi's Download control can be a link to a same-site HTML document.
+  // Do not route gallery context-menu choices through generic URL ingestion.
+  // Detect gallery pages by the currently loaded document (not the clicked
+  // anchor href), and capture generated ZIP bytes for R2 destinations.
+  const pageUrl=String(info.pageUrl||tab?.url||"");
+  const onHitomiGallery=/^https:\/\/hitomi\.la\//i.test(pageUrl);
+  const isGalleryDocument=/^https:\/\/hitomi\.la\/(?:doujinshi|manga|cg|gamecg|artistcg|galleries|reader|tag|series|character|group|type)\//i.test(pageUrl) &&
+    !/\/(?:index|popular|search)\.html(?:[?#]|$)/i.test(pageUrl);
+  const chosenDestination=/^(quick:|simple-option:|nested:|tree:)/.test(String(info.menuItemId));
+  if(onHitomiGallery && isGalleryDocument && chosenDestination && !info.srcUrl){
     try { await initiateHitomiCapture(info,tab,profiles); }
-    catch(e){
-      console.error("REDOWN Hitomi capture start failed",e);
-      const message=e?.message||String(e);
-      await recordTransfer({ok:false,sourceUrl:info.pageUrl||tab?.url||"",profileName:"Hitomi gallery capture",category:"files",error:message}).catch(()=>{});
+    catch(error){
+      console.error("REDOWN Hitomi capture failed to start",error);
+      const message=error?.message||String(error);
+      await recordTransfer({ok:false,sourceUrl:pageUrl,profileName:"Hitomi gallery capture",category:"files",error:message}).catch(()=>{});
       await notify("REDOWN gallery failed",message);
     }
     return;
   }
-  const sourceUrl = selectedUrl(info);
-  // Never store a Hitomi HTML document as a purported ZIP if gallery capture
-  // did not start. This guards remaining unrecognized Hitomi page URLs.
-  if(onHitomiGallery && hitomiGalleryPage && !info.srcUrl &&
+  const sourceUrl=selectedUrl(info);
+  // Explicitly block accidental HTML transfers from Hitomi pages.
+  if(onHitomiGallery && chosenDestination && !info.srcUrl &&
       /^https:\/\/hitomi\.la\/[^?#]+\.html(?:[?#]|$)/i.test(sourceUrl)){
-    const message="Hitomi page HTML is not a gallery ZIP. Use the Download control to capture the generated archive.";
+    const message="Hitomi HTML pages cannot be uploaded as gallery ZIPs. Open the gallery and choose REDOWN from its Download control.";
     await recordTransfer({ok:false,sourceUrl,profileName:"Hitomi gallery capture",category:"files",error:message}).catch(()=>{});
     await notify("REDOWN gallery capture required",message);
     return;
