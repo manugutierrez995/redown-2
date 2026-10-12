@@ -1364,9 +1364,12 @@ async function uploadLocalFiles(fileList){
       const path=`/accounts/${encodeURIComponent(target.accountId)}/r2/buckets/${encodeURIComponent(target.bucketName)}/objects/${key.split("/").map(encodeURIComponent).join("/")}`;
       let uploaded;
       for(let attempt=0;attempt<3;attempt++){
-        const data=new FormData();
-        data.append("body",file,file.name);
-        const response=await RedownCloudflareApi.request(path,{method:"PUT",body:data,timeoutMs:300000});
+        const response=await RedownCloudflareApi.request(path,{
+          method:"PUT",
+          headers:{"content-type":file.type||"application/octet-stream"},
+          body:file,
+          timeoutMs:300000
+        });
         const result=await response.json().catch(()=>null);
         if(response.ok&&result?.success&&result?.result){
           uploaded=result.result;
