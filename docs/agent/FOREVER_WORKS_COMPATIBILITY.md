@@ -28,3 +28,7 @@ The inferred-provenance fixture is structurally valid yet unreviewed: validity d
 5. Test future adapters with upstream fixtures for unknown fields, cycles, broken references, old versions, inferred provenance and conservative migration/evaluation. Keep upstream ownership independent; HTTP/MCP are optional transports later.
 
 **Gaps:** no `forever/` ReDown manifest/accepted records, no genuine entity mappings, no model loader/validator, no public Forever API adapter or conformance evidence. `getForeverLinks` intentionally returns unknown. M0 mapping strategy is complete; actual model integration remains unfinished.
+
+## Later semantic bridge (separate namespace)
+
+The historical M0 design boundary above is retained. A working [semantic proposal bridge](semantic/DESIGN.md) now exports actual Forever kinds and preserves unreviewed authority, with vendored reference/schema evidence at the same upstream pin. Its proposal passes the JavaScript reference validator but fails published schema validation on the version regex. [Draft upstream PR #5](https://github.com/thanks-cohn/forever-works/pull/5) proposes the separate correction; it is unmerged. No accepted ReDown Forever model or baseline conformance certification is claimed.

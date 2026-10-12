@@ -1,0 +1,130 @@
+{
+  "CI": "not observed",
+  "baseline": {
+    "fail": 19,
+    "pass": 65,
+    "tests": 84
+  },
+  "baselineCommit": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+  "capturedAt": "2026-10-12T02:04:53.552Z",
+  "commands": [
+    {
+      "artifact": "syntax-check.txt",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "counts": {},
+      "exitCode": 0
+    },
+    {
+      "artifact": "semantic-tests.txt",
+      "command": [
+        "node",
+        "--test",
+        "--test-isolation=none",
+        "--test-reporter=tap",
+        "tests/semantic-api.test.mjs",
+        "tests/semantic-replacement.test.mjs"
+      ],
+      "counts": {
+        "fail": 0,
+        "pass": 27,
+        "tests": 27
+      },
+      "exitCode": 0
+    },
+    {
+      "artifact": "final-tests.txt",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "counts": {
+        "fail": 19,
+        "pass": 95,
+        "tests": 114
+      },
+      "exitCode": 1
+    },
+    {
+      "artifact": "forever-published-schema-validation.json",
+      "command": [
+        "python",
+        "tests/semantic-schema-conformance.py"
+      ],
+      "counts": {},
+      "exitCode": 0
+    },
+    {
+      "artifact": "debug-schema-results.txt",
+      "command": [
+        "python",
+        "tests/debug-schema-conformance.py"
+      ],
+      "counts": {},
+      "exitCode": 0
+    }
+  ],
+  "environment": {
+    "arch": "x64",
+    "platform": "linux",
+    "runtime": "v24.19.0"
+  },
+  "existingFailingTestNames": [
+    "offline discovery advertises only implemented operations and distinct versions",
+    "catalog IDs, evidence labels, source hashes and references are internally consistent",
+    "click creates a visible window before network navigation; repeated clicks focus it",
+    "successful callback exchanges PKCE and verifies access before saving token",
+    "callback resumes after service worker restart from session state",
+    "unrelated tab, subframe, lookalike host, and wrong callback path are ignored",
+    "state mismatch fails without token exchange and allows a fresh retry",
+    "denied consent and missing authorization code fail cleanly",
+    "closed popup releases attempt and stale window is replaced on next click",
+    "expired attempt clears secrets, closes popup, and permits retry",
+    "failed API verification never stores an access token",
+    "duplicate navigation events exchange a code only once",
+    "verification network stall aborts and releases the attempt",
+    "popup creation errors are returned instead of leaving an in-flight lock",
+    "settings and worker observing the same callback exchange the code once across contexts",
+    "Worker deployments cannot overlap and a failed deployment releases the lock",
+    "real discovery, case, history, filters and validation are deterministic and honest",
+    "original case and proposal Markdown bytes are retained from pinned upstream",
+    "settings mode checkbox saves only the active mode and keeps both destination configurations"
+  ],
+  "final": {
+    "fail": 19,
+    "pass": 95,
+    "tests": 114
+  },
+  "installedChrome": "not performed",
+  "liveR2": "not performed",
+  "newFailureNames": [],
+  "runtimePatchCommit": "949a5dc",
+  "upstreamDraft": {
+    "commit": "177c15ce3ede0f20fd16262c533db096c6875f86",
+    "fail": 0,
+    "merged": false,
+    "pass": 21,
+    "schemaRecords": 72,
+    "tests": 21,
+    "url": "https://github.com/thanks-cohn/forever-works/pull/5"
+  },
+  "upstreamReference": {
+    "commit": "230c67fa7e27577c53b6f7895df442a2ab24e4cb",
+    "fail": 0,
+    "pass": 20,
+    "tests": 20
+  },
+  "workflow": {
+    "browserStatus": "browser-unverified",
+    "counts": {
+      "fail": 0,
+      "pass": 10,
+      "tests": 10
+    },
+    "proofScope": "local-fixtures-only",
+    "status": "pass"
+  }
+}

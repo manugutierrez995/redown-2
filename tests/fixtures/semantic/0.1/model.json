@@ -1,0 +1,111 @@
+{
+  "semanticGraphVersion": "0.1",
+  "sourceCommit": "0000000000000000000000000000000000000000",
+  "entities": [
+    {
+      "id": "fixture.intent",
+      "kind": "intent",
+      "purpose": "Preserve destination fidelity.",
+      "provenance": {
+        "sourceType": "agent-proposed",
+        "reviewStatus": "unreviewed"
+      },
+      "privacy": "public-sanitized",
+      "sourceRefs": [],
+      "limits": [
+        "Portable fixture; no runtime proof."
+      ]
+    },
+    {
+      "id": "fixture.capability",
+      "kind": "capability",
+      "purpose": "Choose exact destination.",
+      "provenance": {
+        "sourceType": "agent-proposed",
+        "reviewStatus": "unreviewed"
+      },
+      "privacy": "public-sanitized",
+      "sourceRefs": [],
+      "limits": [
+        "Portable fixture; no runtime proof."
+      ]
+    },
+    {
+      "id": "fixture.invariant",
+      "kind": "invariant",
+      "purpose": "Reject obsolete requests.",
+      "provenance": {
+        "sourceType": "agent-proposed",
+        "reviewStatus": "unreviewed"
+      },
+      "privacy": "public-sanitized",
+      "sourceRefs": [],
+      "limits": [
+        "Portable fixture; no runtime proof."
+      ]
+    },
+    {
+      "id": "fixture.test",
+      "kind": "test",
+      "purpose": "Verify sanitized overlap fixture.",
+      "provenance": {
+        "sourceType": "agent-proposed",
+        "reviewStatus": "unreviewed"
+      },
+      "privacy": "public-sanitized",
+      "sourceRefs": [],
+      "limits": [
+        "Portable fixture; no runtime proof."
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "fixture.edge.1",
+      "from": "fixture.intent",
+      "to": "fixture.capability",
+      "type": "realizes",
+      "rationale": "Fixture contract link.",
+      "provenance": {
+        "sourceType": "agent-proposed",
+        "reviewStatus": "unreviewed"
+      }
+    },
+    {
+      "id": "fixture.edge.2",
+      "from": "fixture.capability",
+      "to": "fixture.invariant",
+      "type": "requires",
+      "rationale": "Fixture contract link.",
+      "provenance": {
+        "sourceType": "agent-proposed",
+        "reviewStatus": "unreviewed"
+      }
+    },
+    {
+      "id": "fixture.edge.3",
+      "from": "fixture.invariant",
+      "to": "fixture.test",
+      "type": "verifies",
+      "rationale": "Fixture contract link.",
+      "provenance": {
+        "sourceType": "agent-proposed",
+        "reviewStatus": "unreviewed"
+      }
+    }
+  ],
+  "coverage": [
+    {
+      "id": "fixture.coverage",
+      "status": "partial",
+      "entityIds": [
+        "fixture.intent"
+      ],
+      "limits": [
+        "No browser."
+      ],
+      "observationPlan": "Authorized manual observation."
+    }
+  ],
+  "artifacts": []
+}

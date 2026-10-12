@@ -1,0 +1,74 @@
+{
+  "commit": "230c67fa7e27577c53b6f7895df442a2ab24e4cb",
+  "files": {
+    "LICENSE": {
+      "sha256": "be103b3f6bcc965258d3b1a216f1f67cd012391cba0dd8e95293f7a98d861ad0",
+      "upstreamPath": "packages/javascript/LICENSE"
+    },
+    "schemas/capability.schema.json": {
+      "sha256": "a9c0ee5b43fa8ccc9a4471a341429bec21db43ceaf5e724dc7968cd6135b5833",
+      "upstreamPath": "spec/schemas/capability.schema.json"
+    },
+    "schemas/common.schema.json": {
+      "sha256": "f530df6193696724a565624c8632c8eb091896fbc7c16fc3be15fcc6ce618cb5",
+      "upstreamPath": "spec/schemas/common.schema.json"
+    },
+    "schemas/compatibility-contract.schema.json": {
+      "sha256": "51e9fb4b68841ed52fa04240c8ac1b752552359da7e6a7f48997dff8e9dc53e0",
+      "upstreamPath": "spec/schemas/compatibility-contract.schema.json"
+    },
+    "schemas/constraint.schema.json": {
+      "sha256": "cc26de703b023e78e215b2c60f802ca3bd6f8721539cdd1721bb64a5ddfcb3c4",
+      "upstreamPath": "spec/schemas/constraint.schema.json"
+    },
+    "schemas/decision.schema.json": {
+      "sha256": "b65c976294cfee2e02ddeec489d42f1055587821b95333d863bcc52533974457",
+      "upstreamPath": "spec/schemas/decision.schema.json"
+    },
+    "schemas/dependency-intent.schema.json": {
+      "sha256": "3e8c5a5b34b8985025386a0b4efcf833c84f54eaa6c488a49e7a1774dd8248bd",
+      "upstreamPath": "spec/schemas/dependency-intent.schema.json"
+    },
+    "schemas/evidence.schema.json": {
+      "sha256": "1313b16464a0abc3114363ae4165e62521a6c8b57a3e29e213e8ea2485966681",
+      "upstreamPath": "spec/schemas/evidence.schema.json"
+    },
+    "schemas/implementation.schema.json": {
+      "sha256": "967a941f8965bd62e38af4cf98f163e796dee7d60104f737a548c613cb9742f1",
+      "upstreamPath": "spec/schemas/implementation.schema.json"
+    },
+    "schemas/invariant.schema.json": {
+      "sha256": "3ceacc70348d37387c8059a32c2478e2f0f45f38ba0823bebdf1c48d8b3a0efa",
+      "upstreamPath": "spec/schemas/invariant.schema.json"
+    },
+    "schemas/manifest.schema.json": {
+      "sha256": "cb312380c8d5f7ca5aa7e35e16a128ccfe6ab322d68b7c8918355b82e483715e",
+      "upstreamPath": "spec/schemas/manifest.schema.json"
+    },
+    "schemas/migration.schema.json": {
+      "sha256": "1bef23a78cb881a21ec520df83855d28d2c116c25386736c673dbdfa8cd491b3",
+      "upstreamPath": "spec/schemas/migration.schema.json"
+    },
+    "schemas/project-intent.schema.json": {
+      "sha256": "09f8466ce4a01ae5406bbd336c1928796107e32da7875e05a4c0b54ba5697430",
+      "upstreamPath": "spec/schemas/project-intent.schema.json"
+    },
+    "src/index.js": {
+      "sha256": "37ab31d4325ecdf9405cbc561e60293384a3f461273b8133246b369145fd6921",
+      "upstreamPath": "packages/javascript/src/index.js"
+    },
+    "src/model.js": {
+      "sha256": "b2b093efd36fe47f6ca4ccf624bd2468273535f2ce1cafead204b34745cee66f",
+      "upstreamPath": "packages/javascript/src/model.js"
+    },
+    "src/node.js": {
+      "sha256": "9db21b71f494a8e0f5b4fef5c54704db34641bc5e46e873aa11b915c62f5d58e",
+      "upstreamPath": "packages/javascript/src/node.js"
+    }
+  },
+  "license": "MIT",
+  "localPackagingOnly": [
+    "package.json"
+  ],
+  "repository": "https://github.com/thanks-cohn/forever-works"
+}

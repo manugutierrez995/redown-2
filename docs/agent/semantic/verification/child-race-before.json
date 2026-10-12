@@ -1,0 +1,16 @@
+{
+  "reproductionVersion": "0.1",
+  "scope": "mocked-dom-current-source",
+  "status": "fail",
+  "cache": [
+    "videos",
+    "images/old-alpha-child"
+  ],
+  "options": [
+    "",
+    "videos"
+  ],
+  "messageCount": 7,
+  "competingExplanation": "Provider correctness, Chrome runtime and live R2 remain unknown.",
+  "browserStatus": "browser-unverified"
+}

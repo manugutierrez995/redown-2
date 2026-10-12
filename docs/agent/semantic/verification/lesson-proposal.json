@@ -1,0 +1,1746 @@
+{
+  "browserStatus": "browser-unverified",
+  "compatibility": {
+    "code": "upstream-version-pattern",
+    "note": "Pinned published schemas reject documented foreverVersion 0.1; the reference library accepts it. Independent validation records both results. No compatibility certification.",
+    "status": "blocked-by-published-schema"
+  },
+  "files": {
+    "records/redown.component.background.json": {
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.component.background",
+              "id": "redown.edge.e41",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Actual literal handler inventoried from source.",
+              "to": "redown.message.cfcreatefolder",
+              "type": "owns"
+            },
+            {
+              "from": "redown.component.background",
+              "id": "redown.edge.e45",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Actual literal handler inventoried from source.",
+              "to": "redown.message.cfensureprefixes",
+              "type": "owns"
+            },
+            {
+              "from": "redown.component.background",
+              "id": "redown.edge.e47",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Actual literal handler inventoried from source.",
+              "to": "redown.message.cffolderchildren",
+              "type": "owns"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.component.background",
+            "kind": "component",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Service worker routes messages, prepares profiles, creates menus and orchestrates transfers.",
+            "sourceRefs": [
+              {
+                "path": "extension/background.js",
+                "role": "source",
+                "sha256": "b3bd7af935e9816cabe5107abbeaaa46eb3f024ef61a8d4307ead29233ddc196",
+                "symbol": "chrome.runtime.onMessage.addListener"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.component.background",
+      "kind": "implementation",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "replaceability": "unknown",
+      "satisfiesCapabilities": [],
+      "technology": "Current ReDown implementation; replaceable subject to reviewed contracts.",
+      "type": "source-component"
+    },
+    "records/redown.component.settings.json": {
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.upload.state.request-context",
+              "id": "redown.edge.e26",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Mutable upload state is settings-owned, not debug history.",
+              "to": "redown.component.settings",
+              "type": "owns"
+            },
+            {
+              "from": "redown.upload.operation.loaduploadlocations",
+              "id": "redown.edge.e28",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Options page owns this operation.",
+              "to": "redown.component.settings",
+              "type": "owns"
+            },
+            {
+              "from": "redown.upload.operation.fetchuploadbuilderchildren",
+              "id": "redown.edge.e30",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Options page owns this operation.",
+              "to": "redown.component.settings",
+              "type": "owns"
+            },
+            {
+              "from": "redown.upload.operation.renderuploadlocationbuilder",
+              "id": "redown.edge.e32",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Options page owns this operation.",
+              "to": "redown.component.settings",
+              "type": "owns"
+            },
+            {
+              "from": "redown.upload.operation.materializeuploadbuilderprefix",
+              "id": "redown.edge.e34",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Options page owns this operation.",
+              "to": "redown.component.settings",
+              "type": "owns"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.component.settings",
+            "kind": "component",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Settings DOM owns temporary path selections/drafts and Explorer view state.",
+            "sourceRefs": [
+              {
+                "path": "extension/options.js",
+                "role": "source",
+                "sha256": "ddc2fdb39d8481c811f35a71e1e6181093498388dbb3b975ba134cd2ae81e9f3",
+                "symbol": "function uploadTarget"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.component.settings",
+      "kind": "implementation",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "replaceability": "unknown",
+      "satisfiesCapabilities": [],
+      "technology": "Current ReDown implementation; replaceable subject to reviewed contracts.",
+      "type": "source-component"
+    },
+    "records/redown.evidence.dbg-003.child-cache-guard.json": {
+      "confidence": 0,
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.incident.dbg-003",
+              "id": "redown.edge.e128",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Exact append-only event and proof scope.",
+              "to": "redown.evidence.dbg-003.child-cache-guard",
+              "type": "documents"
+            }
+          ],
+          "sourceEntity": {
+            "caseId": "DBG-003",
+            "eventId": "DBG-003.child-cache-guard",
+            "id": "redown.evidence.dbg-003.child-cache-guard",
+            "kind": "evidence",
+            "limits": [
+              "Historical local fixture result, not browser/R2 truth."
+            ],
+            "privacy": "public-sanitized",
+            "proofScope": "historical",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Commit 949a5dc guards shared child-prefix cache and asynchronous creation completion using request generation and account/bucket ownership. The root guard was already present; this is a narrower additional correction.",
+            "recordedEvidenceStatus": "proposed",
+            "recordedProvenance": {
+              "collector": "Codex executed local fixture workflow",
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/agent/semantic/verification/workflow-result.json",
+              "sourceType": "agent-proposed"
+            },
+            "sourceRefs": [
+              {
+                "path": "debug/cases/DBG-003.events.jsonl",
+                "reviewNote": "Reviewed after semantic onboarding additions, append-only journal results and targeted regression execution.",
+                "role": "record",
+                "sha256": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+                "symbol": "DBG-003.child-cache-guard"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.evidence.dbg-003.child-cache-guard",
+      "immutableReference": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+      "kind": "evidence",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "source": "debug/cases/DBG-003.events.jsonl",
+      "statementSupported": "Commit 949a5dc guards shared child-prefix cache and asynchronous creation completion using request generation and account/bucket ownership. The root guard was already present; this is a narrower additional correction.",
+      "timestampVersion": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+      "type": "source-or-historical-reference"
+    },
+    "records/redown.evidence.dbg-003.child-cache-reproduced.json": {
+      "confidence": 0,
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.incident.dbg-003",
+              "id": "redown.edge.e127",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Exact append-only event and proof scope.",
+              "to": "redown.evidence.dbg-003.child-cache-reproduced",
+              "type": "documents"
+            }
+          ],
+          "sourceEntity": {
+            "caseId": "DBG-003",
+            "eventId": "DBG-003.child-cache-reproduced",
+            "id": "redown.evidence.dbg-003.child-cache-reproduced",
+            "kind": "evidence",
+            "limits": [
+              "Historical local fixture result, not browser/R2 truth."
+            ],
+            "privacy": "public-sanitized",
+            "proofScope": "automated",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Sanitized current-source reproduction before correction returned fail: beta shared cache contained images/old-alpha-child after a late alpha child response. Root dropdown alone still appeared beta; inspecting only its DOM misses the cache race.",
+            "recordedEvidenceStatus": "historical",
+            "recordedProvenance": {
+              "collector": "Codex executed local fixture workflow",
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/agent/semantic/verification/workflow-result.json",
+              "sourceType": "agent-proposed"
+            },
+            "sourceRefs": [
+              {
+                "path": "debug/cases/DBG-003.events.jsonl",
+                "reviewNote": "Reviewed after semantic onboarding additions, append-only journal results and targeted regression execution.",
+                "role": "record",
+                "sha256": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+                "symbol": "DBG-003.child-cache-reproduced"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.evidence.dbg-003.child-cache-reproduced",
+      "immutableReference": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+      "kind": "evidence",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "source": "debug/cases/DBG-003.events.jsonl",
+      "statementSupported": "Sanitized current-source reproduction before correction returned fail: beta shared cache contained images/old-alpha-child after a late alpha child response. Root dropdown alone still appeared beta; inspecting only its DOM misses the cache race.",
+      "timestampVersion": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+      "type": "source-or-historical-reference"
+    },
+    "records/redown.evidence.dbg-003.local-fixture-verification.json": {
+      "confidence": 0,
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.incident.dbg-003",
+              "id": "redown.edge.e129",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Exact append-only event and proof scope.",
+              "to": "redown.evidence.dbg-003.local-fixture-verification",
+              "type": "documents"
+            }
+          ],
+          "sourceEntity": {
+            "caseId": "DBG-003",
+            "eventId": "DBG-003.local-fixture-verification",
+            "id": "redown.evidence.dbg-003.local-fixture-verification",
+            "kind": "evidence",
+            "limits": [
+              "Historical local fixture result, not browser/R2 truth."
+            ],
+            "privacy": "public-sanitized",
+            "proofScope": "automated",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Executed fixed Upload/Simple workflow: 10 tests passed, zero failed, including late child-cache and profile/creation completion after switching buckets. This is local mocked-DOM evidence only; no installed Chrome, live R2 or deployed Worker verification. Incident remains open.",
+            "recordedEvidenceStatus": "verified-by-test",
+            "recordedProvenance": {
+              "collector": "Codex executed local fixture workflow",
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/agent/semantic/verification/workflow-result.json",
+              "sourceType": "agent-proposed"
+            },
+            "sourceRefs": [
+              {
+                "path": "debug/cases/DBG-003.events.jsonl",
+                "reviewNote": "Reviewed after semantic onboarding additions, append-only journal results and targeted regression execution.",
+                "role": "record",
+                "sha256": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+                "symbol": "DBG-003.local-fixture-verification"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.evidence.dbg-003.local-fixture-verification",
+      "immutableReference": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+      "kind": "evidence",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "source": "debug/cases/DBG-003.events.jsonl",
+      "statementSupported": "Executed fixed Upload/Simple workflow: 10 tests passed, zero failed, including late child-cache and profile/creation completion after switching buckets. This is local mocked-DOM evidence only; no installed Chrome, live R2 or deployed Worker verification. Incident remains open.",
+      "timestampVersion": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+      "type": "source-or-historical-reference"
+    },
+    "records/redown.evidence.dbg-003.remediation.json": {
+      "confidence": 0,
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.incident.dbg-003",
+              "id": "redown.edge.e109",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Exact frozen debug event ID and authored provenance, never inferred verification.",
+              "to": "redown.evidence.dbg-003.remediation",
+              "type": "documents"
+            }
+          ],
+          "sourceEntity": {
+            "caseId": "DBG-003",
+            "eventId": "DBG-003.remediation",
+            "id": "redown.evidence.dbg-003.remediation",
+            "kind": "evidence",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "proofScope": "historical",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Source patch 79c90c4 separates selection from creation drafts, prevents auto-materializing selected existing folders, isolates right-side choices by account/bucket and ignores late responses. Tests 74896f4 committed. Automated execution not performed.",
+            "recordedEvidenceStatus": "proposed",
+            "recordedProvenance": {
+              "collector": "ChatGPT implementation",
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/debug/DBG-003_UPLOAD_LOCATION_BINDING.md",
+              "sourceType": "agent-proposed"
+            },
+            "sourceRefs": [
+              {
+                "path": "debug/cases/DBG-003.events.jsonl",
+                "reviewNote": "Reviewed after semantic onboarding additions, append-only journal results and targeted regression execution.",
+                "role": "record",
+                "sha256": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+                "symbol": "DBG-003.remediation"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.evidence.dbg-003.remediation",
+      "immutableReference": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+      "kind": "evidence",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "source": "debug/cases/DBG-003.events.jsonl",
+      "statementSupported": "Source patch 79c90c4 separates selection from creation drafts, prevents auto-materializing selected existing folders, isolates right-side choices by account/bucket and ignores late responses. Tests 74896f4 committed. Automated execution not performed.",
+      "timestampVersion": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+      "type": "source-or-historical-reference"
+    },
+    "records/redown.evidence.dbg-003.report.json": {
+      "confidence": 0,
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.incident.dbg-003",
+              "id": "redown.edge.e107",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Exact frozen debug event ID and authored provenance, never inferred verification.",
+              "to": "redown.evidence.dbg-003.report",
+              "type": "documents"
+            }
+          ],
+          "sourceEntity": {
+            "caseId": "DBG-003",
+            "eventId": "DBG-003.report",
+            "id": "redown.evidence.dbg-003.report",
+            "kind": "evidence",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "proofScope": "historical",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Upload from Computer duplicates selected folder name in separate creation field and can display cross-bucket paths in right-side location dropdown.",
+            "recordedEvidenceStatus": "reported",
+            "recordedProvenance": {
+              "collector": "User report",
+              "reviewStatus": "unreviewed",
+              "sourceReference": "bugs/README.md BUG-013 and BUG-014",
+              "sourceType": "explicit"
+            },
+            "sourceRefs": [
+              {
+                "path": "debug/cases/DBG-003.events.jsonl",
+                "reviewNote": "Reviewed after semantic onboarding additions, append-only journal results and targeted regression execution.",
+                "role": "record",
+                "sha256": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+                "symbol": "DBG-003.report"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.evidence.dbg-003.report",
+      "immutableReference": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+      "kind": "evidence",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "source": "debug/cases/DBG-003.events.jsonl",
+      "statementSupported": "Upload from Computer duplicates selected folder name in separate creation field and can display cross-bucket paths in right-side location dropdown.",
+      "timestampVersion": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+      "type": "source-or-historical-reference"
+    },
+    "records/redown.evidence.dbg-003.source-investigation.json": {
+      "confidence": 0,
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.incident.dbg-003",
+              "id": "redown.edge.e108",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Exact frozen debug event ID and authored provenance, never inferred verification.",
+              "to": "redown.evidence.dbg-003.source-investigation",
+              "type": "documents"
+            }
+          ],
+          "sourceEntity": {
+            "caseId": "DBG-003",
+            "eventId": "DBG-003.source-investigation",
+            "id": "redown.evidence.dbg-003.source-investigation",
+            "kind": "evidence",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "proofScope": "historical",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "options.js initialized upload creation input from selected segment; loadUploadLocations mixed remote bucket listing with unverified saved profile prefixes. These mechanisms are source-observable; browser symptom not independently reproduced.",
+            "recordedEvidenceStatus": "historical",
+            "recordedProvenance": {
+              "collector": "ChatGPT source inspection",
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/debug/DBG-003_UPLOAD_LOCATION_BINDING.md",
+              "sourceType": "agent-proposed"
+            },
+            "sourceRefs": [
+              {
+                "path": "debug/cases/DBG-003.events.jsonl",
+                "reviewNote": "Reviewed after semantic onboarding additions, append-only journal results and targeted regression execution.",
+                "role": "record",
+                "sha256": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+                "symbol": "DBG-003.source-investigation"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.evidence.dbg-003.source-investigation",
+      "immutableReference": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+      "kind": "evidence",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "source": "debug/cases/DBG-003.events.jsonl",
+      "statementSupported": "options.js initialized upload creation input from selected segment; loadUploadLocations mixed remote bucket listing with unverified saved profile prefixes. These mechanisms are source-observable; browser symptom not independently reproduced.",
+      "timestampVersion": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+      "type": "source-or-historical-reference"
+    },
+    "records/redown.evidence.dbg-003.verification-pending.json": {
+      "confidence": 0,
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.incident.dbg-003",
+              "id": "redown.edge.e110",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Exact frozen debug event ID and authored provenance, never inferred verification.",
+              "to": "redown.evidence.dbg-003.verification-pending",
+              "type": "documents"
+            }
+          ],
+          "sourceEntity": {
+            "caseId": "DBG-003",
+            "eventId": "DBG-003.verification-pending",
+            "id": "redown.evidence.dbg-003.verification-pending",
+            "kind": "evidence",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "proofScope": "browser",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "No automated or Chrome/R2 verification completed; manual testing pending and DBG-003 remains open.",
+            "recordedEvidenceStatus": "unknown",
+            "recordedProvenance": {
+              "collector": "ChatGPT implementation",
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/debug/DBG-003_UPLOAD_LOCATION_BINDING.md",
+              "sourceType": "agent-proposed"
+            },
+            "sourceRefs": [
+              {
+                "path": "debug/cases/DBG-003.events.jsonl",
+                "reviewNote": "Reviewed after semantic onboarding additions, append-only journal results and targeted regression execution.",
+                "role": "record",
+                "sha256": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+                "symbol": "DBG-003.verification-pending"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.evidence.dbg-003.verification-pending",
+      "immutableReference": "99d80f8cd297efa6c21f54655c475ac00331d47a86b06b60f694894deb9f0309",
+      "kind": "evidence",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "source": "debug/cases/DBG-003.events.jsonl",
+      "statementSupported": "No automated or Chrome/R2 verification completed; manual testing pending and DBG-003 remains open.",
+      "timestampVersion": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+      "type": "source-or-historical-reference"
+    },
+    "records/redown.evidence.upload-existing-root-guard.json": {
+      "confidence": 0,
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.evidence.upload-existing-root-guard",
+              "id": "redown.edge.e126",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Counterevidence limits the broad hypothesis that all requests lack ownership.",
+              "to": "redown.lesson.request-context-freshness",
+              "type": "contradicts"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.evidence.upload-existing-root-guard",
+            "kind": "evidence",
+            "limits": [
+              "Installed Chrome and live R2 remain unverified."
+            ],
+            "privacy": "public-sanitized",
+            "proofScope": "source-only",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Current root load already checks generation and bucket; child-cache race does not invalidate that narrower guard.",
+            "sourceRefs": [
+              {
+                "path": "extension/options.js",
+                "role": "source",
+                "sha256": "ddc2fdb39d8481c811f35a71e1e6181093498388dbb3b975ba134cd2ae81e9f3",
+                "symbol": "if(requestVersion!==uploadLocationLoadVersion"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.evidence.upload-existing-root-guard",
+      "immutableReference": "ddc2fdb39d8481c811f35a71e1e6181093498388dbb3b975ba134cd2ae81e9f3",
+      "kind": "evidence",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "source": "extension/options.js",
+      "statementSupported": "Current root load already checks generation and bucket; child-cache race does not invalidate that narrower guard.",
+      "timestampVersion": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+      "type": "source-or-historical-reference"
+    },
+    "records/redown.intent.destination.fidelity.json": {
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.project",
+              "id": "redown.edge.e1",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Destination fidelity is a proposed durable purpose grounded in the owner contract.",
+              "to": "redown.intent.destination.fidelity",
+              "type": "realizes"
+            },
+            {
+              "from": "redown.intent.destination.fidelity",
+              "id": "redown.edge.e21",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Owner destination contract applies to local upload selection.",
+              "to": "redown.upload.destination.selection",
+              "type": "realizes"
+            },
+            {
+              "from": "redown.intent.destination.fidelity",
+              "id": "redown.edge.e75",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Path fidelity and flat presentation are independent.",
+              "to": "redown.simple.menu.flat",
+              "type": "realizes"
+            },
+            {
+              "from": "redown.intent.destination.fidelity",
+              "id": "redown.edge.e79",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Same destination intent with different UI hierarchy.",
+              "to": "redown.nested.editor",
+              "type": "realizes"
+            },
+            {
+              "from": "redown.intent.destination.fidelity",
+              "id": "redown.edge.e82",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Selected destination must reach remote outcome.",
+              "to": "redown.transfer.pipeline",
+              "type": "realizes"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.intent.destination.fidelity",
+            "kind": "intent",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Preserve exact selected account, bucket and location independently of presentation or implementation.",
+            "sourceRefs": [
+              {
+                "path": "docs/SIMPLE_RIGHT_CLICK_MENU_CONTRACT.md",
+                "role": "document",
+                "sha256": "2250e936c55744f5bc1a5d03f49fbec4042be9fd5213da84175d1587c2a1d936",
+                "symbol": "Destination editor rules"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.intent.destination.fidelity",
+      "kind": "intent",
+      "name": "redown.intent.destination.fidelity",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "purpose": [
+        "Preserve exact selected account, bucket and location independently of presentation or implementation."
+      ],
+      "relatedCapabilities": [
+        "redown.nested.editor",
+        "redown.simple.menu.flat",
+        "redown.transfer.pipeline",
+        "redown.upload.destination.selection"
+      ],
+      "statement": "Preserve exact selected account, bucket and location independently of presentation or implementation.",
+      "status": "proposed"
+    },
+    "records/redown.lesson.request-context-freshness.json": {
+      "context": "Mutable views issuing overlapping asynchronous reads; account/bucket/parent contexts.",
+      "decision": "Bind asynchronous results to request generation and destination ownership before any shared-state write.",
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e120",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Reviewable generalization; no accepted upstream intent.",
+              "to": "redown.lesson.request-context-freshness",
+              "type": "generalizes"
+            },
+            {
+              "from": "redown.lesson.request-context-freshness",
+              "id": "redown.edge.e121",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Traceable origin incident.",
+              "to": "redown.incident.dbg-003",
+              "type": "supports"
+            },
+            {
+              "from": "redown.lesson.request-context-freshness",
+              "id": "redown.edge.e122",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Proposed reusable invariant.",
+              "to": "redown.upload.invariant.request-freshness",
+              "type": "requires"
+            },
+            {
+              "from": "redown.evidence.upload-existing-root-guard",
+              "id": "redown.edge.e126",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Counterevidence limits the broad hypothesis that all requests lack ownership.",
+              "to": "redown.lesson.request-context-freshness",
+              "type": "contradicts"
+            }
+          ],
+          "sourceEntity": {
+            "applicability": [
+              "Mutable views issuing overlapping asynchronous reads; account/bucket/parent contexts."
+            ],
+            "counterevidence": [
+              "Root generation guard already exists; whole chooser is not uniformly unguarded.",
+              "Installed Chrome and real R2 outcomes remain unverified."
+            ],
+            "exceptions": [
+              "Immutable snapshots or views with one serialized request do not need this particular guard.",
+              "A generation guard does not prove provider truth, pagination, authorization or remote success."
+            ],
+            "id": "redown.lesson.request-context-freshness",
+            "kind": "lesson",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Bind asynchronous results to request generation and destination ownership before any shared-state write.",
+            "sourceRefs": [
+              {
+                "path": "docs/debug/DBG-003_UPLOAD_LOCATION_BINDING.md",
+                "role": "document",
+                "sha256": "8a41ded02f5a4e42cf9b19783e18f2c17bafed7bf433f89c59147ec6477688d6",
+                "symbol": "Pending requests"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.lesson.request-context-freshness",
+      "kind": "decision",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "rationale": "Review source, counterevidence and scope before reuse; no automatic authority promotion.",
+      "status": "proposed",
+      "title": "redown.lesson.request-context-freshness"
+    },
+    "records/redown.nested.editor.json": {
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.intent.destination.fidelity",
+              "id": "redown.edge.e79",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Same destination intent with different UI hierarchy.",
+              "to": "redown.nested.editor",
+              "type": "realizes"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.nested.editor",
+            "kind": "capability",
+            "knownLimits": [
+              "DBG-001 disabled-state restoration remains a distinct unresolved source diagnosis."
+            ],
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Select existing nested locations or explicitly create children while maintaining action readiness.",
+            "sourceRefs": [
+              {
+                "path": "extension/nested-menu-editor.js",
+                "role": "source",
+                "sha256": "61ef80e35f749eb606ae10be9dfafe1446e324306aeaa439e84b0f07ee594ced",
+                "symbol": "async function run"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.nested.editor",
+      "kind": "capability",
+      "name": "redown.nested.editor",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "relatedInvariants": [],
+      "statement": "Select existing nested locations or explicitly create children while maintaining action readiness.",
+      "status": "proposed"
+    },
+    "records/redown.simple.menu.flat.json": {
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.intent.destination.fidelity",
+              "id": "redown.edge.e75",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Path fidelity and flat presentation are independent.",
+              "to": "redown.simple.menu.flat",
+              "type": "realizes"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.simple.menu.flat",
+            "kind": "capability",
+            "knownLimits": [
+              "Current bucket/deepest preference overrides explicit labels; owner document describes explicit-label precedence. Conflict remains visible."
+            ],
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "preconditions": [
+              "Simple mode and saved destination profile."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Simple destinations are siblings directly under REDOWN; presentation fallback leaves stable click routing IDs intact.",
+            "sourceRefs": [
+              {
+                "path": "extension/background.js",
+                "role": "source",
+                "sha256": "b3bd7af935e9816cabe5107abbeaaa46eb3f024ef61a8d4307ead29233ddc196",
+                "symbol": "async function buildMenus"
+              },
+              {
+                "path": "docs/SIMPLE_RIGHT_CLICK_MENU_CONTRACT.md",
+                "role": "document",
+                "sha256": "2250e936c55744f5bc1a5d03f49fbec4042be9fd5213da84175d1587c2a1d936",
+                "symbol": "ONE popup level"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.simple.menu.flat",
+      "kind": "capability",
+      "name": "redown.simple.menu.flat",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "relatedInvariants": [],
+      "statement": "Simple destinations are siblings directly under REDOWN; presentation fallback leaves stable click routing IDs intact.",
+      "status": "proposed"
+    },
+    "records/redown.transfer.pipeline.json": {
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.intent.destination.fidelity",
+              "id": "redown.edge.e82",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Selected destination must reach remote outcome.",
+              "to": "redown.transfer.pipeline",
+              "type": "realizes"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.transfer.pipeline",
+            "kind": "capability",
+            "knownLimits": [
+              "Local history capped at 50; not transactional or durable recovery. Unknown-length ingest can buffer. Remote deployment not verified."
+            ],
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Context-menu or popup source URL routes through profile, provider/Worker ingest, R2 outcome and local transfer history.",
+            "sourceRefs": [
+              {
+                "path": "extension/background.js",
+                "role": "source",
+                "sha256": "b3bd7af935e9816cabe5107abbeaaa46eb3f024ef61a8d4307ead29233ddc196",
+                "symbol": "async function ingest"
+              },
+              {
+                "path": "extension/background.js",
+                "role": "source",
+                "sha256": "b3bd7af935e9816cabe5107abbeaaa46eb3f024ef61a8d4307ead29233ddc196",
+                "symbol": "async function recordTransfer"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.transfer.pipeline",
+      "kind": "capability",
+      "name": "redown.transfer.pipeline",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "relatedInvariants": [],
+      "statement": "Context-menu or popup source URL routes through profile, provider/Worker ingest, R2 outcome and local transfer history.",
+      "status": "proposed"
+    },
+    "records/redown.upload.destination.selection.json": {
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e106",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Canonical case genuinely concerns this UI capability; not an inferred same-cause cluster.",
+              "to": "redown.incident.dbg-003",
+              "type": "affects"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e111",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Suggested regression target; recorded command outcome remains separate.",
+              "to": "redown.test.upload",
+              "type": "verifies"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e120",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Reviewable generalization; no accepted upstream intent.",
+              "to": "redown.lesson.request-context-freshness",
+              "type": "generalizes"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e123",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Focused regression for child cache, separate from existing root-response test.",
+              "to": "redown.test.upload-child-context",
+              "type": "verifies"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e124",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Scoped corrective patch from failing deterministic reproduction.",
+              "to": "redown.change.upload-child-ownership",
+              "type": "implements"
+            },
+            {
+              "from": "redown.intent.destination.fidelity",
+              "id": "redown.edge.e21",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Owner destination contract applies to local upload selection.",
+              "to": "redown.upload.destination.selection",
+              "type": "realizes"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e22",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Proposed contract grounded in reported owner requirements.",
+              "to": "redown.upload.invariant.immediate-children",
+              "type": "requires"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e23",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Proposed contract grounded in reported owner requirements.",
+              "to": "redown.upload.invariant.separate-draft",
+              "type": "requires"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e24",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Proposed contract grounded in reported owner requirements.",
+              "to": "redown.upload.invariant.request-freshness",
+              "type": "requires"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e25",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Request-context ownership protects destination fidelity.",
+              "to": "redown.upload.state.request-context",
+              "type": "implements"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e27",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Concrete replaceable implementation anchor.",
+              "to": "redown.upload.operation.loaduploadlocations",
+              "type": "implements"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e29",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Concrete replaceable implementation anchor.",
+              "to": "redown.upload.operation.fetchuploadbuilderchildren",
+              "type": "implements"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e31",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Concrete replaceable implementation anchor.",
+              "to": "redown.upload.operation.renderuploadlocationbuilder",
+              "type": "implements"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e33",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Concrete replaceable implementation anchor.",
+              "to": "redown.upload.operation.materializeuploadbuilderprefix",
+              "type": "implements"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e68",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Chooser uses scoped listings or explicit materialization; read access does not authorize message execution.",
+              "to": "redown.message.cffolderchildren",
+              "type": "calls"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e69",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Chooser uses scoped listings or explicit materialization; read access does not authorize message execution.",
+              "to": "redown.message.cfcreatefolder",
+              "type": "calls"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e70",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Chooser uses scoped listings or explicit materialization; read access does not authorize message execution.",
+              "to": "redown.message.cfensureprefixes",
+              "type": "calls"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.upload.destination.selection",
+            "kind": "capability",
+            "knownLimits": [
+              "Root and child cache ownership guarded in current source; browser/R2 and large pagination remain unverified."
+            ],
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "preconditions": [
+              "Selected account and bucket; authorized provider access for live listings."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Choose an Upload from Computer destination with only selected bucket immediate children, separate existing selection from creation draft, and reject stale asynchronous results.",
+            "sourceRefs": [
+              {
+                "path": "extension/options.js",
+                "role": "source",
+                "sha256": "ddc2fdb39d8481c811f35a71e1e6181093498388dbb3b975ba134cd2ae81e9f3",
+                "symbol": "async function loadUploadLocations"
+              },
+              {
+                "path": "extension/options.js",
+                "role": "source",
+                "sha256": "ddc2fdb39d8481c811f35a71e1e6181093498388dbb3b975ba134cd2ae81e9f3",
+                "symbol": "function renderUploadLocationBuilder"
+              },
+              {
+                "path": "extension/options.html",
+                "role": "document",
+                "sha256": "9fac6a61d2003278a6d464a8f239cde7ef6d8d24e7d1e453dc15638ad6f8ddb7",
+                "symbol": "local-profile"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.upload.destination.selection",
+      "kind": "capability",
+      "name": "redown.upload.destination.selection",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "relatedInvariants": [
+        "redown.upload.invariant.immediate-children",
+        "redown.upload.invariant.request-freshness",
+        "redown.upload.invariant.separate-draft"
+      ],
+      "statement": "Choose an Upload from Computer destination with only selected bucket immediate children, separate existing selection from creation draft, and reject stale asynchronous results.",
+      "status": "proposed"
+    },
+    "records/redown.upload.invariant.immediate-children.json": {
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e22",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Proposed contract grounded in reported owner requirements.",
+              "to": "redown.upload.invariant.immediate-children",
+              "type": "requires"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.upload.invariant.immediate-children",
+            "kind": "invariant",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Only the selected bucket and parent immediate children may populate the dropdown.",
+            "sourceRefs": [
+              {
+                "path": "docs/debug/DBG-003_UPLOAD_LOCATION_BINDING.md",
+                "role": "document",
+                "sha256": "8a41ded02f5a4e42cf9b19783e18f2c17bafed7bf433f89c59147ec6477688d6",
+                "symbol": "Source correction"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.upload.invariant.immediate-children",
+      "kind": "invariant",
+      "name": "redown.upload.invariant.immediate-children",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "severity": "high",
+      "statement": "Only the selected bucket and parent immediate children may populate the dropdown."
+    },
+    "records/redown.upload.invariant.request-freshness.json": {
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.lesson.request-context-freshness",
+              "id": "redown.edge.e122",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Proposed reusable invariant.",
+              "to": "redown.upload.invariant.request-freshness",
+              "type": "requires"
+            },
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e24",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Proposed contract grounded in reported owner requirements.",
+              "to": "redown.upload.invariant.request-freshness",
+              "type": "requires"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.upload.invariant.request-freshness",
+            "kind": "invariant",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "An obsolete account/bucket/parent request must not overwrite current state.",
+            "sourceRefs": [
+              {
+                "path": "docs/debug/DBG-003_UPLOAD_LOCATION_BINDING.md",
+                "role": "document",
+                "sha256": "8a41ded02f5a4e42cf9b19783e18f2c17bafed7bf433f89c59147ec6477688d6",
+                "symbol": "Source correction"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.upload.invariant.request-freshness",
+      "kind": "invariant",
+      "name": "redown.upload.invariant.request-freshness",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "severity": "high",
+      "statement": "An obsolete account/bucket/parent request must not overwrite current state."
+    },
+    "records/redown.upload.invariant.separate-draft.json": {
+      "extensions": {
+        "org.redown": {
+          "authority": "Export never constitutes intent acceptance.",
+          "confidenceMeaning": "Required numeric field is a conservative lower bound, not a measured probability.",
+          "edges": [
+            {
+              "from": "redown.upload.destination.selection",
+              "id": "redown.edge.e23",
+              "provenance": {
+                "reviewStatus": "unreviewed",
+                "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+                "sourceType": "agent-proposed"
+              },
+              "rationale": "Proposed contract grounded in reported owner requirements.",
+              "to": "redown.upload.invariant.separate-draft",
+              "type": "requires"
+            }
+          ],
+          "sourceEntity": {
+            "id": "redown.upload.invariant.separate-draft",
+            "kind": "invariant",
+            "limits": [
+              "Source navigation is not an executed test or installed-browser result."
+            ],
+            "privacy": "public-sanitized",
+            "provenance": {
+              "reviewStatus": "unreviewed",
+              "sourceReference": "docs/CODEX_SEMANTIC_PROJECT_ACCESS_FOREVER_WORKS_IMPLEMENTATION_REQUEST.md",
+              "sourceType": "agent-proposed"
+            },
+            "purpose": "Existing-folder selection must not populate a creation draft or create a folder.",
+            "sourceRefs": [
+              {
+                "path": "docs/debug/DBG-003_UPLOAD_LOCATION_BINDING.md",
+                "role": "document",
+                "sha256": "8a41ded02f5a4e42cf9b19783e18f2c17bafed7bf433f89c59147ec6477688d6",
+                "symbol": "Source correction"
+              }
+            ]
+          },
+          "status": "proposed"
+        }
+      },
+      "foreverVersion": "0.1",
+      "id": "redown.upload.invariant.separate-draft",
+      "kind": "invariant",
+      "name": "redown.upload.invariant.separate-draft",
+      "provenance": {
+        "confidence": 0,
+        "reviewStatus": "unreviewed",
+        "sourceReference": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "sourceType": "agent-proposed"
+      },
+      "severity": "high",
+      "statement": "Existing-folder selection must not populate a creation draft or create a folder."
+    }
+  },
+  "foreverApiVersion": "0.1",
+  "foreverVersion": "0.1",
+  "manifest": {
+    "extensions": {
+      "org.redown": {
+        "origin": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+        "status": "proposed",
+        "upstreamCommit": "230c67fa7e27577c53b6f7895df442a2ab24e4cb"
+      }
+    },
+    "foreverVersion": "0.1",
+    "projectId": "redown.learning-proposal",
+    "records": {
+      "capabilities": [
+        "records/redown.nested.editor.json",
+        "records/redown.simple.menu.flat.json",
+        "records/redown.transfer.pipeline.json",
+        "records/redown.upload.destination.selection.json"
+      ],
+      "decisions": [
+        "records/redown.lesson.request-context-freshness.json"
+      ],
+      "evidence": [
+        "records/redown.evidence.dbg-003.child-cache-guard.json",
+        "records/redown.evidence.dbg-003.child-cache-reproduced.json",
+        "records/redown.evidence.dbg-003.local-fixture-verification.json",
+        "records/redown.evidence.dbg-003.remediation.json",
+        "records/redown.evidence.dbg-003.report.json",
+        "records/redown.evidence.dbg-003.source-investigation.json",
+        "records/redown.evidence.dbg-003.verification-pending.json",
+        "records/redown.evidence.upload-existing-root-guard.json"
+      ],
+      "implementations": [
+        "records/redown.component.background.json",
+        "records/redown.component.settings.json"
+      ],
+      "intent": [
+        "records/redown.intent.destination.fidelity.json"
+      ],
+      "invariants": [
+        "records/redown.upload.invariant.immediate-children.json",
+        "records/redown.upload.invariant.request-freshness.json",
+        "records/redown.upload.invariant.separate-draft.json"
+      ]
+    }
+  },
+  "omitted": [
+    {
+      "id": "redown.change.upload-child-ownership",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.incident.dbg-003",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.message.cfcreatefolder",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.message.cfensureprefixes",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.message.cffolderchildren",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.project",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.provider.operation.createexplorerfolder",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.provider.operation.listfolderchildren",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.test.upload",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.test.upload-child-context",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.upload.operation.fetchuploadbuilderchildren",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.upload.operation.loaduploadlocations",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.upload.operation.materializeuploadbuilderprefix",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.upload.operation.renderuploadlocationbuilder",
+      "reason": "No safe normative projection for this project-specific kind."
+    },
+    {
+      "id": "redown.upload.state.request-context",
+      "reason": "No safe normative projection for this project-specific kind."
+    }
+  ],
+  "reviewStatus": "unreviewed",
+  "sourceFreshness": {
+    "findingCount": 0,
+    "findings": [],
+    "scope": "Pinned per-instance file hashes and anchors only; recreate to refresh.",
+    "status": "current"
+  },
+  "status": "proposed",
+  "upstreamCommit": "230c67fa7e27577c53b6f7895df442a2ab24e4cb"
+}

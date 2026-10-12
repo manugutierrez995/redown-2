@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forever.works/schemas/0.1/intent.schema.json",
+  "title": "Intent",
+  "description": "Canonical Forever Works intent record. Unknown fields are preserved for compatible extension.",
+  "type": "object",
+  "required": [
+    "foreverVersion",
+    "id",
+    "kind",
+    "name",
+    "statement",
+    "purpose"
+  ],
+  "properties": {
+    "foreverVersion": {
+      "type": "string",
+      "pattern": "^0\\\\.[0-9]+$",
+      "description": "Forever Works schema version."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$",
+      "description": "Stable, globally unique entity identifier."
+    },
+    "kind": {
+      "const": "intent"
+    },
+    "provenance": {
+      "$ref": "common.schema.json#/$defs/provenance"
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+      },
+      "additionalProperties": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "statement": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Purpose statements."
+    },
+    "priorities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "nonGoals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "supportedEnvironments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "status": {
+      "type": "string"
+    },
+    "relatedCapabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "relatedConstraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    }
+  },
+  "additionalProperties": true,
+  "examples": [
+    {
+      "foreverVersion": "0.1",
+      "id": "intent.example",
+      "kind": "intent",
+      "name": "Example",
+      "statement": "Preserve meaning.",
+      "purpose": [
+        "Durable understanding"
+      ],
+      "provenance": {
+        "sourceType": "explicit",
+        "confidence": 1
+      }
+    }
+  ]
+}

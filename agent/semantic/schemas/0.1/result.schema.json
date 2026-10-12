@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://redown.invalid/semantic/0.1/result.schema.json",
+  "type": "object",
+  "required": ["semanticApiVersion", "semanticGraphVersion", "data", "authority", "evidenceStatus"],
+  "properties": {
+    "semanticApiVersion": {"const":"0.1"},
+    "semanticGraphVersion": {"const":"0.1"},
+    "data": {},
+    "authority": {"const":"inspect-only"},
+    "evidenceStatus": {"const":"unknown"},
+    "freshness": {"type":"object","required":["status","scope"],"properties":{"status":{"enum":["unknown","current","stale"]},"scope":{"type":"string"}},"additionalProperties":true},
+    "error": {"type":"object","required":["code","message","details"],"properties":{"code":{"type":"string","pattern":"^[a-z]+(?:-[a-z]+)*$"},"message":{"type":"string"},"details":{"type":"object"}},"additionalProperties":true}
+  },
+  "additionalProperties": true
+}

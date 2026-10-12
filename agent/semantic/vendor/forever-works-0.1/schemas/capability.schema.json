@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forever.works/schemas/0.1/capability.schema.json",
+  "title": "Capability",
+  "description": "Canonical Forever Works capability record. Unknown fields are preserved for compatible extension.",
+  "type": "object",
+  "required": [
+    "foreverVersion",
+    "id",
+    "kind",
+    "name",
+    "statement"
+  ],
+  "properties": {
+    "foreverVersion": {
+      "type": "string",
+      "pattern": "^0\\\\.[0-9]+$",
+      "description": "Forever Works schema version."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$",
+      "description": "Stable, globally unique entity identifier."
+    },
+    "kind": {
+      "const": "capability"
+    },
+    "provenance": {
+      "$ref": "common.schema.json#/$defs/provenance"
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+      },
+      "additionalProperties": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "statement": {
+      "type": "string"
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "requiredProperties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "relatedInvariants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "relatedImplementations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "verification": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/verification"
+      }
+    },
+    "criticality": {
+      "enum": [
+        "essential",
+        "important",
+        "optional"
+      ]
+    },
+    "status": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "examples": [
+    {
+      "foreverVersion": "0.1",
+      "id": "capability.example",
+      "kind": "capability",
+      "name": "Example",
+      "statement": "Perform work."
+    }
+  ]
+}

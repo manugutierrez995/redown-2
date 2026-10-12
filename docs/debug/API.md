@@ -68,3 +68,7 @@ node --test tests/debug-api.test.mjs
 `--json` emits exactly one envelope. Human output explains symptom, source mechanism, unknown outcome, provenance, next verification and navigable references. Success exits 0; operational errors and validation `valid:false` exit 2. Freshness warnings alone exit 0. Bad/duplicate flags are rejected. No root selection, environment secrets or network configuration is accepted.
 
 [Archived 0.1 corpus and semantic golden](../../tests/fixtures/debug/v0.1/expected.json) must remain unchanged in future releases. Conformance tests prove required shape, old meaning, unknown-field round trips and unchanged inferred/unreviewed provenance. Retain old decoders; preserve original bytes and auditable transforms for any future migration. See [atomic publication/retention policy](DESIGN.md); no writer or crash-safety promise is made.
+
+## Semantic navigation and later scoped outcomes
+
+The frozen debug operations/schemas above remain unchanged. [Semantic API 0.1](../agent/semantic/API.md) resolves canonical case/event IDs, preserves journal objects/provenance and adds possible-impact traversal in a separate namespace. Later DBG-003 results append to its journal; historical unverified outcomes remain intact. The explicit local test workflow is outside both read-only APIs. Installed Chrome and live R2 remain unverified; automated evidence does not close an incident.

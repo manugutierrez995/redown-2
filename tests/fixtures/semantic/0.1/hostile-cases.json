@@ -1,0 +1,8 @@
+[
+  {"name":"dangling-reference","mutation":"missing-endpoint","expected":"invalid-graph"},
+  {"name":"colliding-id","mutation":"duplicate-id","expected":"invalid-graph"},
+  {"name":"unapproved-observation","mutation":"forged-browser","expected":"invalid-graph"},
+  {"name":"parent-traversal","mutation":"unsafe-path","expected":"invalid-graph"},
+  {"name":"future-format","mutation":"future-version","expected":"unsupported-graph-version"},
+  {"name":"secret-in-optional-field","mutation":"private-record","expected":"private-record"}
+]

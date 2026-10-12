@@ -1,0 +1,562 @@
+{
+  "type": "object",
+  "required": [
+    "semanticGraphVersion",
+    "sourceCommit",
+    "entities",
+    "edges",
+    "coverage",
+    "artifacts"
+  ],
+  "properties": {
+    "semanticGraphVersion": {
+      "const": "0.1"
+    },
+    "sourceCommit": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "purpose",
+          "provenance",
+          "privacy",
+          "sourceRefs",
+          "limits"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+          },
+          "kind": {
+            "enum": [
+              "project",
+              "intent",
+              "capability",
+              "invariant",
+              "operation",
+              "state-transition",
+              "component",
+              "interface",
+              "dependency",
+              "evidence",
+              "test",
+              "incident",
+              "change",
+              "outcome",
+              "decision",
+              "lesson"
+            ]
+          },
+          "purpose": {
+            "type": "string",
+            "maxLength": 8000
+          },
+          "provenance": {
+            "type": "object",
+            "required": [
+              "sourceType",
+              "reviewStatus"
+            ],
+            "properties": {
+              "sourceType": {
+                "enum": [
+                  "explicit",
+                  "inferred",
+                  "historical",
+                  "imported",
+                  "agent-proposed"
+                ]
+              },
+              "reviewStatus": {
+                "enum": [
+                  "unreviewed",
+                  "accepted",
+                  "rejected"
+                ]
+              }
+            },
+            "additionalProperties": true
+          },
+          "privacy": {
+            "const": "public-sanitized"
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "path",
+                "symbol",
+                "sha256",
+                "role"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "maxLength": 8000
+                },
+                "symbol": {
+                  "type": "string",
+                  "maxLength": 8000
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "role": {
+                  "enum": [
+                    "source",
+                    "test",
+                    "document",
+                    "config",
+                    "record"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            },
+            "maxItems": 100
+          },
+          "limits": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 8000
+            },
+            "maxItems": 100
+          },
+          "status": {
+            "type": "string",
+            "maxLength": 8000
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+            },
+            "maxItems": 20
+          },
+          "caseId": {
+            "type": "string",
+            "pattern": "^DBG-[0-9]{3,}$"
+          },
+          "eventId": {
+            "type": "string",
+            "maxLength": 8000
+          }
+        },
+        "additionalProperties": true
+      },
+      "maxItems": 2000
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "from",
+          "to",
+          "type",
+          "rationale",
+          "provenance"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+          },
+          "from": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+          },
+          "to": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+          },
+          "type": {
+            "enum": [
+              "realizes",
+              "requires",
+              "implements",
+              "calls",
+              "owns",
+              "verifies",
+              "supports",
+              "contradicts",
+              "documents",
+              "affects",
+              "generalizes",
+              "supersedes"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "maxLength": 8000
+          },
+          "provenance": {
+            "type": "object",
+            "required": [
+              "sourceType",
+              "reviewStatus"
+            ],
+            "properties": {
+              "sourceType": {
+                "enum": [
+                  "explicit",
+                  "inferred",
+                  "historical",
+                  "imported",
+                  "agent-proposed"
+                ]
+              },
+              "reviewStatus": {
+                "enum": [
+                  "unreviewed",
+                  "accepted",
+                  "rejected"
+                ]
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "maxItems": 5000
+    },
+    "coverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "entityIds",
+          "limits",
+          "observationPlan"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+          },
+          "status": {
+            "enum": [
+              "covered",
+              "partial",
+              "unavailable"
+            ]
+          },
+          "entityIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+            },
+            "maxItems": 2000
+          },
+          "limits": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 8000
+            },
+            "maxItems": 100
+          },
+          "observationPlan": {
+            "type": "string",
+            "maxLength": 8000
+          }
+        },
+        "additionalProperties": true
+      },
+      "maxItems": 100
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "owner",
+          "coverage"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 8000
+          },
+          "owner": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+          },
+          "coverage": {
+            "enum": [
+              "covered",
+              "partial",
+              "unavailable"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "maxItems": 5000
+    }
+  },
+  "additionalProperties": true,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://redown.invalid/semantic/0.1/graph.schema.json",
+  "$defs": {
+    "entity": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "purpose",
+        "provenance",
+        "privacy",
+        "sourceRefs",
+        "limits"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+        },
+        "kind": {
+          "enum": [
+            "project",
+            "intent",
+            "capability",
+            "invariant",
+            "operation",
+            "state-transition",
+            "component",
+            "interface",
+            "dependency",
+            "evidence",
+            "test",
+            "incident",
+            "change",
+            "outcome",
+            "decision",
+            "lesson"
+          ]
+        },
+        "purpose": {
+          "type": "string",
+          "maxLength": 8000
+        },
+        "provenance": {
+          "type": "object",
+          "required": [
+            "sourceType",
+            "reviewStatus"
+          ],
+          "properties": {
+            "sourceType": {
+              "enum": [
+                "explicit",
+                "inferred",
+                "historical",
+                "imported",
+                "agent-proposed"
+              ]
+            },
+            "reviewStatus": {
+              "enum": [
+                "unreviewed",
+                "accepted",
+                "rejected"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "privacy": {
+          "const": "public-sanitized"
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "path",
+              "symbol",
+              "sha256",
+              "role"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "maxLength": 8000
+              },
+              "symbol": {
+                "type": "string",
+                "maxLength": 8000
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "role": {
+                "enum": [
+                  "source",
+                  "test",
+                  "document",
+                  "config",
+                  "record"
+                ]
+              }
+            },
+            "additionalProperties": true
+          },
+          "maxItems": 100
+        },
+        "limits": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 8000
+          },
+          "maxItems": 100
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 8000
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+          },
+          "maxItems": 20
+        },
+        "caseId": {
+          "type": "string",
+          "pattern": "^DBG-[0-9]{3,}$"
+        },
+        "eventId": {
+          "type": "string",
+          "maxLength": 8000
+        }
+      },
+      "additionalProperties": true
+    },
+    "edge": {
+      "type": "object",
+      "required": [
+        "id",
+        "from",
+        "to",
+        "type",
+        "rationale",
+        "provenance"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+        },
+        "from": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+        },
+        "type": {
+          "enum": [
+            "realizes",
+            "requires",
+            "implements",
+            "calls",
+            "owns",
+            "verifies",
+            "supports",
+            "contradicts",
+            "documents",
+            "affects",
+            "generalizes",
+            "supersedes"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "maxLength": 8000
+        },
+        "provenance": {
+          "type": "object",
+          "required": [
+            "sourceType",
+            "reviewStatus"
+          ],
+          "properties": {
+            "sourceType": {
+              "enum": [
+                "explicit",
+                "inferred",
+                "historical",
+                "imported",
+                "agent-proposed"
+              ]
+            },
+            "reviewStatus": {
+              "enum": [
+                "unreviewed",
+                "accepted",
+                "rejected"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": [
+        "path",
+        "symbol",
+        "sha256",
+        "role"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "maxLength": 8000
+        },
+        "symbol": {
+          "type": "string",
+          "maxLength": 8000
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "role": {
+          "enum": [
+            "source",
+            "test",
+            "document",
+            "config",
+            "record"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

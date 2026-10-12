@@ -4,3 +4,6 @@
 node_modules/
 .wrangler/
 .DS_Store
+
+# Agent scratch outputs (durable evidence lives under docs/agent/semantic/verification).
+work/

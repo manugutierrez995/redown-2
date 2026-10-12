@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forever.works/schemas/0.1/evidence.schema.json",
+  "title": "Evidence",
+  "description": "Canonical Forever Works evidence record. Unknown fields are preserved for compatible extension.",
+  "type": "object",
+  "required": [
+    "foreverVersion",
+    "id",
+    "kind",
+    "type",
+    "source",
+    "statementSupported",
+    "confidence"
+  ],
+  "properties": {
+    "foreverVersion": {
+      "type": "string",
+      "pattern": "^0\\\\.[0-9]+$",
+      "description": "Forever Works schema version."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$",
+      "description": "Stable, globally unique entity identifier."
+    },
+    "kind": {
+      "const": "evidence"
+    },
+    "provenance": {
+      "$ref": "common.schema.json#/$defs/provenance"
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+      },
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "statementSupported": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "timestampVersion": {
+      "type": "string"
+    },
+    "immutableReference": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "examples": [
+    {
+      "foreverVersion": "0.1",
+      "id": "evidence.example",
+      "kind": "evidence",
+      "type": "test",
+      "source": "test output",
+      "statementSupported": "Requirement passes.",
+      "confidence": 1
+    }
+  ]
+}

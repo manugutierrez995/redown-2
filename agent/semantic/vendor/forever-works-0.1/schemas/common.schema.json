@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forever.works/schemas/0.1/common.schema.json",
+  "$defs": {
+    "provenance": {
+      "type": "object",
+      "required": [
+        "sourceType",
+        "confidence"
+      ],
+      "properties": {
+        "sourceType": {
+          "enum": [
+            "explicit",
+            "inferred",
+            "imported",
+            "historical",
+            "agent-proposed"
+          ]
+        },
+        "sourceReference": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "lastReviewedAt": {
+          "type": "string"
+        },
+        "reviewStatus": {
+          "enum": [
+            "unreviewed",
+            "accepted",
+            "rejected"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "verification": {
+      "type": "object",
+      "required": [
+        "type",
+        "expected"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "unit-test",
+            "integration-test",
+            "benchmark",
+            "static-analysis",
+            "manual-review",
+            "compatibility-fixture",
+            "file-corpus",
+            "protocol-test",
+            "runtime-probe",
+            "external-conformance-suite"
+          ]
+        },
+        "expected": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        },
+        "tool": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "description": "Stable entity ID references."
+        }
+      },
+      "additionalProperties": true
+    },
+    "claim": {
+      "type": "object",
+      "required": [
+        "requirement",
+        "status"
+      ],
+      "properties": {
+        "requirement": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "unknown"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "description": "Stable entity ID references."
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

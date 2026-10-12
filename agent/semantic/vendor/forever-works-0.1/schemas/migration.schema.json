@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forever.works/schemas/0.1/migration.schema.json",
+  "title": "Migration",
+  "description": "Canonical Forever Works migration record. Unknown fields are preserved for compatible extension.",
+  "type": "object",
+  "required": [
+    "foreverVersion",
+    "id",
+    "kind",
+    "sourceImplementation",
+    "targetImplementation",
+    "reason",
+    "status"
+  ],
+  "properties": {
+    "foreverVersion": {
+      "type": "string",
+      "pattern": "^0\\\\.[0-9]+$",
+      "description": "Forever Works schema version."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$",
+      "description": "Stable, globally unique entity identifier."
+    },
+    "kind": {
+      "const": "migration"
+    },
+    "provenance": {
+      "$ref": "common.schema.json#/$defs/provenance"
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+      },
+      "additionalProperties": true
+    },
+    "sourceImplementation": {
+      "type": "string"
+    },
+    "targetImplementation": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "preservedCapabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "preservedInvariants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "compatibilityImpact": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "assumptionsRetired": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "verification": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Stable entity ID references."
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/claim"
+      }
+    },
+    "rollbackNotes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "dateVersion": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "examples": [
+    {
+      "foreverVersion": "0.1",
+      "id": "migration.example",
+      "kind": "migration",
+      "sourceImplementation": "implementation.old",
+      "targetImplementation": "implementation.new",
+      "reason": "Obsolete implementation.",
+      "status": "planned"
+    }
+  ]
+}

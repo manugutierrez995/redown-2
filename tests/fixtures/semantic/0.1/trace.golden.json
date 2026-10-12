@@ -1,0 +1,109 @@
+{
+  "depth": 3,
+  "direction": "both",
+  "edges": {
+    "items": [
+      {
+        "from": "fixture.intent",
+        "id": "fixture.edge.1",
+        "provenance": {
+          "reviewStatus": "unreviewed",
+          "sourceType": "agent-proposed"
+        },
+        "rationale": "Fixture contract link.",
+        "to": "fixture.capability",
+        "type": "realizes"
+      },
+      {
+        "from": "fixture.capability",
+        "id": "fixture.edge.2",
+        "provenance": {
+          "reviewStatus": "unreviewed",
+          "sourceType": "agent-proposed"
+        },
+        "rationale": "Fixture contract link.",
+        "to": "fixture.invariant",
+        "type": "requires"
+      },
+      {
+        "from": "fixture.invariant",
+        "id": "fixture.edge.3",
+        "provenance": {
+          "reviewStatus": "unreviewed",
+          "sourceType": "agent-proposed"
+        },
+        "rationale": "Fixture contract link.",
+        "to": "fixture.test",
+        "type": "verifies"
+      }
+    ],
+    "nextOffset": null,
+    "offset": 0,
+    "total": 3
+  },
+  "entities": {
+    "items": [
+      {
+        "id": "fixture.capability",
+        "kind": "capability",
+        "limits": [
+          "Portable fixture; no runtime proof."
+        ],
+        "privacy": "public-sanitized",
+        "provenance": {
+          "reviewStatus": "unreviewed",
+          "sourceType": "agent-proposed"
+        },
+        "purpose": "Choose exact destination.",
+        "sourceRefs": []
+      },
+      {
+        "id": "fixture.intent",
+        "kind": "intent",
+        "limits": [
+          "Portable fixture; no runtime proof."
+        ],
+        "privacy": "public-sanitized",
+        "provenance": {
+          "reviewStatus": "unreviewed",
+          "sourceType": "agent-proposed"
+        },
+        "purpose": "Preserve destination fidelity.",
+        "sourceRefs": []
+      },
+      {
+        "id": "fixture.invariant",
+        "kind": "invariant",
+        "limits": [
+          "Portable fixture; no runtime proof."
+        ],
+        "privacy": "public-sanitized",
+        "provenance": {
+          "reviewStatus": "unreviewed",
+          "sourceType": "agent-proposed"
+        },
+        "purpose": "Reject obsolete requests.",
+        "sourceRefs": []
+      },
+      {
+        "id": "fixture.test",
+        "kind": "test",
+        "limits": [
+          "Portable fixture; no runtime proof."
+        ],
+        "privacy": "public-sanitized",
+        "provenance": {
+          "reviewStatus": "unreviewed",
+          "sourceType": "agent-proposed"
+        },
+        "purpose": "Verify sanitized overlap fixture.",
+        "sourceRefs": []
+      }
+    ],
+    "nextOffset": null,
+    "offset": 0,
+    "total": 4
+  },
+  "scope": "Possible reachability through declared edges; not a correctness proof.",
+  "truncated": false
+}

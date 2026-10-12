@@ -1,0 +1,39 @@
+{
+  "authority": "proposed",
+  "certified": false,
+  "discovery": {
+    "adapter": {
+      "name": "javascript-core"
+    },
+    "foreverApiVersion": "0.1",
+    "implementation": {
+      "name": "@forever-works/javascript",
+      "version": "0.1.0"
+    },
+    "operations": [
+      "audit",
+      "describe",
+      "evaluateReplacement",
+      "explainDependency",
+      "getEntity",
+      "getProjectIntent",
+      "listCapabilities",
+      "listDependencies",
+      "listImplementations",
+      "listInvariants",
+      "normalize",
+      "traceEntity",
+      "validateModel",
+      "verifyMigration"
+    ],
+    "supportedModelVersions": [
+      "0.1"
+    ]
+  },
+  "errors": [],
+  "layer": "actual-upstream-javascript-reference",
+  "reviewStatus": "unreviewed",
+  "schemaCompatibility": "requires-independent-published-schema-validation",
+  "upstreamCommit": "230c67fa7e27577c53b6f7895df442a2ab24e4cb",
+  "valid": true
+}

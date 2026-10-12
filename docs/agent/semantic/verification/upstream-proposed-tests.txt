@@ -1,0 +1,137 @@
+TAP version 13
+# Subtest: shared case catalog
+    # Subtest: minimal
+    ok 1 - minimal
+      ---
+      duration_ms: 1.741528
+      type: 'test'
+      ...
+    # Subtest: complete
+    ok 2 - complete
+      ---
+      duration_ms: 8.215483
+      type: 'test'
+      ...
+    # Subtest: invalid-missing-id
+    ok 3 - invalid-missing-id
+      ---
+      duration_ms: 8.987612
+      type: 'test'
+      ...
+    # Subtest: invalid-reference
+    ok 4 - invalid-reference
+      ---
+      duration_ms: 0.945596
+      type: 'test'
+      ...
+    # Subtest: unknown-future-field
+    ok 5 - unknown-future-field
+      ---
+      duration_ms: 1.119541
+      type: 'test'
+      ...
+    # Subtest: inferred-provenance
+    ok 6 - inferred-provenance
+      ---
+      duration_ms: 0.724534
+      type: 'test'
+      ...
+    # Subtest: circular-relationship
+    ok 7 - circular-relationship
+      ---
+      duration_ms: 0.958931
+      type: 'test'
+      ...
+    # Subtest: old-schema-version
+    ok 8 - old-schema-version
+      ---
+      duration_ms: 0.876045
+      type: 'test'
+      ...
+    # Subtest: migration-violating
+    ok 9 - migration-violating
+      ---
+      duration_ms: 4.50851
+      type: 'test'
+      ...
+    # Subtest: migration-preserving
+    ok 10 - migration-preserving
+      ---
+      duration_ms: 8.219024
+      type: 'test'
+      ...
+    1..10
+ok 1 - shared case catalog
+  ---
+  duration_ms: 42.52184
+  type: 'test'
+  ...
+# Subtest: normalization and evaluations equal canonical goldens
+ok 2 - normalization and evaluations equal canonical goldens
+  ---
+  duration_ms: 24.159536
+  type: 'test'
+  ...
+# Subtest: a clean JavaScript consumer imports the packed package without TypeScript
+ok 3 - a clean JavaScript consumer imports the packed package without TypeScript
+  ---
+  duration_ms: 688.281316
+  type: 'test'
+  ...
+# Subtest: loads, validates, queries, traces cycles, and audits
+ok 4 - loads, validates, queries, traces cycles, and audits
+  ---
+  duration_ms: 5.706014
+  type: 'test'
+  ...
+# Subtest: normalizes deterministically and preserves unknown fields
+ok 5 - normalizes deterministically and preserves unknown fields
+  ---
+  duration_ms: 1.114091
+  type: 'test'
+  ...
+# Subtest: replacement aggregation preserves fail, pass, unknown, and partial
+ok 6 - replacement aggregation preserves fail, pass, unknown, and partial
+  ---
+  duration_ms: 0.270228
+  type: 'test'
+  ...
+# Subtest: replacement and migration match shared goldens
+ok 7 - replacement and migration match shared goldens
+  ---
+  duration_ms: 19.873179
+  type: 'test'
+  ...
+# Subtest: reports malformed records and rejects escaping paths
+ok 8 - reports malformed records and rejects escaping paths
+  ---
+  duration_ms: 3.494432
+  type: 'test'
+  ...
+# Subtest: Public API discovery and operations are deterministic
+ok 9 - Public API discovery and operations are deterministic
+  ---
+  duration_ms: 5.547275
+  type: 'test'
+  ...
+# Subtest: Public API exposes stable machine-readable not-found errors
+ok 10 - Public API exposes stable machine-readable not-found errors
+  ---
+  duration_ms: 4.455886
+  type: 'test'
+  ...
+# Subtest: published record schema version patterns accept documented and old model versions
+ok 11 - published record schema version patterns accept documented and old model versions
+  ---
+  duration_ms: 2.683336
+  type: 'test'
+  ...
+1..11
+# tests 21
+# suites 0
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 818.13205

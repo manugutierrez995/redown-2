@@ -1,0 +1,172 @@
+TAP version 13
+# Subtest: central discovery is deterministic and versions and authority remain separate
+ok 1 - central discovery is deterministic and versions and authority remain separate
+  ---
+  duration_ms: 2.235485
+  type: 'test'
+  ...
+# Subtest: real vertical contract resolves intent, three upload invariants, handlers, current source and regression
+ok 2 - real vertical contract resolves intent, three upload invariants, handlers, current source and regression
+  ---
+  duration_ms: 33.536609
+  type: 'test'
+  ...
+# Subtest: pagination is sorted, exhaustive and rejects invalid limits or depths
+ok 3 - pagination is sorted, exhaustive and rejects invalid limits or depths
+  ---
+  duration_ms: 48.599913
+  type: 'test'
+  ...
+# Subtest: independent DFS agrees with reader bidirectional traversal on cyclic portable golden
+ok 4 - independent DFS agrees with reader bidirectional traversal on cyclic portable golden
+  ---
+  duration_ms: 2.125108
+  type: 'test'
+  ...
+# Subtest: reverse direction and supporting/counterevidence remain explicit
+ok 5 - reverse direction and supporting/counterevidence remain explicit
+  ---
+  duration_ms: 43.197145
+  type: 'test'
+  ...
+# Subtest: exact debug events, unknown optional fields and original provenance survive semantic evidence queries
+ok 6 - exact debug events, unknown optional fields and original provenance survive semantic evidence queries
+  ---
+  duration_ms: 25.22021
+  type: 'test'
+  ...
+# Subtest: duplicate IDs, endpoints, aliases, ownership, coverage and forged proof fail closed
+ok 7 - duplicate IDs, endpoints, aliases, ownership, coverage and forged proof fail closed
+  ---
+  duration_ms: 7.485657
+  type: 'test'
+  ...
+# Subtest: traversal attempts, secret-like content and symlinks cannot expose private files
+ok 8 - traversal attempts, secret-like content and symlinks cannot expose private files
+  ---
+  duration_ms: 8.759142
+  type: 'test'
+  ...
+# Subtest: changed bytes and moved anchors yield stale warnings; cached snapshots stay pinned
+ok 9 - changed bytes and moved anchors yield stale warnings; cached snapshots stay pinned
+  ---
+  duration_ms: 2.605361
+  type: 'test'
+  ...
+# Subtest: real change impact is possible and unknown changes never get invented proof
+ok 10 - real change impact is possible and unknown changes never get invented proof
+  ---
+  duration_ms: 42.316833
+  type: 'test'
+  ...
+# Subtest: full finite public coverage inventory resolves strata and all canonical case links
+ok 11 - full finite public coverage inventory resolves strata and all canonical case links
+  ---
+  duration_ms: 39.01089
+  type: 'test'
+  ...
+# Subtest: lesson is a portable proposal validated by actual upstream reference API, without acceptance
+ok 12 - lesson is a portable proposal validated by actual upstream reference API, without acceptance
+  ---
+  duration_ms: 41.627061
+  type: 'test'
+  ...
+# Subtest: missing normative references fail independent upstream validation and future fields survive
+ok 13 - missing normative references fail independent upstream validation and future fields survive
+  ---
+  duration_ms: 20.315594
+  type: 'test'
+  ...
+# Subtest: archived graph/golden remains readable; normalization preserves bytes, optional fields and stable identity across rewrite
+ok 14 - archived graph/golden remains readable; normalization preserves bytes, optional fields and stable identity across rewrite
+  ---
+  duration_ms: 1.653519
+  type: 'test'
+  ...
+# Subtest: aliases resolve deterministically, deprecation metadata stays visible and no guessed split
+ok 15 - aliases resolve deterministically, deprecation metadata stays visible and no guessed split
+  ---
+  duration_ms: 0.888967
+  type: 'test'
+  ...
+# Subtest: oversized models and graph depths are bounded and errors do not echo unsafe input
+ok 16 - oversized models and graph depths are bounded and errors do not echo unsafe input
+  ---
+  duration_ms: 31.893215
+  type: 'test'
+  ...
+# Subtest: workflow is dry-run by default and arbitrary commands cannot be supplied
+ok 17 - workflow is dry-run by default and arbitrary commands cannot be supplied
+  ---
+  duration_ms: 82.838888
+  type: 'test'
+  ...
+# Subtest: DOM observer requires independent consent and reads structure only, not values/storage
+ok 18 - DOM observer requires independent consent and reads structure only, not values/storage
+  ---
+  duration_ms: 0.281779
+  type: 'test'
+  ...
+# Subtest: CLI works from outside checkout, emits one JSON result and rejects malformed flags
+ok 19 - CLI works from outside checkout, emits one JSON result and rejects malformed flags
+  ---
+  duration_ms: 209.462247
+  type: 'test'
+  ...
+# Subtest: innocent internal symlink aliases cannot read excluded credential paths
+ok 20 - innocent internal symlink aliases cannot read excluded credential paths
+  ---
+  duration_ms: 1.151167
+  type: 'test'
+  ...
+# Subtest: aggregate frozen-debug corpus has a semantic-reader memory budget before delegation
+ok 21 - aggregate frozen-debug corpus has a semantic-reader memory budget before delegation
+  ---
+  duration_ms: 26.062009
+  type: 'test'
+  ...
+# Subtest: archived hostile fixtures produce stable errors on the released decoder
+ok 22 - archived hostile fixtures produce stable errors on the released decoder
+  ---
+  duration_ms: 2.058201
+  type: 'test'
+  ...
+# Subtest: replacement relational reader preserves directed depth semantics across rewrite fixtures
+ok 23 - replacement relational reader preserves directed depth semantics across rewrite fixtures
+  ---
+  duration_ms: 4.369505
+  type: 'test'
+  ...
+# Subtest: replacement evaluation remains partial when browser evidence is absent; failure dominates
+ok 24 - replacement evaluation remains partial when browser evidence is absent; failure dominates
+  ---
+  duration_ms: 0.54783
+  type: 'test'
+  ...
+# Subtest: large reachable graph stops at visited budget and pagination never hides truncation
+ok 25 - large reachable graph stops at visited budget and pagination never hides truncation
+  ---
+  duration_ms: 40.336395
+  type: 'test'
+  ...
+# Subtest: frozen APIs/fixtures stay byte-identical and all original incident journal prefixes survive
+ok 26 - frozen APIs/fixtures stay byte-identical and all original incident journal prefixes survive
+  ---
+  duration_ms: 0.772374
+  type: 'test'
+  ...
+# Subtest: vendored actual upstream sources and schemas retain pinned hashes
+ok 27 - vendored actual upstream sources and schemas retain pinned hashes
+  ---
+  duration_ms: 0.436987
+  type: 'test'
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 747.652285

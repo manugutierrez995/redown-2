@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: Simple menu places default and extra destinations immediately under REDOWN, never inside a preset submenu
+ok 1 - Simple menu places default and extra destinations immediately under REDOWN, never inside a preset submenu
+  ---
+  duration_ms: 2.893113
+  type: 'test'
+  ...
+# Subtest: Simple blank labels honor bucket fallback without adding a submenu or changing explicit names
+ok 2 - Simple blank labels honor bucket fallback without adding a submenu or changing explicit names
+  ---
+  duration_ms: 0.856232
+  type: 'test'
+  ...
+# Subtest: Menu Label is default for existing profiles without a saved preference
+ok 3 - Menu Label is default for existing profiles without a saved preference
+  ---
+  duration_ms: 0.81097
+  type: 'test'
+  ...
+# Subtest: Lowest directory preference selects location name rather than a manually entered label
+ok 4 - Lowest directory preference selects location name rather than a manually entered label
+  ---
+  duration_ms: 0.718328
+  type: 'test'
+  ...
+# Subtest: BUG-014: selecting an existing child does not fill the new-folder input or create a directory
+ok 5 - BUG-014: selecting an existing child does not fill the new-folder input or create a directory
+  ---
+  duration_ms: 77.065931
+  type: 'test'
+  ...
+# Subtest: BUG-013: right-side root lists only immediate folders from the selected left bucket
+ok 6 - BUG-013: right-side root lists only immediate folders from the selected left bucket
+  ---
+  duration_ms: 17.21882
+  type: 'test'
+  ...
+# Subtest: BUG-013: stale earlier bucket results cannot overwrite newly selected bucket
+ok 7 - BUG-013: stale earlier bucket results cannot overwrite newly selected bucket
+  ---
+  duration_ms: 9.855068
+  type: 'test'
+  ...
+# Subtest: DBG-003 child requests released after bucket switch cannot contaminate current shared cache
+ok 8 - DBG-003 child requests released after bucket switch cannot contaminate current shared cache
+  ---
+  duration_ms: 14.453288
+  type: 'test'
+  ...
+# Subtest: DBG-003 late profile completion cannot alter the new bucket view
+ok 9 - DBG-003 late profile completion cannot alter the new bucket view
+  ---
+  duration_ms: 10.921316
+  type: 'test'
+  ...
+# Subtest: DBG-003 late creation completion cannot alter the new bucket view
+ok 10 - DBG-003 late creation completion cannot alter the new bucket view
+  ---
+  duration_ms: 16.671649
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 401.183634

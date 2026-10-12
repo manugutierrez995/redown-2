@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "bcbbe10452773ad5e2794f99e66a39de0d1cef69",
+  "frozenFiles": {
+    "agent/api.mjs": "a7384efd461c85c58abd451d29c029f436c974c37244d0ecbbee21b3292450a5",
+    "agent/catalog.json": "c08087fb9b7932ed8a98f29cb86041a2a82f905a6dd0aab3fb2cd43436d7de90",
+    "agent/catalog.schema.json": "37ab7e7bea911c062993ff56d7e0c01a43134af2798c3e315087efa6a7b65179",
+    "agent/cli.mjs": "752d68f76e14e0999dc799a13e3f7b2b587d51fa434595db746fa40900d234ef",
+    "agent/debug/api.mjs": "ce2ddb7a0a08b3be2590cf882e7dcc141c95652cd7b98bc23cf29d12e997ea5b",
+    "agent/debug/cli.mjs": "a5687e780b6c30294f999338fdc5e8c951e4a5dc4cf94e57e0aff884154af796",
+    "agent/debug/schemas/0.1/common.schema.json": "94c9f49314d5bb47e37aeddcfefb03b55de9ae40e5f8b48a3686eb06172b9c42",
+    "agent/debug/schemas/0.1/event.schema.json": "ff9f90c3426074f372e056986ededefebe233dad10225308d8c5f74a76a2447e",
+    "agent/debug/schemas/0.1/incident.schema.json": "229614e186c05b6198e5c645c9fd08cebd634ea9b8fd2c4f681b4424481ebd5f",
+    "agent/debug/schemas/0.1/manifest.schema.json": "94c001f90e8785d6f4f268e79ce9e7b614daf40d948f75431e92a5d931c8f5a2",
+    "agent/debug/schemas/0.1/result.schema.json": "65ce7b1f1cf95ba9d39beecf386cd505492fb68577afc8c32ccadd013b06e4f7",
+    "agent/result.schema.json": "6982b6c4aef01ebb6af44df99bcec2a0fc77453df421c2b9e54d03bfbfd6fc92",
+    "tests/fixtures/debug/v0.1/expected.json": "0ddc4bc4712bb7082869edb8b3e3e2c5195a7c3c05efb8d26aa55674edda57cf",
+    "tests/fixtures/debug/v0.1/history.jsonl": "5a83411254ea13378260f9ae95554efbd1150c9775b4d8735888358d2647fa88",
+    "tests/fixtures/debug/v0.1/incident.json": "29d7a7f2652681d4fc03f1be6f5cae70aabc61f662a957dc4e199a66d4f0908a",
+    "tests/fixtures/debug/v0.1/manifest.json": "b13825c4470837242ad9b1f125856d9198877278c0a925f12e80d7f0d179c743"
+  },
+  "journalPrefixes": {
+    "debug/cases/DBG-001.events.jsonl": {
+      "bytes": 12465,
+      "sha256": "72c8cbeb428e2e72d6e9a575124931104f413701f450868639fdb5320e5f183d"
+    },
+    "debug/cases/DBG-002.events.jsonl": {
+      "bytes": 2114,
+      "sha256": "e014f35fedeb222fdb7203a165589558ddb59bf558ccb9b734d51ca89a6d8537"
+    },
+    "debug/cases/DBG-003.events.jsonl": {
+      "bytes": 2762,
+      "sha256": "c7d93b6c7699f0a2c43e638d598a0125a6a5c9329c762500ced43f750cf83136"
+    }
+  }
+}
