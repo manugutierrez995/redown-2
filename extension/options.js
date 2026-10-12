@@ -1075,6 +1075,8 @@ async function fetchUploadBuilderChildren(parentSegments=[]){
   const target=uploadTarget();
   if(!target)return [];
   const parent=parentSegments.filter(Boolean);
+  const requestVersion=uploadLocationLoadVersion;
+  const targetKey=target.accountId+":"+target.bucketName;
   const result=await send({
     type:"cfFolderChildren",
     accountId:target.accountId,
@@ -1082,6 +1084,10 @@ async function fetchUploadBuilderChildren(parentSegments=[]){
     parentPrefix:parent.join("/"),
     limit:250
   });
+  // A disconnected row can still finish fetching. Guard the shared cache, not only its DOM.
+  const currentTarget=uploadTarget();
+  if(requestVersion!==uploadLocationLoadVersion || targetKey!==uploadLocationTargetKey
+    || !currentTarget || targetKey!==currentTarget.accountId+":"+currentTarget.bucketName)return [];
   if(!result?.ok)return [];
   const children=(result.children||[]).map((value)=>String(value||"").trim()).filter(Boolean);
   for(const child of children){
@@ -1100,11 +1106,17 @@ function syncUploadBuilderPrefix(){
 async function materializeUploadBuilderPrefix(){
   const prefix=syncUploadBuilderPrefix();
   if(!prefix)return;
+  const requestVersion=uploadLocationLoadVersion;
+  const targetKey=uploadLocationTargetKey;
+  const stillCurrent=()=>requestVersion===uploadLocationLoadVersion && targetKey===uploadLocationTargetKey;
   try{
     const profile=await ensureUploadProfile();
+    if(!stillCurrent())return;
     await ensureProfileMenuPrefixes(profile,[prefix]);
+    if(!stillCurrent())return;
     if(!uploadLocationPrefixes.includes(prefix))uploadLocationPrefixes.push(prefix);
   }catch(error){
+    if(!stillCurrent())return;
     const hint=$("local-location-hint");
     if(hint)hint.textContent="Destination saved. REDOWN will create it when Cloudflare access is ready.";
   }
@@ -1199,8 +1211,11 @@ function renderUploadLocationBuilder(){
         return;
       }
 
+      const requestVersion=uploadLocationLoadVersion;
+      const targetKey=uploadLocationTargetKey;
       uploadLocationSegments[index]=current;
       await materializeUploadBuilderPrefix();
+      if(requestVersion!==uploadLocationLoadVersion || targetKey!==uploadLocationTargetKey)return;
       uploadLocationSegments=uploadLocationSegments.slice(0,index+1);
       uploadLocationSegments.push("");
       renderUploadLocationBuilder();
