@@ -3821,10 +3821,26 @@ async function refreshBuckets(){
     const ready=profiles.some(p=>p.type==="cloudflare-r2"&&p.accountId===currentAccountId&&p.bucketName===bucket.name);
     const span=document.createElement("span");
     span.textContent=ready
-      ? "REDOWN ready · click to verify/repair"
-      : ([bucket.location,bucket.jurisdiction].filter(Boolean).join(" · ")||"R2 bucket")+" · click to use";
+      ? "REDOWN ready · click to select (no Worker redeployment)"
+      : ([bucket.location,bucket.jurisdiction].filter(Boolean).join(" · ")||"R2 bucket")+" · click to prepare";
     el.append(strong,span);
-    el.addEventListener("click",()=>addBucketPreset(bucket.name));
+    el.addEventListener("click",()=>{
+      if(ready){
+        setStatus("cf-status",bucket.name+" is already configured. Selected without redeploying its Worker.","ok");
+        return;
+      }
+      addBucketPreset(bucket.name);
+    });
+    if(ready){
+      const repair=document.createElement("button");
+      repair.type="button";
+      repair.textContent="Verify / repair Worker";
+      repair.addEventListener("click",event=>{
+        event.stopPropagation();
+        addBucketPreset(bucket.name);
+      });
+      el.append(repair);
+    }
     root.append(el);
   });
   setStatus("cf-status",(result.buckets||[]).length?"Click a bucket to make it a REDOWN preset.":"No buckets yet. Create one above.");
