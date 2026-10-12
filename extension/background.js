@@ -1772,7 +1772,7 @@ async function handleHitomiCaptureMessage(message,sender) {
   const tabId=sender.tab?.id;
   const intent=hitomiIntents.get(tabId);
   if(!intent||Date.now()-intent.at>180000)throw new Error("No active gallery transfer; retry the right-click action");
-  if(!/^https:\/\/hitomi\.la\//.test(sender.url||""))throw new Error("Unexpected gallery origin");
+  if(!String(sender.url||"").startsWith("https://hitomi.la/"))throw new Error("Unexpected gallery origin");
   if(message.type==="hitomiCaptureError"){hitomiIntents.delete(tabId);await notify("REDOWN gallery failed",message.error||"Capture failed");return {ok:true};}
   if(message.type==="hitomiCaptureStart"){
     if(intent.state!=="armed")throw new Error("Capture already started");
@@ -1827,7 +1827,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   }
 
   const profiles = await getProfiles();
-  if(/^https:\/\/hitomi\\.la\//.test(info.pageUrl||tab?.url||"") && (!info.linkUrl || info.linkUrl==="#" || info.linkUrl.endsWith("#")) && String(info.menuItemId).match(/^(quick:|simple-option:|nested:|tree:)/)) {
+  if(String(info.pageUrl||tab?.url||"").startsWith("https://hitomi.la/") && (!info.linkUrl || info.linkUrl==="#" || info.linkUrl.endsWith("#")) && String(info.menuItemId).match(/^(quick:|simple-option:|nested:|tree:)/)) {
     try { await initiateHitomiCapture(info,tab,profiles); }
     catch(e){await notify("REDOWN gallery failed",e?.message||String(e));}
     return;
