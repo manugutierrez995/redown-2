@@ -1886,7 +1886,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // same-page link. Do not mistake it for a remote downloadable asset.
   const onHitomiGallery=/^https:\/\/hitomi\.la\//.test(String(info.pageUrl||tab?.url||""));
   // Hitomi gallery Download controls may expose generated or same-page links.
-  const hitomiGalleryPage=/^https:\/\/hitomi\.la\/(?:doujinshi|manga|cg|gamecg|artistcg)\//.test(String(info.pageUrl||tab?.url||""));
+  const hitomiGalleryPage=/^https:\/\/hitomi\.la\/(?:doujinshi|manga|cg|gamecg|artistcg|galleries|reader)\//.test(String(info.pageUrl||tab?.url||""));
   const hitomiLink=String(info.linkUrl||"");
   const hitomiDownloadLink=!hitomiLink || /^(?:javascript:|blob:|#)/i.test(hitomiLink) || /(?:download_gallery|#dl-button)/i.test(hitomiLink) || hitomiLink===String(info.pageUrl||tab?.url||"");
   if(onHitomiGallery && hitomiGalleryPage && hitomiDownloadLink && /^(quick:|simple-option:|nested:|tree:)/.test(String(info.menuItemId))) {
