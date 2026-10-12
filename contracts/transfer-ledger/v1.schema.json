@@ -1,0 +1,332 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/thanks-cohn/remote-download-2-cloudfare/blob/main/contracts/transfer-ledger/v1.schema.json",
+  "title": "REDOWN Transfer Ledger Record v1",
+  "description": "Durable, privacy-minimized metadata record. A transfer record never by itself proves R2 integrity or authorizes local deletion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "jobId",
+    "createdAt",
+    "updatedAt",
+    "state",
+    "source",
+    "destination",
+    "policy",
+    "attempts",
+    "verification",
+    "cleanup"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "jobId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "state": {
+      "enum": [
+        "queued",
+        "resolving",
+        "transferring",
+        "verifying",
+        "completed",
+        "retry-wait",
+        "needs-user",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "url",
+            "hitomi-gallery",
+            "local-file",
+            "other"
+          ]
+        },
+        "url": {
+          "type": "string"
+        },
+        "siteKey": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "localRef": {
+          "type": "string",
+          "description": "Non-secret opaque file reference, never a full arbitrary filesystem path."
+        }
+      }
+    },
+    "destination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "accountId",
+        "bucket",
+        "key"
+      ],
+      "properties": {
+        "provider": {
+          "const": "cloudflare-r2"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "bucket": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "objectVersion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "etag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preferredMode",
+        "allowBrowserFallback",
+        "deleteLocalAfterVerification",
+        "overwrite"
+      ],
+      "properties": {
+        "preferredMode": {
+          "enum": [
+            "cloud-to-cloud",
+            "browser-assisted"
+          ]
+        },
+        "allowBrowserFallback": {
+          "type": "boolean"
+        },
+        "deleteLocalAfterVerification": {
+          "type": "boolean"
+        },
+        "overwrite": {
+          "enum": [
+            "skip-existing",
+            "replace",
+            "fail-if-existing"
+          ]
+        }
+      }
+    },
+    "attempts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attemptId",
+          "mode",
+          "status",
+          "startedAt"
+        ],
+        "properties": {
+          "attemptId": {
+            "type": "string"
+          },
+          "mode": {
+            "enum": [
+              "cloud-to-cloud",
+              "browser-assisted"
+            ]
+          },
+          "status": {
+            "enum": [
+              "started",
+              "succeeded",
+              "interrupted",
+              "failed"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reasonCode": {
+            "type": "string"
+          },
+          "bytesTransferred": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "method"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not-started",
+            "pending",
+            "verified",
+            "inconclusive",
+            "mismatch"
+          ]
+        },
+        "method": {
+          "enum": [
+            "none",
+            "metadata",
+            "checksum",
+            "readback"
+          ]
+        },
+        "localSize": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "remoteSize": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "algorithm": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "localDigest": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "remoteDigest": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "checkedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "cleanup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not-requested",
+            "waiting-verification",
+            "eligible",
+            "needs-permission",
+            "deleted",
+            "failed",
+            "not-applicable"
+          ]
+        },
+        "localFileRef": {
+          "type": "string"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "queue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "retryCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "nextAttemptAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "lastErrorCode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expectedMime": {
+          "type": "string"
+        },
+        "observedMime": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
