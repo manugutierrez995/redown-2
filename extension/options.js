@@ -4032,7 +4032,45 @@ async function refreshDownloadsOnAccess(){
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refreshDownloadsOnAccess();});
 window.addEventListener("focus",refreshDownloadsOnAccess);
 
+// These preferences are forward-compatible with Transfer Ledger v1.
+ // They MUST NOT activate unfinished cloud-to-cloud transport or delete files.
+const TRANSFER_POLICY_KEY="redownTransferPolicyV1";
+const TRANSFER_POLICY_DEFAULTS=Object.freeze({
+  schemaVersion:1,preferredMode:"browser-assisted",
+  allowBrowserFallback:true,deleteLocalAfterVerification:false,overwrite:"skip-existing"
+});
+async function initTransferPolicyControls(){
+  const mode=$("transfer-preferred-mode");
+  const fallback=$("transfer-allow-fallback");
+  const cleanup=$("transfer-delete-local");
+  const status=$("transfer-policy-status");
+  if(!mode||!fallback||!cleanup||!status)return;
+  const data=await chrome.storage.local.get(TRANSFER_POLICY_KEY);
+  const saved=data[TRANSFER_POLICY_KEY]||{};
+  const policy={...TRANSFER_POLICY_DEFAULTS,...saved};
+  mode.value=["cloud-to-cloud","browser-assisted"].includes(policy.preferredMode)?policy.preferredMode:"browser-assisted";
+  fallback.checked=Boolean(policy.allowBrowserFallback);
+  cleanup.checked=Boolean(policy.deleteLocalAfterVerification);
+  const onChange=async()=>{
+    const next={...TRANSFER_POLICY_DEFAULTS,preferredMode:mode.value,
+      allowBrowserFallback:fallback.checked,deleteLocalAfterVerification:cleanup.checked};
+    try{
+      await chrome.storage.local.set({[TRANSFER_POLICY_KEY]:next});
+      status.className="status ok";
+      status.textContent="Preferences saved. Current Hitomi transfers remain Browser-Assisted; remote transfer and automatic deletion are not yet implemented.";
+    }catch(error){
+      status.className="status bad";
+      status.textContent="Could not save transfer preferences: "+(error?.message||String(error));
+    }
+  };
+  mode.addEventListener("change",onChange);
+  fallback.addEventListener("change",onChange);
+  cleanup.addEventListener("change",onChange);
+  status.textContent="Current Hitomi transfers remain Browser-Assisted. Cloud-to-Cloud and automatic cleanup are planned, not active.";
+}
+
 (async()=>{
+  await initTransferPolicyControls();
   const stored=await chrome.storage.local.get(["profiles","cloudflareAuth","rightClickMode"]);
   profiles=stored.profiles||[];
   rightClickMode=RedownNestedLocations.menuMode(stored.rightClickMode,profiles);
