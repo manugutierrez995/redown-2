@@ -1365,7 +1365,7 @@ async function uploadLocalFiles(fileList){
   const profile=uploadProfile();
   const prefix=String($("local-prefix")?.value||"").trim().replace(/^\/+|\/+$/g,"");
   const status=$("local-upload-status");
-  let completed=0;
+  let completed=0,skipped=0;
   const permanentFailures=[];
   const queue=files.map(file=>({file,failures:0,nextAt:0}));
   // File references live only while this settings page remains open.
@@ -1375,7 +1375,7 @@ async function uploadLocalFiles(fileList){
     if(item.nextAt>Date.now()){
       queue.push(item);
       const earliest=Math.min(...queue.map(entry=>entry.nextAt));
-      status.textContent="Network retry queue: "+completed+"/"+files.length+" uploaded, "+queue.length+" pending. Keep this page open.";
+      status.textContent="Network retry queue: "+completed+" uploaded, "+skipped+" already existed, "+queue.length+" pending. Keep this page open.";
       await new Promise(resolve=>setTimeout(resolve,Math.min(30000,Math.max(250,earliest-Date.now()))));
       continue;
     }
@@ -1387,6 +1387,12 @@ async function uploadLocalFiles(fileList){
     let firstLookupError="";
     try{existed=await inspectLocalUploadObject(target,key);}
     catch(error){existed="unknown (lookup failed)";firstLookupError=error?.name||"lookup-error";}
+    if(existed==="yes"){
+      skipped++;
+      status.className="status ok";
+      status.textContent=`Already exists — skipped ${file.name} (${skipped} skipped; ${completed} uploaded).`;
+      continue;
+    }
     status.textContent=`Uploading ${file.name} (attempt ${item.failures+1}) · already exists: ${existed}…`;
     try{
       if(file.size>300*1000*1000){retryable=false;throw new Error("Cloudflare's direct upload API has a 300 MB per-file limit.");}
@@ -1456,8 +1462,8 @@ async function uploadLocalFiles(fileList){
   await renderHistory();
   status.className=permanentFailures.length?"status bad":"status ok";
   status.textContent=permanentFailures.length
-    ?`Batch finished: ${completed} uploaded; ${permanentFailures.length} non-retryable failures. ${permanentFailures.map(entry=>entry.name+" ("+entry.error+")").join("; ")}`
-    :`Batch finished: all ${completed} files uploaded.`;
+    ?`Batch finished: ${completed} uploaded, ${skipped} already existed (skipped); ${permanentFailures.length} non-retryable failures. ${permanentFailures.map(entry=>entry.name+" ("+entry.error+")").join("; ")}`
+    :`Batch finished: ${completed} uploaded, ${skipped} already existed (skipped), 0 failures.`;
   if(workspaceTarget?.accountId===target.accountId&&workspaceTarget?.bucketName===target.bucketName){
     workspacePrefix=normalizePrefix(prefix);
     await browseWorkspace().catch(()=>{});
