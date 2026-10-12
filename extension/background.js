@@ -1827,9 +1827,18 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   }
 
   const profiles = await getProfiles();
-  if(String(info.pageUrl||tab?.url||"").startsWith("https://hitomi.la/") && (!info.linkUrl || info.linkUrl==="#" || info.linkUrl.endsWith("#")) && String(info.menuItemId).match(/^(quick:|simple-option:|nested:|tree:)/)) {
+  // Hitomi gallery Download is an anchor and can expose a javascript: or
+  // same-page link. Do not mistake it for a remote downloadable asset.
+  const onHitomiGallery=/^https:\/\/hitomi\.la\//.test(String(info.pageUrl||tab?.url||""));
+  const hitomiDownloadLink=!info.linkUrl || info.linkUrl==="#" || info.linkUrl.endsWith("#") || /^javascript:/i.test(info.linkUrl) || /(?:download_gallery|#dl-button)/i.test(info.linkUrl);
+  if(onHitomiGallery && hitomiDownloadLink && /^(quick:|simple-option:|nested:|tree:)/.test(String(info.menuItemId))) {
     try { await initiateHitomiCapture(info,tab,profiles); }
-    catch(e){await notify("REDOWN gallery failed",e?.message||String(e));}
+    catch(e){
+      console.error("REDOWN Hitomi capture start failed",e);
+      const message=e?.message||String(e);
+      await recordTransfer({ok:false,sourceUrl:info.pageUrl||tab?.url||"",profileName:"Hitomi gallery capture",category:"files",error:message}).catch(()=>{});
+      await notify("REDOWN gallery failed",message);
+    }
     return;
   }
   const sourceUrl = selectedUrl(info);
