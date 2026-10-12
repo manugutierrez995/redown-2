@@ -1343,6 +1343,20 @@ function categoryFromPrefix(prefix){
   if(first==="videos"||first==="video")return "videos";
   return "files";
 }
+// Exact-key existence check for upload diagnostics; never interpret listing
+// failures or incomplete pagination as proof that an object is absent.
+async function inspectLocalUploadObject(target,key){
+  let cursor="";
+  for(let page=0;page<20;page++){
+    const result=await send({type:"cfObjects",accountId:target.accountId,bucketName:target.bucketName,prefix:key,cursor});
+    if(!result?.ok)throw new Error(result?.error||"Could not inspect R2 object");
+    if((result.objects||[]).some(object=>object.key===key))return "yes";
+    if(!result.cursor)return "no";
+    if(result.cursor===cursor)break;
+    cursor=result.cursor;
+  }
+  return "unknown (listing incomplete)";
+}
 async function uploadLocalFiles(fileList){
   const files=Array.from(fileList||[]);
   if(!files.length)return;
@@ -1353,12 +1367,17 @@ async function uploadLocalFiles(fileList){
   const status=$("local-upload-status");
   let completed=0;
   const failed=[];
+  const diagnostics=[];
   for(const [index,file] of files.entries()){
     status.className="status";
-    status.textContent=`Uploading ${file.name} (${index+1}/${files.length})…`;
+    status.textContent=`Checking R2 for ${file.name} (${index+1}/${files.length})…`;
+    const key=prefix?`${prefix}/${file.name}`:file.name;
+    let existed="unknown";
+    try{existed=await inspectLocalUploadObject(target,key);}
+    catch{existed="unknown (lookup failed)";}
+    status.textContent=`Uploading ${file.name} (${index+1}/${files.length}) · already exists: ${existed}…`;
     try{
       if(file.size>300*1000*1000)throw new Error("Cloudflare's direct upload API has a 300 MB per-file limit.");
-      const key=prefix?`${prefix}/${file.name}`:file.name;
       // The Cloudflare management API uses OAuth and does not require our Worker.
       // Slashes in object keys must remain literal; encode each path component.
       const path=`/accounts/${encodeURIComponent(target.accountId)}/r2/buckets/${encodeURIComponent(target.bucketName)}/objects/${key.split("/").map(encodeURIComponent).join("/")}`;
@@ -1386,21 +1405,24 @@ async function uploadLocalFiles(fileList){
       }
       if(!uploaded)throw new Error("Cloudflare did not confirm this upload.");
       completed++;
+      diagnostics.push({name:file.name,existed,uploaded:true});
       await send({type:"recordLocalTransfer",ok:true,profileId:profile?.id||"",profileName:profile?.name||target.bucketName,category:categoryFromPrefix(prefix),location:profile?publicObjectUrl(profile,key):`R2: ${target.bucketName}/${key}`}).catch(()=>{});
       status.className="status ok";
       status.textContent=`Uploaded ${completed}/${files.length} · ${file.name}`;
     }catch(error){
-      failed.push({name:file.name,error:error?.message||String(error)});
+      failed.push({name:file.name,error:error?.message||String(error),existed});
+      diagnostics.push({name:file.name,existed,uploaded:false});
       await send({type:"recordLocalTransfer",ok:false,profileId:profile?.id||"",profileName:profile?.name||target.bucketName,category:categoryFromPrefix(prefix),error:error?.message||String(error)}).catch(()=>{});
       status.className="status bad";
-      status.textContent=`Failed ${file.name}: ${error?.message||String(error)}. Continuing (${index+1}/${files.length})…`;
+      status.textContent=`Failed ${file.name} (already exists: ${existed}): ${error?.message||String(error)}. Continuing (${index+1}/${files.length})…`;
     }
   }
   await renderHistory();
   status.className=failed.length?"status bad":"status ok";
+  const summary=`Existence check: ${diagnostics.filter(item=>item.existed==="yes").length} already existed; ${diagnostics.filter(item=>item.existed==="no").length} absent; ${diagnostics.filter(item=>!["yes","no"].includes(item.existed)).length} unknown. Failed files: ${failed.map(item=>`${item.name} [existed before: ${item.existed}] (${item.error})`).join("; ")}`;
   status.textContent=failed.length
-    ?`Batch finished: ${completed} uploaded, ${failed.length} failed of ${files.length}. Failed files: ${failed.map(item=>`${item.name} (${item.error})`).join("; ")}`
-    :`Batch finished: all ${completed} files uploaded.`;
+    ?`Batch finished: ${completed} uploaded, ${failed.length} failed of ${files.length}. ${summary}`
+    :`Batch finished: all ${completed} files uploaded. ${summary.split(" Failed files:")[0]}`;
   if(workspaceTarget?.accountId===target.accountId&&workspaceTarget?.bucketName===target.bucketName){workspacePrefix=normalizePrefix(prefix);await browseWorkspace();}
 }
 function objectContentType(obj,key){
