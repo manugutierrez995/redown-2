@@ -1389,7 +1389,7 @@ async function uploadLocalFiles(fileList){
     catch(error){existed="unknown (lookup failed)";firstLookupError=error?.name||"lookup-error";}
     status.textContent=`Uploading ${file.name} (attempt ${item.failures+1}) · already exists: ${existed}…`;
     try{
-      if(file.size>300*1000*1000)throw new Error("Cloudflare's direct upload API has a 300 MB per-file limit.");
+      if(file.size>300*1000*1000){retryable=false;throw new Error("Cloudflare's direct upload API has a 300 MB per-file limit.");}
       // The Cloudflare management API uses OAuth and does not require our Worker.
       // Slashes in object keys must remain literal; encode each path component.
       const path=`/accounts/${encodeURIComponent(target.accountId)}/r2/buckets/${encodeURIComponent(target.bucketName)}/objects/${key.split("/").map(encodeURIComponent).join("/")}`;
@@ -1406,7 +1406,6 @@ async function uploadLocalFiles(fileList){
           });
         }catch(error){
           const kind=error?.name==="TimeoutError"?"timeout":error?.name==="AbortError"?"aborted":"network-or-browser";
-          lastFailureStage=kind;
           // Fetch TypeErrors provide no HTTP response. Browser DevTools is
           // needed to distinguish CORS, connectivity, and transport failures.
           throw new Error(`Upload ${kind} after ${Date.now()-started} ms: ${error?.message||String(error)} (no HTTP response)`);
@@ -1417,7 +1416,6 @@ async function uploadLocalFiles(fileList){
           if(uploaded.size!=null&&Number(uploaded.size)!==file.size)throw new Error("Uploaded object size did not match the local file.");
           break;
         }
-        lastFailureStage=`HTTP ${response.status}`;
         const transient=[429,500,502,503,504].includes(response.status);
         const reason=result?.errors?.map(e=>e.message).filter(Boolean).join("; ")||`Cloudflare direct upload failed (HTTP ${response.status})`;
         retryable=transient||response.ok;
@@ -1451,7 +1449,7 @@ async function uploadLocalFiles(fileList){
         permanentFailures.push({name:file.name,error:detail});
       }
       if(!retryable)await send({type:"recordLocalTransfer",ok:false,profileId:profile?.id||"",profileName:profile?.name||target.bucketName,category:categoryFromPrefix(prefix),error:detail}).catch(()=>{});
-      status.className="status bad";
+      status.className=retryable?"status":"status bad";
       status.textContent=`${retryable?"Retry queued":"Permanent failure"}: ${file.name} (already exists: ${existed}): ${detail}. ${queue.length} pending; keep this page open.`;
     }
   }
