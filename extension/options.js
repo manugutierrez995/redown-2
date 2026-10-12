@@ -1366,25 +1366,35 @@ async function uploadLocalFiles(fileList){
   const prefix=String($("local-prefix")?.value||"").trim().replace(/^\/+|\/+$/g,"");
   const status=$("local-upload-status");
   let completed=0;
-  const failed=[];
-  const diagnostics=[];
-  for(const [index,file] of files.entries()){
+  const permanentFailures=[];
+  const queue=files.map(file=>({file,failures:0,nextAt:0}));
+  // File references live only while this settings page remains open.
+  while(queue.length){
+    const item=queue.shift();
+    const file=item.file;
+    if(item.nextAt>Date.now()){
+      queue.push(item);
+      const earliest=Math.min(...queue.map(entry=>entry.nextAt));
+      status.textContent="Network retry queue: "+completed+"/"+files.length+" uploaded, "+queue.length+" pending. Keep this page open.";
+      await new Promise(resolve=>setTimeout(resolve,Math.min(30000,Math.max(250,earliest-Date.now()))));
+      continue;
+    }
+    let retryable=true;
     status.className="status";
-    status.textContent=`Checking R2 for ${file.name} (${index+1}/${files.length})…`;
+    status.textContent=`Checking R2 for ${file.name} (attempt ${item.failures+1}, ${completed}/${files.length} uploaded)…`;
     const key=prefix?`${prefix}/${file.name}`:file.name;
     let existed="unknown";
     let firstLookupError="";
     try{existed=await inspectLocalUploadObject(target,key);}
     catch(error){existed="unknown (lookup failed)";firstLookupError=error?.name||"lookup-error";}
-    status.textContent=`Uploading ${file.name} (${index+1}/${files.length}) · already exists: ${existed}…`;
+    status.textContent=`Uploading ${file.name} (attempt ${item.failures+1}) · already exists: ${existed}…`;
     try{
       if(file.size>300*1000*1000)throw new Error("Cloudflare's direct upload API has a 300 MB per-file limit.");
       // The Cloudflare management API uses OAuth and does not require our Worker.
       // Slashes in object keys must remain literal; encode each path component.
       const path=`/accounts/${encodeURIComponent(target.accountId)}/r2/buckets/${encodeURIComponent(target.bucketName)}/objects/${key.split("/").map(encodeURIComponent).join("/")}`;
       let uploaded;
-      let lastFailureStage="request";
-      for(let attempt=0;attempt<3;attempt++){
+      for(let attempt=0;attempt<1;attempt++){
         let response;
         const started=Date.now();
         try{
@@ -1410,15 +1420,13 @@ async function uploadLocalFiles(fileList){
         lastFailureStage=`HTTP ${response.status}`;
         const transient=[429,500,502,503,504].includes(response.status);
         const reason=result?.errors?.map(e=>e.message).filter(Boolean).join("; ")||`Cloudflare direct upload failed (HTTP ${response.status})`;
-        if(!transient||attempt===2)throw new Error(`${reason}${transient?" after 3 attempts":""}`);
-        const retryAfter=Number(response.headers.get("retry-after"));
-        const delay=Number.isFinite(retryAfter)&&retryAfter>0?Math.min(retryAfter*1000,10000):1000*2**attempt;
-        status.textContent=`Temporary Cloudflare error (${response.status}) uploading ${file.name}. Retrying ${attempt+2}/3…`;
-        await new Promise(resolve=>setTimeout(resolve,delay));
+        retryable=transient||response.ok;
+        throw new Error(reason);
+
       }
       if(!uploaded)throw new Error("Cloudflare did not confirm this upload.");
       completed++;
-      diagnostics.push({name:file.name,existed,uploaded:true});
+
       await send({type:"recordLocalTransfer",ok:true,profileId:profile?.id||"",profileName:profile?.name||target.bucketName,category:categoryFromPrefix(prefix),location:profile?publicObjectUrl(profile,key):`R2: ${target.bucketName}/${key}`}).catch(()=>{});
       status.className="status ok";
       status.textContent=`Uploaded ${completed}/${files.length} · ${file.name}`;
@@ -1434,20 +1442,28 @@ async function uploadLocalFiles(fileList){
       }catch{after="unknown (lookup failed)";}
       const possibleWrite=after==="yes"&&afterSize===file.size;
       const detail=`${error?.message||String(error)}; before=${existed}; after=${after}; afterSize=${afterSize??"unavailable"}; localSize=${file.size}; ${possibleWrite?"matching object size, completion unconfirmed":""}${firstLookupError?"; initial lookup "+firstLookupError:""}`;
-      failed.push({name:file.name,error:detail,existed});
-      diagnostics.push({name:file.name,existed,uploaded:false});
-      await send({type:"recordLocalTransfer",ok:false,profileId:profile?.id||"",profileName:profile?.name||target.bucketName,category:categoryFromPrefix(prefix),error:detail}).catch(()=>{});
+      item.failures++;
+      if(retryable){
+        const delay=Math.min(60000,1000*Math.pow(2,Math.min(item.failures-1,6)))+Math.floor(Math.random()*500);
+        item.nextAt=Date.now()+delay;
+        queue.push(item);
+      }else{
+        permanentFailures.push({name:file.name,error:detail});
+      }
+      if(!retryable)await send({type:"recordLocalTransfer",ok:false,profileId:profile?.id||"",profileName:profile?.name||target.bucketName,category:categoryFromPrefix(prefix),error:detail}).catch(()=>{});
       status.className="status bad";
-      status.textContent=`Failed ${file.name} (already exists: ${existed}): ${detail}. Continuing (${index+1}/${files.length})…`;
+      status.textContent=`${retryable?"Retry queued":"Permanent failure"}: ${file.name} (already exists: ${existed}): ${detail}. ${queue.length} pending; keep this page open.`;
     }
   }
   await renderHistory();
-  status.className=failed.length?"status bad":"status ok";
-  const summary=`Existence check: ${diagnostics.filter(item=>item.existed==="yes").length} already existed; ${diagnostics.filter(item=>item.existed==="no").length} absent; ${diagnostics.filter(item=>!["yes","no"].includes(item.existed)).length} unknown. Failed files: ${failed.map(item=>`${item.name} [existed before: ${item.existed}] (${item.error})`).join("; ")}`;
-  status.textContent=failed.length
-    ?`Batch finished: ${completed} uploaded, ${failed.length} failed of ${files.length}. ${summary}`
-    :`Batch finished: all ${completed} files uploaded. ${summary.split(" Failed files:")[0]}`;
-  if(workspaceTarget?.accountId===target.accountId&&workspaceTarget?.bucketName===target.bucketName){workspacePrefix=normalizePrefix(prefix);await browseWorkspace();}
+  status.className=permanentFailures.length?"status bad":"status ok";
+  status.textContent=permanentFailures.length
+    ?`Batch finished: ${completed} uploaded; ${permanentFailures.length} non-retryable failures. ${permanentFailures.map(entry=>entry.name+" ("+entry.error+")").join("; ")}`
+    :`Batch finished: all ${completed} files uploaded.`;
+  if(workspaceTarget?.accountId===target.accountId&&workspaceTarget?.bucketName===target.bucketName){
+    workspacePrefix=normalizePrefix(prefix);
+    await browseWorkspace().catch(()=>{});
+  }
 }
 function objectContentType(obj,key){
   const explicit=String(obj?.httpMetadata?.contentType||obj?.contentType||"").toLowerCase();
