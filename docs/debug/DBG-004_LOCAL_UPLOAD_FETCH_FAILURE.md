@@ -19,3 +19,11 @@ Commit db3edb1c8f1a59911753d032ae13d2d4cb95cfc7 augments only Upload from Comput
 
 ## Verification gaps
 No installed Chrome session, authenticated R2 access, provider logs or successful end-to-end acceptance was available during this code inspection. New code was read back from GitHub; automated tests and semantic/debug CLI execution were not run here. The existing semantic and debug API readers are offline and inspect-only, so this narrative is a pending case note, not an independently validated canonical incident journal. Do not mark resolved without automated and live-browser outcomes.
+
+## 2026-10-12 follow-up — browser transport evidence and round-robin mitigation
+
+**User-observed browser evidence:** DevTools reported repeated `net::ERR_NETWORK_CHANGED` on direct `PUT` requests to the Cloudflare R2 Object API. Other R2 object listing requests also intermittently failed. This identifies a browser-level network-change abort for the captured requests, not an existing-object conflict or an R2 Worker memory diagnosis. Why the network changed remains unknown. Separately, the model-viewer WebAssembly CSP exception is unrelated to ZIP uploads.
+
+**Mitigation in source:** commits `aa02c4aaea64acac5f27954f84ba5a47689a2dab` and `774d1e31ba1114f1f47d813fa326b135473d2334` implement a page-scoped round-robin local upload queue. Transient failures return to the tail; successful files leave the queue; backoff grows to approximately 60 seconds plus jitter. Non-retryable errors are reported without indefinite retries. PUT overwrites exact existing keys. Upload from Computer is the only transfer workflow modified by these queue commits.
+
+**Limits:** No persisted queue, no browser-restart recovery, no multipart/chunk resume, and no guarantee that connectivity will return. The options page must remain open. Lost HTTP responses may mean remote write status is uncertain; neither object presence nor equal size proves upload completion. Confirm with independent verification before deleting a local original. Automated tests and live installed-Chrome/R2 checks are pending. Historical observations above retain their original scope and should not be retroactively reclassified.
