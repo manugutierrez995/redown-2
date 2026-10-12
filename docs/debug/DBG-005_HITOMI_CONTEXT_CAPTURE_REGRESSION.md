@@ -28,3 +28,7 @@ Date: 2026-10-12.
 - Validate generated payload begins with ZIP signature, and ends in verified R2 object with correct size and transfer-history status.
 - Test missed capture, second click, service-worker suspension, tab removal, and one-hour queue retention.
 - End-to-end confirmation is currently unavailable. Source review and JS syntax do not prove successful remote upload.
+
+## 2026-10-12 — Confirmed `/imageset/` false negative
+
+User provided an exact failed gallery URL of the form `https://hitomi.la/imageset/...-3725749.html#` and the error `Hitomi HTML pages cannot be uploaded as gallery ZIPs`. This proves the context-menu click reached the safety guard but did not reach `initiateHitomiCapture`. The prior `isGalleryDocument` allowlist omitted `imageset`, despite this being a valid gallery prefix. Commit `d615923d37215b3838830d6ae03ef01db4378d49` adds `imageset` to the eligible capture routing. The `#` fragment is irrelevant to pathname matching. User-reported successful transfer around 4 AM is observational evidence, not a reproducible repository acceptance test. Verify end-to-end ZIP upload in installed Chrome before closing the incident.
