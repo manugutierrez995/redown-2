@@ -1692,12 +1692,132 @@ function addMenuControls(mode){
   });
 }
 
+
+/* Explicit, opt-in gallery capture, scoped to a right-click action on hitomi.la.
+ * First slice limits whole-file buffering to 64 MiB; larger galleries need
+ * persistent streaming/multipart R2 upload, not unbounded MV3 service worker RAM.
+ */
+const hitomiIntents = new Map();
+const HITOMI_MAX_BYTES = 64 * 1024 * 1024;
+function hitomiDestination(menuId, profiles) {
+  const id=String(menuId);
+  let m=id.match(/^simple-option:([^:]+):([^:]+)$/);
+  if(m) {
+    const p=profiles.find(x=>x.id===m[1] && x.type==="cloudflare-r2");
+    const item=p?.simpleOptions?.find(x=>x.id===m[2]);
+    if(!item)return null;
+    const target=profiles.find(x=>x.type==="cloudflare-r2"&&x.accountId===p.accountId&&x.bucketName===(item.bucketName||p.bucketName));
+    return target?{profile:target,prefix:item.prefix||""}:null;
+  }
+  m=id.match(/^quick:([^:]+)$/);
+  if(m) {
+    const p=profiles.find(x=>x.id===m[1]&&x.type==="cloudflare-r2");
+    if(!p)return null;
+    const target=profiles.find(x=>x.type==="cloudflare-r2"&&x.accountId===p.accountId&&x.bucketName===(p.simpleBucketName||p.bucketName));
+    return target?{profile:target,prefix:p.defaultPrefix||""}:null;
+  }
+  m=id.match(/^nested:([^:]+):([^:]+):([^:]+)(?::send)?$/);
+  if(m){
+    const p=profiles.find(x=>x.id===m[1]&&x.type==="cloudflare-r2");
+    const item=RedownNestedLocations.destinations(p?.nestedMenu).find(x=>x.rootId===m[2]&&x.nodeId===m[3]);
+    return p&&item?{profile:{...p,bucketName:item.bucketName},prefix:item.prefix||""}:null;
+  }
+  m=id.match(/^tree:([^:]+):(.+)$/);
+  if(m){
+    const p=profiles.find(x=>x.id===m[1]&&x.type==="cloudflare-r2");
+    let nodes=p?.menuTree||[],node;
+    for(const key of m[2].split(".")){node=nodes.find(x=>sanitizeMenuId(x.id)===key);if(!node)return null;nodes=node.children||[];}
+    if(nodes.length)return null;
+    return {profile:p,prefix:node.prefix||""};
+  }
+  return null;
+}
+async function initiateHitomiCapture(info, tab, profiles) {
+  const target=hitomiDestination(info.menuItemId,profiles);
+  if(!target)throw new Error("Choose a prepared Cloudflare R2 destination");
+  if(!tab?.id)throw new Error("No source tab found");
+  const existing=hitomiIntents.get(tab.id);
+  if(existing && Date.now()-existing.at<180000)throw new Error("A gallery capture is already active in this tab");
+  hitomiIntents.set(tab.id,{...target,at:Date.now(),chunks:[],size:0,state:"armed"});
+  try {
+    await chrome.scripting.executeScript({target:{tabId:tab.id},files:["hitomi-capture.js"],world:"ISOLATED"});
+    await chrome.scripting.executeScript({
+      target:{tabId:tab.id},world:"MAIN",
+      func:()=>{
+        const button=document.querySelector("#dl-button");
+        if(!button)throw new Error("Hitomi Download button not found");
+        const original=URL.createObjectURL;
+        let captured=false;
+        const onClick=(event)=>{
+          const a=event.target?.closest?.("a[download]");
+          if(a && a.href?.startsWith("blob:")){event.preventDefault();event.stopImmediatePropagation();}
+        };
+        document.addEventListener("click",onClick,true);
+        URL.createObjectURL=function(object){
+          const url=original.apply(this,arguments);
+          if(!captured && object instanceof Blob && object.size>0){
+            captured=true;
+            window.postMessage({kind:"redown-hitomi-blob-ready",url,filename:document.querySelector("#gallery-brand")?.textContent?.trim()||"hitomi-gallery"},"*");
+          }
+          return url;
+        };
+        setTimeout(()=>{URL.createObjectURL=original;document.removeEventListener("click",onClick,true);},120000);
+        button.click();
+      }
+    });
+    await notify("REDOWN","Hitomi is preparing the gallery ZIP for your chosen R2 bucket.");
+  }catch(e){hitomiIntents.delete(tab.id);throw e;}
+}
+async function handleHitomiCaptureMessage(message,sender) {
+  const tabId=sender.tab?.id;
+  const intent=hitomiIntents.get(tabId);
+  if(!intent||Date.now()-intent.at>180000)throw new Error("No active gallery transfer; retry the right-click action");
+  if(!/^https:\/\/hitomi\.la\//.test(sender.url||""))throw new Error("Unexpected gallery origin");
+  if(message.type==="hitomiCaptureError"){hitomiIntents.delete(tabId);await notify("REDOWN gallery failed",message.error||"Capture failed");return {ok:true};}
+  if(message.type==="hitomiCaptureStart"){
+    if(intent.state!=="armed")throw new Error("Capture already started");
+    if(!Number.isSafeInteger(message.size)||message.size<=0||message.size>HITOMI_MAX_BYTES)throw new Error("Gallery ZIP exceeds the 64 MiB initial capture limit");
+    intent.state="receiving";intent.expected=message.size;intent.filename=cleanExplorerName(message.filename||"hitomi-gallery.zip");
+    intent.id=crypto.randomUUID();return {ok:true,id:intent.id};
+  }
+  if(intent.state!=="receiving"||intent.id!==message.id)throw new Error("Invalid transfer session");
+  if(message.type==="hitomiCaptureChunk"){
+    const binary=atob(message.data||"");
+    if(binary.length>262144||intent.size+binary.length>intent.expected)throw new Error("Invalid gallery ZIP chunk");
+    const buf=new Uint8Array(binary.length);for(let i=0;i<binary.length;i++)buf[i]=binary.charCodeAt(i);
+    intent.chunks.push(buf);intent.size+=buf.length;return {ok:true};
+  }
+  if(message.type!=="hitomiCaptureFinish")throw new Error("Unknown gallery action");
+  if(intent.size!==intent.expected)throw new Error("Incomplete gallery ZIP");
+  intent.state="uploading";
+  try{
+    const prepared=await preparedProfile(intent.profile.accountId,intent.profile.bucketName,intent.profile.accountName);
+    const folder=cleanExplorerPrefix(intent.prefix||"").replace(/\/$/,"");
+    const response=await fetch(prepared.workerUrl,{
+      method:"POST",headers:{
+        authorization:`Bearer ${prepared.token||""}`,
+        "content-type":"application/zip",
+        "x-redown-action":"upload-local",
+        "x-redown-filename":encodeURIComponent(intent.filename),
+        "x-redown-folder":folder,
+        "x-redown-public-base":prepared.publicBaseUrl||`${prepared.workerUrl}/assets`
+      },body:new Blob(intent.chunks,{type:"application/zip"})
+    });
+    const body=await response.json().catch(()=>({}));
+    if(!response.ok||!body.ok)throw new Error(body.error||`R2 upload failed (${response.status})`);
+    const location=body.publicUrl||publicAssetUrl(prepared,body.key);
+    await recordTransfer({ok:true,sourceUrl:sender.url,profileId:intent.profile.id,profileName:intent.profile.name,category:"files",location});
+    await notify("REDOWN gallery complete",location);
+    return {ok:true,location};
+  }finally{hitomiIntents.delete(tabId);}
+}
+
 chrome.runtime.onInstalled.addListener(rebuildMenus);
 chrome.runtime.onStartup.addListener(rebuildMenus);
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === "local" && (changes.profiles || changes.rightClickMode || changes.simpleLabelFallback)) rebuildMenus();
 });
-chrome.contextMenus.onClicked.addListener(async info => {
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if(info.menuItemId==='redown-nested-mode'){
     await chrome.storage.local.set({rightClickMode:info.checked ? 'nested' : 'simple'});
     return;
@@ -1707,6 +1827,11 @@ chrome.contextMenus.onClicked.addListener(async info => {
   }
 
   const profiles = await getProfiles();
+  if(/^https:\/\/hitomi\\.la\//.test(info.pageUrl||tab?.url||"") && (!info.linkUrl || info.linkUrl==="#" || info.linkUrl.endsWith("#")) && String(info.menuItemId).match(/^(quick:|simple-option:|nested:|tree:)/)) {
+    try { await initiateHitomiCapture(info,tab,profiles); }
+    catch(e){await notify("REDOWN gallery failed",e?.message||String(e));}
+    return;
+  }
   const sourceUrl = selectedUrl(info);
 
   const extraSimpleMatch=String(info.menuItemId).match(/^simple-option:([^:]+):([^:]+)$/);
@@ -1840,6 +1965,7 @@ chrome.contextMenus.onClicked.addListener(async info => {
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   (async () => {
     try {
+      if (/^hitomiCapture(Start|Chunk|Finish|Error)$/.test(message?.type||"")) return sendResponse(await handleHitomiCaptureMessage(message,_sender));
       if (message?.type === "ingest") {
         const profiles = await getProfiles();
         const profile = profiles.find(p => p.id === message.profileId);
