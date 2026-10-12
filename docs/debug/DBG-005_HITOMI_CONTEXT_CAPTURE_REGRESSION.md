@@ -1,6 +1,6 @@
 # DBG-005 — Hitomi right-click routes to HTML / appears inert
 
-Status: source-confirmed routing defect corrected; live Chrome/R2 acceptance pending.
+Status: user-confirmed working Hitomi right-click version (2026-10-12); automated Chrome/R2 regression test still pending.
 Date: 2026-10-12.
 
 ## Reported observations
@@ -32,3 +32,7 @@ Date: 2026-10-12.
 ## 2026-10-12 — Confirmed `/imageset/` false negative
 
 User provided an exact failed gallery URL of the form `https://hitomi.la/imageset/...-3725749.html#` and the error `Hitomi HTML pages cannot be uploaded as gallery ZIPs`. This proves the context-menu click reached the safety guard but did not reach `initiateHitomiCapture`. The prior `isGalleryDocument` allowlist omitted `imageset`, despite this being a valid gallery prefix. Commit `d615923d37215b3838830d6ae03ef01db4378d49` adds `imageset` to the eligible capture routing. The `#` fragment is irrelevant to pathname matching. User-reported successful transfer around 4 AM is observational evidence, not a reproducible repository acceptance test. Verify end-to-end ZIP upload in installed Chrome before closing the incident.
+
+## 2026-10-12 — Working Hitomi checkpoint (user-confirmed)
+
+**User reports the current installed version works for the Hitomi right-click flow.** Preserve this as a known-good *user-tested* baseline before future changes. The current source baseline includes the `/imageset/` routing correction (`d615923d37215b3838830d6ae03ef01db4378d49`) and the later bucket-selection separation (`2fdf6edb838da9b496da36f940a5e668e1adafa0`). Reference baseline: `2fdf6edb838da9b496da36f940a5e668e1adafa0`, subject to confirmation that the installed unpacked extension corresponds to that checkout. This is the user's confirmation, not an automated live Chrome/R2 acceptance test. Do not regress right-click menu dispatch, `/imageset/` classification, ZIP Blob capture, target R2 bucket routing, or queue recording. When investigating later issues, compare against this checkpoint first.
