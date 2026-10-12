@@ -1888,7 +1888,17 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // Hitomi gallery Download controls may expose generated or same-page links.
   const hitomiGalleryPage=/^https:\/\/hitomi\.la\/(?:doujinshi|manga|cg|gamecg|artistcg|galleries|reader)\//.test(String(info.pageUrl||tab?.url||""));
   const hitomiLink=String(info.linkUrl||"");
-  const hitomiDownloadLink=!hitomiLink || /^(?:javascript:|blob:|#)/i.test(hitomiLink) || /(?:download_gallery|#dl-button)/i.test(hitomiLink) || hitomiLink===String(info.pageUrl||tab?.url||"");
+  // An HTML link on Hitomi's gallery page is NOT a downloadable gallery ZIP.
+  // The real ZIP is assembled in the page by JSZip/FileSaver. When the user
+  // invokes REDOWN from a gallery without a direct media URL, always capture
+  // the generated ZIP instead of ingesting the HTML link.
+  const hitomiDownloadLink=!info.srcUrl && (
+    !hitomiLink ||
+    /^(?:javascript:|blob:|#)/i.test(hitomiLink) ||
+    /(?:download_gallery|#dl-button)/i.test(hitomiLink) ||
+    hitomiLink===String(info.pageUrl||tab?.url||"") ||
+    /^https:\/\/hitomi\.la\/[^?#]+\.html(?:[?#]|$)/i.test(hitomiLink)
+  );
   if(onHitomiGallery && hitomiGalleryPage && hitomiDownloadLink && /^(quick:|simple-option:|nested:|tree:)/.test(String(info.menuItemId))) {
     try { await initiateHitomiCapture(info,tab,profiles); }
     catch(e){
@@ -1900,6 +1910,15 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     return;
   }
   const sourceUrl = selectedUrl(info);
+  // Never store a Hitomi HTML document as a purported ZIP if gallery capture
+  // did not start. This guards remaining unrecognized Hitomi page URLs.
+  if(onHitomiGallery && hitomiGalleryPage && !info.srcUrl &&
+      /^https:\/\/hitomi\.la\/[^?#]+\.html(?:[?#]|$)/i.test(sourceUrl)){
+    const message="Hitomi page HTML is not a gallery ZIP. Use the Download control to capture the generated archive.";
+    await recordTransfer({ok:false,sourceUrl,profileName:"Hitomi gallery capture",category:"files",error:message}).catch(()=>{});
+    await notify("REDOWN gallery capture required",message);
+    return;
+  }
 
   const extraSimpleMatch=String(info.menuItemId).match(/^simple-option:([^:]+):([^:]+)$/);
   if(extraSimpleMatch){
