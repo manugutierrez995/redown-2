@@ -3855,15 +3855,29 @@ async function addBucketPreset(bucketName){
   }
   setStatus("cf-status",`Preparing ${bucketName}… REDOWN is verifying the remote transfer Worker before saving this preset.`);
   try {
-  const result=await send({
-    type:"cfProvision",
-    accountId:account.id,
-    accountName:account.name,
-    bucketName,
-    profileName:bucketName,
-    folders:{"3d":"3d","2d":"2d","videos":"videos","files":"files"}
-  });
-  if(!result?.ok){setStatus("cf-status",result?.error||"Could not prepare bucket","bad");return;}
+  let result;
+  for(let attempt=1;attempt<=4;attempt++){
+    try{
+      result=await send({
+        type:"cfProvision",
+        accountId:account.id,
+        accountName:account.name,
+        bucketName,
+        profileName:bucketName,
+        folders:{"3d":"3d","2d":"2d","videos":"videos","files":"files"}
+      });
+    }catch(error){
+      result={ok:false,error:error?.message||String(error)};
+    }
+    if(result?.ok)break;
+    const message=result?.error||"Unknown Cloudflare preparation error";
+    if(!/failed to fetch|network.changed|network changed|networkerror|connection.reset|connection reset|timeout|timed out|reachability|dns/i.test(message)||attempt===4){
+      setStatus("cf-status",bucketName+" could not be prepared: "+message,"bad");
+      return;
+    }
+    setStatus("cf-status",bucketName+" is in R2, but Worker setup was interrupted ("+message+"). Retrying "+(attempt+1)+"/4 without losing the bucket…");
+    await new Promise(resolve=>setTimeout(resolve,Math.min(10000,1200*Math.pow(2,attempt-1))));
+  }
   const stored=await chrome.storage.local.get("profiles");
   profiles=stored.profiles||[];
   rightClickMode=RedownNestedLocations.menuMode(stored.rightClickMode,profiles);
