@@ -1352,9 +1352,10 @@ async function uploadLocalFiles(fileList){
   const prefix=String($("local-prefix")?.value || "").trim();
   const status=$("local-upload-status");
   let completed=0;
-  for(const file of files){
+  const failed=[];
+  for(const [index,file] of files.entries()){
     status.className="status";
-    status.textContent=`Uploading ${file.name} (${completed+1}/${files.length})…`;
+    status.textContent=`Uploading ${file.name} (${index+1}/${files.length})…`;
     try{
       // Retry only transient HTTP failures. Re-send the original File rather than
       // buffering it in extension memory. Permanent failures are never retried.
@@ -1406,12 +1407,16 @@ async function uploadLocalFiles(fileList){
         error:error?.message||String(error)
       });
       status.className="status bad";
-      status.textContent=`Stopped on ${file.name}: ${error?.message||String(error)}`;
-      await renderHistory();
-      return;
+      failed.push({name:file.name,error:error?.message||String(error)});
+      status.textContent=`Failed ${file.name}: ${error?.message||String(error)}. Continuing (${index+1}/${files.length})…`;
+      continue;
     }
   }
   await renderHistory();
+  status.className=failed.length?"status bad":"status ok";
+  status.textContent=failed.length
+    ?`Batch finished: ${completed} uploaded, ${failed.length} failed of ${files.length}. Failed files: ${failed.map(item=>`${item.name} (${item.error})`).join("; ")}`
+    :`Batch finished: all ${completed} files uploaded.`;
   if(workspaceTarget?.accountId===profile.accountId&&workspaceTarget?.bucketName===profile.bucketName){workspacePrefix=normalizePrefix(prefix);await browseWorkspace();}
 }
 function objectContentType(obj,key){
