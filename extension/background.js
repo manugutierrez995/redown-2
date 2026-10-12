@@ -1799,7 +1799,7 @@ async function initiateHitomiCapture(info, tab, profiles,existingJobId=null) {
         document.addEventListener("click",onClick,true);
         URL.createObjectURL=function(object){
           const url=original.apply(this,arguments);
-          if(!captured && object instanceof Blob && object.size>0 && /(?:zip|octet-stream)/i.test(object.type||"application/zip")){
+          if(!captured && object instanceof Blob && object.size>0 && (object.type==="" || /(?:zip|octet-stream)/i.test(object.type))){
             captured=true;
             window.postMessage({kind:"redown-hitomi-blob-ready",url,filename:document.querySelector("#gallery-brand")?.textContent?.trim()||"hitomi-gallery"},"*");
           }
