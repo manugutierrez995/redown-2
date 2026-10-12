@@ -3837,7 +3837,7 @@ async function refreshBuckets(){
       repair.textContent="Verify / repair Worker";
       repair.addEventListener("click",event=>{
         event.stopPropagation();
-        addBucketPreset(bucket.name);
+        addBucketPreset(bucket.name,{forceRepair:true});
       });
       el.append(repair);
     }
@@ -3845,11 +3845,11 @@ async function refreshBuckets(){
   });
   setStatus("cf-status",(result.buckets||[]).length?"Click a bucket to make it a REDOWN preset.":"No buckets yet. Create one above.");
 }
-async function addBucketPreset(bucketName){
+async function addBucketPreset(bucketName,{forceRepair=false}={}){
   const account=cfAccounts.find(a=>a.id===currentAccountId);
   if(!account)return;
   // Selecting an existing destination must never trigger a Worker deployment.
-  if(profiles.some(p=>p.type==="cloudflare-r2"&&p.accountId===account.id&&p.bucketName===bucketName)){
+  if(!forceRepair&&profiles.some(p=>p.type==="cloudflare-r2"&&p.accountId===account.id&&p.bucketName===bucketName)){
     setStatus("cf-status",bucketName+" is already configured. No Worker redeployment was attempted.","ok");
     return;
   }
