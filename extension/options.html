@@ -296,6 +296,33 @@
     </div>
   </section>
 
+  <section id="transfer-policy-settings" class="section">
+    <div class="section-head">
+      <div><h2>Transfer methods &amp; safety</h2><div class="section-note">Future remote-transfer preferences. The existing Hitomi browser-assisted workflow remains unchanged.</div></div>
+    </div>
+    <div class="card">
+      <label for="transfer-preferred-mode">Preferred transfer method</label>
+      <select id="transfer-preferred-mode">
+        <option value="browser-assisted">Browser-Assisted Transfer (available)</option>
+        <option value="cloud-to-cloud">Cloud-to-Cloud Transfer (planned; not operational yet)</option>
+      </select>
+      <div class="meta">Cloud-to-Cloud is a saved preference only until the remote transfer engine is implemented. Selecting it does not change active Hitomi downloads.</div>
+      <label style="display:flex;align-items:flex-start;gap:10px;margin-top:14px">
+        <input id="transfer-allow-fallback" type="checkbox" checked style="width:auto;margin-top:3px">
+        <span>Allow automatic fallback to Browser-Assisted Transfer if Cloud-to-Cloud fails
+          <span class="meta" style="display:block">Saved for the future remote engine; no fallback is triggered by this setting today.</span>
+        </span>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:10px;margin-top:14px">
+        <input id="transfer-delete-local" type="checkbox" style="width:auto;margin-top:3px">
+        <span>Delete local copy after verified remote upload
+          <span class="meta" style="display:block">Saved preference only. Automatic deletion is not implemented. A future desktop helper must verify the exact R2 object and obtain filesystem permission first.</span>
+        </span>
+      </label>
+      <div id="transfer-policy-status" class="status" role="status">Preferences do not change currently working transfer behavior.</div>
+    </div>
+  </section>
+
   <section id="local-tools" class="section" hidden>
     <div class="section-head">
       <div><h2>Upload from computer</h2><div class="section-note">Choose an R2 bucket and location, then drag files in.</div></div>
