@@ -3848,6 +3848,11 @@ async function refreshBuckets(){
 async function addBucketPreset(bucketName){
   const account=cfAccounts.find(a=>a.id===currentAccountId);
   if(!account)return;
+  // Selecting an existing destination must never trigger a Worker deployment.
+  if(profiles.some(p=>p.type==="cloudflare-r2"&&p.accountId===account.id&&p.bucketName===bucketName)){
+    setStatus("cf-status",bucketName+" is already configured. No Worker redeployment was attempted.","ok");
+    return;
+  }
   setStatus("cf-status",`Preparing ${bucketName}… REDOWN is verifying the remote transfer Worker before saving this preset.`);
   try {
   const result=await send({
@@ -3865,7 +3870,12 @@ async function addBucketPreset(bucketName){
   if(stored.rightClickMode!=="simple" && stored.rightClickMode!=="nested")await chrome.storage.local.set({rightClickMode});
   renderProfiles();
   setStatus("cf-status",`${bucketName} is ready. REDOWN verified a real R2 write and prepared its default locations. Right-click a link, image, video, audio item, or GLB link → REDOWN → ${bucketName}.`,"ok");
-  } catch(error) { setStatus("cf-status",error?.message || "Could not prepare bucket. Retry.","bad"); }
+  } catch(error) {
+    const message=error?.message||String(error);
+    setStatus("cf-status",/failed to fetch|network/i.test(message)
+      ? bucketName+" exists in Cloudflare, but preparing its right-click Worker was interrupted by the network. The bucket was not deleted; try Prepare again when connected."
+      : "Could not prepare "+bucketName+": "+message,"bad");
+  }
 }
 
 async function loginRequest(operation) {
