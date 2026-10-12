@@ -1356,20 +1356,35 @@ async function uploadLocalFiles(fileList){
     status.className="status";
     status.textContent=`Uploading ${file.name} (${completed+1}/${files.length})…`;
     try{
-      const response=await fetch(profile.workerUrl,{
-        method:"POST",
-        headers:{
-          authorization:`Bearer ${profile.token||""}`,
-          "content-type":file.type||"application/octet-stream",
-          "x-redown-action":"upload-local",
-          "x-redown-filename":encodeURIComponent(file.name),
-          "x-redown-folder":prefix,
-          "x-redown-public-base":profile.publicBaseUrl||`${profile.workerUrl}/assets`
-        },
-        body:file
-      });
-      const body=await response.json().catch(()=>({}));
-      if(!response.ok||!body?.ok)throw new Error(body?.error||`Upload failed (${response.status})`);
+      // Retry only transient HTTP failures. Re-send the original File rather than
+      // buffering it in extension memory. Permanent failures are never retried.
+      let body;
+      for(let attempt=0;attempt<3;attempt++){
+        const response=await fetch(profile.workerUrl,{
+          method:"POST",
+          headers:{
+            authorization:`Bearer ${profile.token||""}`,
+            "content-type":file.type||"application/octet-stream",
+            "x-redown-action":"upload-local",
+            "x-redown-filename":encodeURIComponent(file.name),
+            "x-redown-folder":prefix,
+            "x-redown-public-base":profile.publicBaseUrl||`${profile.workerUrl}/assets`
+          },
+          body:file
+        });
+        body=await response.json().catch(()=>({}));
+        if(response.ok&&body?.ok)break;
+        const transient=[429,500,502,503,504].includes(response.status);
+        if(!transient||attempt===2){
+          const reason=body?.error||`Upload failed (HTTP ${response.status})`;
+          throw new Error(`${reason}${transient?" after 3 attempts":""}`);
+        }
+        const retryAfter=Number(response.headers.get("retry-after"));
+        const delay=Number.isFinite(retryAfter)&&retryAfter>0
+          ?Math.min(retryAfter*1000,10000):Math.min(1000*2**attempt,10000);
+        status.textContent=`Temporary server error (${response.status}) uploading ${file.name}. Retrying ${attempt+2}/3…`;
+        await new Promise(resolve=>setTimeout(resolve,delay));
+      }
       completed++;
       await send({
         type:"recordLocalTransfer",
