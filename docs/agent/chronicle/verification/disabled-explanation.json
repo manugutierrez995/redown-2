@@ -1,0 +1,135 @@
+{
+  "ok": true,
+  "apiVersion": 1,
+  "data": {
+    "claims": [
+      {
+        "claim": "Selected HTTP URL is a remote candidate; retrievability has not been proven",
+        "evidence": [
+          "fixture:7"
+        ],
+        "confidence": "boundary-observation",
+        "limitations": "Not independent proof of downstream success or a root cause",
+        "source": [
+          {
+            "path": "extension/remote-transfers.js",
+            "anchor": "async function submit"
+          }
+        ],
+        "nextSafeStep": "Inspect evidence references and stage gaps, then propose an isolated fixture test"
+      },
+      {
+        "claim": "Fully Remote cannot start because the executor is disabled",
+        "evidence": [
+          "fixture:8"
+        ],
+        "confidence": "boundary-observation",
+        "limitations": "Not independent proof of downstream success or a root cause",
+        "source": [
+          {
+            "path": "extension/remote-transfers.js",
+            "anchor": "if(!config.enabled)"
+          }
+        ],
+        "nextSafeStep": "Inspect the configured/disabled decision and run the disabled-executor fixture; no source request was started by this branch"
+      }
+    ],
+    "coverage": [
+      {
+        "stage": "selection",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "classification",
+        "status": "observed",
+        "reason": "Only listed events establish outcomes; gap markers are not execution proof",
+        "eventIds": [
+          "fixture:7"
+        ]
+      },
+      {
+        "stage": "destination",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "policy",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "acceptance",
+        "status": "skipped-for-reason",
+        "reason": "Only listed events establish outcomes; gap markers are not execution proof",
+        "eventIds": [
+          "fixture:8"
+        ]
+      },
+      {
+        "stage": "queue",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "capture",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "source",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "upload",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "verification",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "journal",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "index",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "backup",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "recovery",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      },
+      {
+        "stage": "cleanup",
+        "status": "not-observed",
+        "reason": "No captured evidence; does not imply this stage did not happen",
+        "eventIds": []
+      }
+    ],
+    "rootCause": "Only directly observed boundary conditions are established; downstream absence is unknown"
+  }
+}

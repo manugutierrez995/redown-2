@@ -1,0 +1,19 @@
+{
+  "id": "fixture:chronicle",
+  "time": "2026-10-12T00:00:00Z",
+  "page": {
+    "overUrl": "https://hitomi.la/galleries/123.html"
+  },
+  "references": [
+    {
+      "role": "asset-url",
+      "url": "https://cdn.test/x"
+    }
+  ],
+  "recording": "observed",
+  "integrity": "unknown",
+  "filename": "archive.zip",
+  "size": 3,
+  "clickedAction": "gallery-download",
+  "siteItemId": "hitomi:123"
+}

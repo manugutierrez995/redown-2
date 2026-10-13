@@ -1,0 +1,33 @@
+✔ private WEBP preview reads nested keys without a Worker or background messaging (25.327355ms)
+✔ downloads use a header, keep credentials out of URLs and sanitize filenames (0.936328ms)
+✔ concurrent expired requests refresh rotating credentials once (2.073362ms)
+✔ 401 refresh retries a private read and denied reads report failure (2.014131ms)
+✔ oversized preview stops without allocating an object URL (1.673321ms)
+✔ preview failure replaces spinner and download rejection ends progress (1.559554ms)
+✔ same-bucket transfers stream objects and preserve metadata (7.400412ms)
+✔ cross-bucket transfers stay Worker-to-Worker and keep-both resolves conflicts (3.118454ms)
+✔ folder markers, properties, and batched deletes are real R2 operations (3.151316ms)
+✔ private Explorer reads require auth while explicitly enabled public assets still work (2.350954ms)
+✔ short-lived private preview URLs support ranges for text, PDF, and GLB (7.434947ms)
+✔ ZIP and CBZ archives are listed as virtual folders and selected entries extract safely (5.551621ms)
+✔ archive traversal and malformed archives are rejected (2.133035ms)
+✔ actual background ingestion uses remote control only, exact bucket/prefix; lost acknowledgment replays after browser restart (3.407046ms)
+✔ feature gating, unsupported browser URL, fallback flags and Fully Remote missing executor never fetch source (1.035123ms)
+✔ IndexedDB projection performs a single replace transaction and preserves authoritative job state (1.159186ms)
+✔ Simple: removing an ancestor preserves reusable blank descendant rows and does not delete R2 folders (90.528875ms)
+✔ Simple: selecting existing folder does not populate creation draft (13.670342ms)
+✔ Simple: new directory is created under the exact parent only after Create (10.679839ms)
+✔ BUG-014: selecting an existing child does not fill the new-folder input or create a directory (28.106322ms)
+✔ BUG-013: right-side root lists only immediate folders from the selected left bucket (12.083052ms)
+✔ BUG-013: stale earlier bucket results cannot overwrite newly selected bucket (13.732639ms)
+✔ DBG-003 child requests released after bucket switch cannot contaminate current shared cache (15.085849ms)
+✔ DBG-003 late profile completion cannot alter the new bucket view (12.457887ms)
+✔ DBG-003 late creation completion cannot alter the new bucket view (12.625372ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 610.444045

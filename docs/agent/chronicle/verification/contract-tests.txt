@@ -1,0 +1,40 @@
+
+> remote-asset-ingest@0.1.0 test:chronicle
+> node --test --test-isolation=none tests/content-chronicle.test.mjs tests/chronicle-diagnostics.test.mjs && python tests/chronicle-schema-conformance.py
+
+✔ actual context-menu Hitomi policy emits intentional browser block; direct source stays distinct (30.438331ms)
+✔ actual executor disabled, invalid HTTPS, permission denial, uncertain response, durable replay boundaries (10.09964ms)
+✔ actual Hitomi start/chunk/finish paths aggregate bytes, retain guard, acknowledge without verified claim (2.561619ms)
+✔ actual Hitomi failure paths retain chunk mismatch, incomplete ZIP, R2 503 and independent recorder outcomes (4.079388ms)
+✔ actual ordinary ingest emits ack, uncertainty and HTTP symptoms, but throwing diagnostics never breaks success (2.834561ms)
+✔ actual R2 adapter errors emit 503, denied HTTP and lost response without changing retry policy (0.944664ms)
+✔ bounded recorder overflow, write failure/retry/quota and independent metadata success/failure (2.926914ms)
+✔ durable journal fsync, replay after new instance/cache reset, torn tail and ID conflicts (11.926059ms)
+✔ causal query gives evidence-backed first divergence, preserves unknown future codes, and is pure (2.90866ms)
+✔ adversarial URLs/titles/headers/private paths never reach diagnostic persistence or export; input bounds (3.12702ms)
+✔ recognition never proves same bytes; versioned provenance mapping and roundtrip (10.780418ms)
+✔ every emitted diagnostic resolves to documented source anchor; registry support is honest (8.871664ms)
+✔ IndexedDB atomic activation, partial/stale markers, abort and cache reset keep file truth unknown (9.968483ms)
+✔ browser recorder persists sanitized bundle across background restart; Debug Mode consent and retention (6.355551ms)
+✔ actual injected Hitomi hook succeeds or reports injection symptom without guessing a page-world cause (1.674574ms)
+✔ segmented archive checksum, scoped restore, opt-in immutable vault and failed backup never alter records (3.165343ms)
+✔ preflight failure never produces a fabricated upload failure; durable metadata journal recovers independently (3.287853ms)
+✔ registry artifact matches runtime definitions; export size and recursive detail budgets report gaps (29.541157ms)
+✔ projection failure is independently emitted; archive exact observed coverage for review (11.187682ms)
+✔ Debug Mode UI persists explicit consent, uses text-only timelines, and exports on user action (428.198959ms)
+✔ cheap capture preserves page, click and asset roles while redacting credentials (0.448192ms)
+✔ recognition is hint only, not byte verification or deletion (0.474611ms)
+✔ portable JSON and JSONL round trips without browser or cloud APIs (0.996211ms)
+✔ reject incomplete journals, duplicate ids, future formats and unsafe URLs (0.734999ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 628.818258
+PASS contracts/chronicle/event-v1.schema.json event.json valid + future rejection
+PASS contracts/content-provenance/v1.schema.json provenance.json valid + future rejection
+PASS contracts/diagnostics/event-v1.schema.json diagnostic-event.json valid + future rejection
+PASS contracts/diagnostics/bundle-v1.schema.json blocked-bundle.json valid + future rejection

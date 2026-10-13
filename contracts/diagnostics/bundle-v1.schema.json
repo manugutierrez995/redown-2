@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sanitized Redown diagnostic bundle v1",
+  "type": "object",
+  "required": [
+    "format",
+    "manifest",
+    "events",
+    "registry",
+    "traces",
+    "health",
+    "redactionAudit",
+    "reproduction"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "redown.diagnostics.v1"
+    },
+    "manifest": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "registryVersion",
+        "application",
+        "complete",
+        "limits",
+        "provenance"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "registryVersion": {
+          "const": 1
+        },
+        "application": {
+          "const": "REDOWN"
+        },
+        "complete": {
+          "const": false
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "maxItems": 2000,
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    },
+    "registry": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "versionIntroduced",
+          "severity",
+          "category",
+          "stage",
+          "component",
+          "humanMeaning",
+          "knownCauses",
+          "detectionEvidence",
+          "userSafeAction",
+          "agentNextDiagnostic",
+          "retryability",
+          "isTerminal",
+          "redactionClass",
+          "relatedSourceAnchors",
+          "testFixtureIds",
+          "documentationRef",
+          "support"
+        ]
+      }
+    },
+    "traces": {
+      "type": "array",
+      "maxItems": 100
+    },
+    "health": {
+      "type": "object"
+    },
+    "redactionAudit": {
+      "type": "object",
+      "required": [
+        "status",
+        "validity"
+      ]
+    },
+    "reproduction": {
+      "type": "object",
+      "properties": {
+        "executable": {
+          "const": false
+        }
+      },
+      "required": [
+        "executable"
+      ]
+    }
+  },
+  "$defs": {
+    "event": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "title": "Redown diagnostic event v1",
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "code",
+        "traceId",
+        "spanId",
+        "parentSpanId",
+        "transferId",
+        "attemptId",
+        "eventId",
+        "occurredAt",
+        "clockSource",
+        "stage",
+        "component",
+        "severity",
+        "outcome",
+        "message",
+        "evidenceRefs",
+        "causalLinks",
+        "causalLinkSemantics",
+        "environmentVersion",
+        "redactionStatus",
+        "observationLevel",
+        "details"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "code": {
+          "type": "string",
+          "pattern": "^REDOWN\\.[A-Z0-9_]+\\.[A-Z_]+\\.[A-Z0-9_]+$"
+        },
+        "traceId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9._:-]{1,128}$"
+        },
+        "spanId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9._:-]{1,128}$"
+        },
+        "parentSpanId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9._:-]{1,128}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transferId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9._:-]{1,128}$"
+        },
+        "attemptId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9._:-]{1,128}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "eventId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9._:-]{1,128}$"
+        },
+        "occurredAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "clockSource": {
+          "const": "wall-clock-utc"
+        },
+        "stage": {
+          "enum": [
+            "selection",
+            "classification",
+            "destination",
+            "policy",
+            "acceptance",
+            "queue",
+            "capture",
+            "source",
+            "upload",
+            "verification",
+            "journal",
+            "index",
+            "backup",
+            "recovery",
+            "cleanup"
+          ]
+        },
+        "component": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "success",
+            "decision",
+            "safety-block",
+            "symptom",
+            "gap",
+            "unknown"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "required": [
+              "path",
+              "anchor"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "maxLength": 512
+              },
+              "anchor": {
+                "type": "string",
+                "maxLength": 512
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "causalLinks": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._:-]{1,128}$"
+          }
+        },
+        "causalLinkSemantics": {
+          "const": "preceding-instrumented-boundary"
+        },
+        "environmentVersion": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "redactionStatus": {
+          "const": "sanitized"
+        },
+        "observationLevel": {
+          "enum": [
+            "reported",
+            "measured",
+            "simulated",
+            "inferred",
+            "not-observed"
+          ]
+        },
+        "details": {
+          "type": "object",
+          "maxProperties": 32
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

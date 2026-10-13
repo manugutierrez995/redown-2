@@ -756,7 +756,13 @@ importScripts("cloudflare-api.js");
 importScripts("nested-locations.js");
 importScripts("rfis-index.js");
 importScripts("transfer-projection.js");
+importScripts("diagnostic-core.js");
+importScripts("diagnostic-recorder.js");
+importScripts("chronicle-domain.js");
+importScripts("chronicle-index.js");
+importScripts("diagnostic-browser.js");
 importScripts("remote-transfers.js");
+
 async function connectCloudflare() { return RedownCloudflareAuth.connect(); }
 async function disconnectCloudflare() {
   const { cloudflareAuth } = await chrome.storage.local.get("cloudflareAuth");
@@ -1512,9 +1518,13 @@ async function ensureGitHubWorkflow(profile) {
   });
   if (!create.ok) throw new Error(`Could not install GitHub ingest workflow (${create.status})`);
 }
-async function ingestCloudflareAtPrefix(profile, sourceUrl, prefix, filename) {
+async function ingestCloudflareAtPrefix(profile, sourceUrl, prefix, filename, traceId=crypto.randomUUID()) {
+  const diagnostic=(code,id,details={})=>{try{globalThis.RedownDiagnostics?.emit(code,id,details);}catch{}};
+  diagnostic("REDOWN.DESTINATION.RESOLUTION.SELECTED",traceId,{account:profile.accountId,bucket:profile.bucketName,key:prefix});
+  let uploadStarted=false;
+  try {
   if (typeof RedownRemoteTransfers !== "undefined") {
-    const accepted = await RedownRemoteTransfers.submit(profile, sourceUrl, prefix, filename);
+    const accepted = await RedownRemoteTransfers.submit(profile, sourceUrl, prefix, filename,traceId);
     if (accepted) return accepted;
   }
   const prepared = await preparedProfile(
@@ -1523,6 +1533,8 @@ async function ingestCloudflareAtPrefix(profile, sourceUrl, prefix, filename) {
     profile.accountName
   );
   const folder = cleanExplorerPrefix(prefix || "").replace(/\/$/, "");
+  uploadStarted=true;
+  diagnostic("REDOWN.TRANSFER.UPLOAD.STARTED",traceId);
   const response = await fetch(prepared.workerUrl, {
     method: "POST",
     headers: {
@@ -1539,13 +1551,19 @@ async function ingestCloudflareAtPrefix(profile, sourceUrl, prefix, filename) {
   const text = await response.text();
   let body;
   try { body = JSON.parse(text); } catch { body = { ok:false, error:text }; }
-  if (!response.ok || !body.ok)
+  if (!response.ok || !body.ok) {
+    diagnostic(response.status===503?"REDOWN.R2.UPLOAD.RESPONSE_503":"REDOWN.R2.UPLOAD.HTTP_REJECTED",traceId,{status:response.status});
     throw new Error(body.error || `Cloudflare ingest failed (${response.status})`);
+  }
+  diagnostic("REDOWN.TRANSFER.UPLOAD.ACKNOWLEDGED",traceId);
+  diagnostic("REDOWN.VERIFICATION.READBACK.NOT_OBSERVED",traceId);
+  diagnostic("REDOWN.CLEANUP.POLICY.DISABLED",traceId);
   return body.publicUrl || publicAssetUrl(prepared, body.key);
+  } catch(error) { diagnostic(uploadStarted?"REDOWN.TRANSFER.UPLOAD.FAILED":"REDOWN.TRANSFER.REQUEST.NOT_STARTED",traceId); throw error; }
 }
-async function ingestCloudflare(profile, sourceUrl, category, filename) {
+async function ingestCloudflare(profile, sourceUrl, category, filename,traceId) {
   const folder = profile.folders?.[category] || category;
-  return ingestCloudflareAtPrefix(profile, sourceUrl, folder, filename);
+  return ingestCloudflareAtPrefix(profile, sourceUrl, folder, filename,traceId);
 }
 async function ingestGitHub(profile, sourceUrl, category, filename) {
   const repo = String(profile.repository || "").trim();
@@ -1781,12 +1799,13 @@ function hitomiDestination(menuId, profiles) {
   return null;
 }
 async function initiateHitomiCapture(info, tab, profiles,existingJobId=null) {
+  const diagnostic=(code,id,details={})=>{try{globalThis.RedownDiagnostics?.emit(code,id,details);}catch{}};
   const target=hitomiDestination(info.menuItemId,profiles);
   if(!target)throw new Error("Choose a prepared Cloudflare R2 destination");
   if(!tab?.id)throw new Error("No source tab found");
   const existing=hitomiIntents.get(tab.id);
   if(existing && Date.now()-existing.at<180000)throw new Error("A gallery capture is already active in this tab");
-  const jobId=existingJobId||crypto.randomUUID();
+  const jobId=existingJobId||info.diagnosticTraceId||crypto.randomUUID();
   if(!existingJobId){
     const jobs=await readHitomiQueue();
     jobs.push({id:jobId,menuId:String(info.menuItemId),url:tab.url,tabId:tab.id,status:"pending",createdAt:Date.now(),updatedAt:Date.now(),retries:0,nextAt:0});
@@ -1821,15 +1840,18 @@ async function initiateHitomiCapture(info, tab, profiles,existingJobId=null) {
         button.click();
       }
     });
+    diagnostic("REDOWN.HITOMI.CAPTURE.HOOK_INSTALLED",jobId);
     await notify("REDOWN","Hitomi is preparing the gallery ZIP for your chosen R2 bucket.");
-  }catch(e){hitomiIntents.delete(tab.id);await markHitomiQueue(jobId,{status:"pending",nextAt:Date.now()+15000,lastError:e?.message||String(e)});throw e;}
+  }catch(e){diagnostic("REDOWN.HITOMI.CAPTURE.INJECTION_FAILED",jobId);hitomiIntents.delete(tab.id);await markHitomiQueue(jobId,{status:"pending",nextAt:Date.now()+15000,lastError:e?.message||String(e)});throw e;}
 }
 async function handleHitomiCaptureMessage(message,sender) {
+  const diagnostic=(code,id,details={})=>{try{globalThis.RedownDiagnostics?.emit(code,id,details);}catch{}};
   const tabId=sender.tab?.id;
   const intent=hitomiIntents.get(tabId);
-  if(!intent)throw new Error("No active gallery capture. The queued request is retained; retry the right-click action.");
+  if(!intent){diagnostic("REDOWN.HITOMI.CAPTURE.SESSION_MISSING",message.id||"unattributed");throw new Error("No active gallery capture. The queued request is retained; retry the right-click action.");}
   if(!String(sender.url||"").startsWith("https://hitomi.la/"))throw new Error("Unexpected gallery origin");
   if(message.type==="hitomiCaptureError"){
+    diagnostic("REDOWN.HITOMI.CAPTURE.ERROR_REPORTED",intent.jobId);
     hitomiIntents.delete(tabId);
     const error=String(message.error||"Capture failed");
     await markHitomiQueue(intent.jobId,{status:"pending",nextAt:Date.now()+15000,lastError:error});
@@ -1839,23 +1861,26 @@ async function handleHitomiCaptureMessage(message,sender) {
   }
   if(message.type==="hitomiCaptureStart"){
     if(intent.state!=="armed")throw new Error("Capture already started");
-    if(!Number.isSafeInteger(message.size)||message.size<=0||message.size>HITOMI_MAX_BYTES)throw new Error("Gallery ZIP exceeds the 64 MiB initial capture limit");
+    if(!Number.isSafeInteger(message.size)||message.size<=0||message.size>HITOMI_MAX_BYTES){diagnostic("REDOWN.HITOMI.CAPTURE.SIZE_LIMIT",intent.jobId,{size:message.size});throw new Error("Gallery ZIP exceeds the 64 MiB initial capture limit");}
+    diagnostic("REDOWN.HITOMI.CAPTURE.BLOB_OBSERVED",intent.jobId,{size:message.size});
     intent.state="receiving";intent.expected=message.size;intent.filename=cleanExplorerName(message.filename||"hitomi-gallery.zip");
     intent.id=crypto.randomUUID();return {ok:true,id:intent.id};
   }
   if(intent.state!=="receiving"||intent.id!==message.id)throw new Error("Invalid transfer session");
   if(message.type==="hitomiCaptureChunk"){
     const binary=atob(message.data||"");
-    if(binary.length>262144||intent.size+binary.length>intent.expected)throw new Error("Invalid gallery ZIP chunk");
+    if(binary.length>262144||intent.size+binary.length>intent.expected){diagnostic("REDOWN.HITOMI.CAPTURE.CHUNK_INVALID",intent.jobId);throw new Error("Invalid gallery ZIP chunk");}
     const buf=new Uint8Array(binary.length);for(let i=0;i<binary.length;i++)buf[i]=binary.charCodeAt(i);
     intent.chunks.push(buf);intent.size+=buf.length;return {ok:true};
   }
   if(message.type!=="hitomiCaptureFinish")throw new Error("Unknown gallery action");
-  if(intent.size!==intent.expected)throw new Error("Incomplete gallery ZIP");
+  if(intent.size!==intent.expected){diagnostic("REDOWN.HITOMI.CAPTURE.INCOMPLETE",intent.jobId,{received:intent.size,expected:intent.expected});throw new Error("Incomplete gallery ZIP");}
+  diagnostic("REDOWN.HITOMI.CAPTURE.BYTES_READY",intent.jobId,{received:intent.size});
   intent.state="uploading";
   try{
     const prepared=await preparedProfile(intent.profile.accountId,intent.profile.bucketName,intent.profile.accountName);
     const folder=cleanExplorerPrefix(intent.prefix||"").replace(/\/$/,"");
+    diagnostic("REDOWN.TRANSFER.UPLOAD.STARTED",intent.jobId);
     const response=await fetch(prepared.workerUrl,{
       method:"POST",headers:{
         authorization:`Bearer ${prepared.token||""}`,
@@ -1867,13 +1892,17 @@ async function handleHitomiCaptureMessage(message,sender) {
       },body:new Blob(intent.chunks,{type:"application/zip"})
     });
     const body=await response.json().catch(()=>({}));
-    if(!response.ok||!body.ok)throw new Error(body.error||`R2 upload failed (${response.status})`);
+    if(!response.ok||!body.ok){diagnostic(response.status===503?"REDOWN.R2.UPLOAD.RESPONSE_503":"REDOWN.R2.UPLOAD.HTTP_REJECTED",intent.jobId,{status:response.status});throw new Error(body.error||`R2 upload failed (${response.status})`);}
+    diagnostic("REDOWN.TRANSFER.UPLOAD.ACKNOWLEDGED",intent.jobId);
+    diagnostic("REDOWN.VERIFICATION.READBACK.NOT_OBSERVED",intent.jobId);
+    diagnostic("REDOWN.CLEANUP.POLICY.DISABLED",intent.jobId);
     const location=body.publicUrl||publicAssetUrl(prepared,body.key);
     await recordTransfer({ok:true,sourceUrl:sender.url,profileId:intent.profile.id,profileName:intent.profile.name,category:"files",location});
     await markHitomiQueue(intent.jobId,{status:"complete",location});
     await notify("REDOWN gallery complete",location);
     return {ok:true,location};
   }catch(error){
+    diagnostic("REDOWN.TRANSFER.UPLOAD.FAILED",intent.jobId);
     await markHitomiQueue(intent.jobId,{status:"pending",nextAt:Date.now()+30000,lastError:error?.message||String(error)});
     throw error;
   }finally{hitomiIntents.delete(tabId);}
@@ -1885,6 +1914,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
   if (area === "local" && (changes.profiles || changes.rightClickMode || changes.simpleLabelFallback)) rebuildMenus();
 });
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+  const diagnostic=(code,id,details={})=>{try{globalThis.RedownDiagnostics?.emit(code,id,details);}catch{}};
   if(info.menuItemId==='redown-nested-mode'){
     await chrome.storage.local.set({rightClickMode:info.checked ? 'nested' : 'simple'});
     return;
@@ -1893,6 +1923,9 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     return chrome.runtime.openOptionsPage();
   }
 
+  info.diagnosticTraceId=crypto.randomUUID();
+  diagnostic("REDOWN.CONTEXT.SELECTION.OBSERVED",info.diagnosticTraceId,{pageUrl:info.pageUrl||tab?.url,clickedUrl:info.srcUrl||info.linkUrl});
+  try { if(typeof RedownDiagnostics!=="undefined")RedownDiagnostics.observe({id:info.diagnosticTraceId,time:new Date().toISOString(),overUrl:info.pageUrl||tab?.url,clickedAction:info.srcUrl?"direct-asset":"context-menu",references:[{role:info.srcUrl?"asset-url":"clicked-url",url:info.srcUrl||info.linkUrl}],transferOutcome:"requested"}); } catch {}
   const profiles = await getProfiles();
   // Hitomi gallery Download is an anchor and can expose a javascript: or
   // same-page link. Do not mistake it for a remote downloadable asset.
@@ -1906,11 +1939,14 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     !/\/(?:index|popular|search)\.html(?:[?#]|$)/i.test(pageUrl);
   const chosenDestination=/^(quick:|simple-option:|nested:|tree:)/.test(String(info.menuItemId));
   if(onHitomiGallery && isGalleryDocument && chosenDestination && !info.srcUrl){
+    diagnostic("REDOWN.SOURCE.URL.BROWSER_ONLY",info.diagnosticTraceId);
     const {redownTransferPolicyV1:policy={}}=await chrome.storage.local.get("redownTransferPolicyV1");
     if(policy.preferredMode==="fully-remote" || ["automatic","cloud-to-cloud"].includes(policy.preferredMode) && policy.allowBrowserFallback===false) {
+      diagnostic("REDOWN.MODE.POLICY.BROWSER_REQUIRED_BLOCK",info.diagnosticTraceId);
       await notify("REDOWN needs browser", "This gallery generates a browser ZIP and cannot run Fully Remote. Select Browser-Assisted explicitly to capture it.");
       return;
     }
+    diagnostic("REDOWN.MODE.POLICY.BROWSER_SELECTED",info.diagnosticTraceId);
     try { await initiateHitomiCapture(info,tab,profiles); }
     catch(error){
       console.error("REDOWN Hitomi capture failed to start",error);
@@ -1942,7 +1978,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
       const selectedBucket=item.bucketName||profile.bucketName;
       const destinationProfile=profiles.find(p=>p.type==="cloudflare-r2" && p.accountId===profile.accountId && p.bucketName===selectedBucket);
       if(!destinationProfile)throw new Error("Selected bucket is not prepared for ReDown transfers. Prepare it in Cloudflare settings first.");
-      const location=await ingestCloudflareAtPrefix(destinationProfile,sourceUrl,prefix,basenameFromUrl(sourceUrl));
+      const location=await ingestCloudflareAtPrefix(destinationProfile,sourceUrl,prefix,basenameFromUrl(sourceUrl),info.diagnosticTraceId);
       await recordTransfer({ok:true,sourceUrl,profileId:profile.id,profileName:profile.name,category:"files",location});
       await notify("REDOWN complete",location);
     }catch(error){
@@ -1965,7 +2001,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
         : profile;
       if(selectedBucket&&!destinationProfile)throw new Error("Selected bucket is not prepared for ReDown transfers. Prepare it in Cloudflare settings first.");
       const location = profile.type === "cloudflare-r2" && profile.defaultPrefix != null
-        ? await ingestCloudflareAtPrefix(destinationProfile, sourceUrl, profile.defaultPrefix, basenameFromUrl(sourceUrl))
+        ? await ingestCloudflareAtPrefix(destinationProfile, sourceUrl, profile.defaultPrefix, basenameFromUrl(sourceUrl),info.diagnosticTraceId)
         : await ingest(destinationProfile, sourceUrl, category);
       await recordTransfer({ ok:true, sourceUrl, profileId:profile.id, profileName:profile.name, category, location });
       await notify("REDOWN complete", location);
@@ -1984,7 +2020,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if(!profile || !destination)return notify("REDOWN","That nested location is no longer available. Refresh it in settings.");
     const target={...profile,bucketName:destination.bucketName};
     try{
-      const location=await ingestCloudflareAtPrefix(target,sourceUrl,destination.prefix,basenameFromUrl(sourceUrl));
+      const location=await ingestCloudflareAtPrefix(target,sourceUrl,destination.prefix,basenameFromUrl(sourceUrl),info.diagnosticTraceId);
       await recordTransfer({ok:true,sourceUrl,profileId:profile.id,profileName:profile.name,category:"files",location});
       await notify("REDOWN complete",location);
     }catch(error){
@@ -2061,6 +2097,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   (async () => {
     try {
+      if(typeof RedownDiagnostics!=="undefined" && RedownDiagnostics.handles(message))return sendResponse(await RedownDiagnostics.handle(message));
       if (/^hitomiCapture(Start|Chunk|Finish|Error)$/.test(message?.type||"")) return sendResponse(await handleHitomiCaptureMessage(message,_sender));
       if (typeof RedownRemoteTransfers!=="undefined" && RedownRemoteTransfers.handles(message))
         return sendResponse(await RedownRemoteTransfers.handle(message));

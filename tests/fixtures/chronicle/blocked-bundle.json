@@ -1,0 +1,224 @@
+{
+  "format": "redown.diagnostics.v1",
+  "manifest": {
+    "schemaVersion": 1,
+    "registryVersion": 1,
+    "application": "REDOWN",
+    "applicationVersion": "not-observed",
+    "adapterVersion": 1,
+    "environmentCapabilities": {
+      "installedBrowser": "not-certified",
+      "liveR2": "not-observed",
+      "native": "unavailable",
+      "evidenceLevels": [
+        "simulated"
+      ]
+    },
+    "complete": false,
+    "exportGap": null,
+    "omittedTraceReports": 0,
+    "provenance": "captured-boundary-observations; installed Chrome and R2 acceptance not certified",
+    "limits": {
+      "events": 2000,
+      "lineBytes": 16384,
+      "bundleBytes": 4194304,
+      "depth": 6,
+      "queue": 128
+    },
+    "backup": "disabled",
+    "native": "unavailable",
+    "index": "disposable",
+    "clockSkew": "UTC ordering approximate; causal links take precedence"
+  },
+  "events": [
+    {
+      "schemaVersion": 1,
+      "code": "REDOWN.MODE.POLICY.BROWSER_REQUIRED_BLOCK",
+      "traceId": "fixture:blocked",
+      "spanId": "ref-abcc4cb0",
+      "parentSpanId": null,
+      "transferId": "fixture:blocked",
+      "attemptId": null,
+      "eventId": "fixture:blocked:1",
+      "occurredAt": "2026-10-12T00:00:00Z",
+      "clockSource": "wall-clock-utc",
+      "stage": "policy",
+      "component": "extension/background.js",
+      "severity": "info",
+      "outcome": "safety-block",
+      "message": "Policy forbids browser assistance for a browser-generated gallery ZIP",
+      "evidenceRefs": [
+        {
+          "path": "extension/background.js",
+          "anchor": "policy.preferredMode==="
+        }
+      ],
+      "causalLinks": [],
+      "causalLinkSemantics": "preceding-instrumented-boundary",
+      "environmentVersion": "redown-diagnostics-1",
+      "redactionStatus": "sanitized",
+      "observationLevel": "simulated",
+      "details": {}
+    }
+  ],
+  "registry": [
+    {
+      "code": "REDOWN.MODE.POLICY.BROWSER_REQUIRED_BLOCK",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "safety-block",
+      "stage": "policy",
+      "component": "extension/background.js",
+      "humanMeaning": "Policy forbids browser assistance for a browser-generated gallery ZIP",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Select Browser-Assisted explicitly for the gallery ZIP, or test a direct asset URL",
+      "agentNextDiagnostic": "Compare Fully Remote direct-MP4 and automatic gallery fixtures; inspect the captured mode branch before investigating R2",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "policy.preferredMode==="
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    }
+  ],
+  "traces": [
+    {
+      "traceId": "fixture:blocked",
+      "coverage": [
+        {
+          "stage": "selection",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "classification",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "destination",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "policy",
+          "status": "skipped-for-reason",
+          "reason": "Only listed events establish outcomes; gap markers are not execution proof",
+          "eventIds": [
+            "fixture:blocked:1"
+          ]
+        },
+        {
+          "stage": "acceptance",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "queue",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "capture",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "source",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "upload",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "verification",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "journal",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "index",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "backup",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "recovery",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        },
+        {
+          "stage": "cleanup",
+          "status": "not-observed",
+          "reason": "No captured evidence; does not imply this stage did not happen",
+          "eventIds": []
+        }
+      ],
+      "explanations": [
+        {
+          "claim": "Policy forbids browser assistance for a browser-generated gallery ZIP",
+          "evidence": [
+            "fixture:blocked:1"
+          ],
+          "confidence": "boundary-observation",
+          "limitations": "Not independent proof of downstream success or a root cause",
+          "source": [
+            {
+              "path": "extension/background.js",
+              "anchor": "policy.preferredMode==="
+            }
+          ],
+          "nextSafeStep": "Compare Fully Remote direct-MP4 and automatic gallery fixtures; inspect the captured mode branch before investigating R2"
+        }
+      ]
+    }
+  ],
+  "health": {},
+  "redactionAudit": {
+    "status": "sanitized-before-persistence",
+    "freeText": "omitted",
+    "urls": "origin and opaque reference only",
+    "validity": {
+      "valid": true,
+      "errors": []
+    }
+  },
+  "reproduction": {
+    "executable": false,
+    "command": "node --test --test-isolation=none tests/chronicle-diagnostics.test.mjs",
+    "scope": "deterministic offline fixtures"
+  }
+}

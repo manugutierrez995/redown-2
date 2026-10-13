@@ -1,0 +1,1140 @@
+{
+  "registryVersion": 1,
+  "grammar": "REDOWN.<DOMAIN>.<STAGE>.<OUTCOME_OR_CAUSE>",
+  "aliases": {},
+  "codes": [
+    {
+      "code": "REDOWN.CONTEXT.SELECTION.OBSERVED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "selection",
+      "component": "extension/background.js",
+      "humanMeaning": "Context menu action observed",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "chrome.contextMenus.onClicked.addListener"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.SOURCE.URL.BROWSER_ONLY",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "decision",
+      "stage": "classification",
+      "component": "extension/background.js",
+      "humanMeaning": "Gallery ZIP is generated inside the browser; gallery HTML is not ZIP bytes",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "const onHitomiGallery="
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.SOURCE.URL.DIRECT_CANDIDATE",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "decision",
+      "stage": "classification",
+      "component": "extension/remote-transfers.js",
+      "humanMeaning": "Selected HTTP URL is a remote candidate; retrievability has not been proven",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "async function submit"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.DESTINATION.RESOLUTION.SELECTED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "destination",
+      "component": "extension/background.js",
+      "humanMeaning": "Explicit account, bucket and prefix selected",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "async function ingestCloudflareAtPrefix"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.MODE.POLICY.BROWSER_REQUIRED_BLOCK",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "safety-block",
+      "stage": "policy",
+      "component": "extension/background.js",
+      "humanMeaning": "Policy forbids browser assistance for a browser-generated gallery ZIP",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Select Browser-Assisted explicitly for the gallery ZIP, or test a direct asset URL",
+      "agentNextDiagnostic": "Compare Fully Remote direct-MP4 and automatic gallery fixtures; inspect the captured mode branch before investigating R2",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "policy.preferredMode==="
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.MODE.POLICY.BROWSER_SELECTED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "decision",
+      "stage": "policy",
+      "component": "extension/remote-transfers.js",
+      "humanMeaning": "Browser assistance selected; this is not a cloud-to-cloud byte path",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "async function submit"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.MODE.POLICY.REMOTE_SELECTED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "decision",
+      "stage": "policy",
+      "component": "extension/remote-transfers.js",
+      "humanMeaning": "Remote executor selected; no automatic legacy fallback is started",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "async function submit"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.EXECUTOR.PREFLIGHT.NOT_CONFIGURED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "safety-block",
+      "stage": "acceptance",
+      "component": "extension/remote-transfers.js",
+      "humanMeaning": "Fully Remote cannot start because the executor is disabled",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Review the executor enable setting; do not put tokens in support bundles",
+      "agentNextDiagnostic": "Inspect the configured/disabled decision and run the disabled-executor fixture; no source request was started by this branch",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "if(!config.enabled)"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.EXECUTOR.PREFLIGHT.HTTPS_REQUIRED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "safety-block",
+      "stage": "acceptance",
+      "component": "extension/remote-transfers.js",
+      "humanMeaning": "Configured executor URL failed HTTPS/origin validation",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Review policy without disabling safety automatically",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "Executor must use HTTPS"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.EXECUTOR.ACCEPTANCE.PERMISSION_DENIED",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "acceptance",
+      "component": "extension/remote-transfers.js",
+      "humanMeaning": "Executor returned 401 or 403; credentials or permissions need separate inspection",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Review executor permission scope without exporting credentials",
+      "agentNextDiagnostic": "Reproduce the 403 fixture; a denied response alone cannot distinguish token expiry from scope or policy rejection",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "async function request"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.EXECUTOR.ACCEPTANCE.RESPONSE_UNKNOWN",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "acceptance",
+      "component": "extension/remote-transfers.js",
+      "humanMeaning": "Acceptance response was lost or unusable; preserved intent may already have been accepted",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Retain the original pending intent; avoid creating a new download occurrence merely to resolve acknowledgment uncertainty",
+      "agentNextDiagnostic": "Propose replay/reconciliation with the original idempotency key; durable acceptance and byte completion remain separate",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "Remote acceptance unknown"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.EXECUTOR.ACCEPTANCE.DURABLE_ACK",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "acceptance",
+      "component": "extension/remote-transfers.js",
+      "humanMeaning": "Service reported durable job acceptance; this is not completed upload or readback proof",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "result.durable"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.EXECUTOR.QUEUE.INTENT_PERSISTED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "queue",
+      "component": "extension/remote-transfers.js",
+      "humanMeaning": "Idempotent remote intent persisted before submission",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "outbox.push(intent)"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.EXECUTOR.RECOVERY.REPLAY",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "decision",
+      "stage": "recovery",
+      "component": "extension/remote-transfers.js",
+      "humanMeaning": "Persisted intent replayed using the original idempotency key",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "for(const intent"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.HOOK_INSTALLED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "capture",
+      "component": "extension/background.js",
+      "humanMeaning": "Both injection calls returned after hook installation and click invocation",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "async function initiateHitomiCapture"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.INJECTION_FAILED",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "capture",
+      "component": "extension/background.js",
+      "humanMeaning": "Injection/click invocation failed; exact page-world cause is unobserved",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "hitomiIntents.delete(tab.id)"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.BLOB_OBSERVED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "capture",
+      "component": "extension/background.js",
+      "humanMeaning": "Capture start reported a bounded browser-generated ZIP size",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "hitomiCaptureStart"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.SIZE_LIMIT",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "safety-block",
+      "stage": "capture",
+      "component": "extension/background.js",
+      "humanMeaning": "Reported ZIP size is invalid or exceeds the unchanged 64 MiB guard",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Use a smaller gallery for the existing capture route",
+      "agentNextDiagnostic": "Compare reported ZIP size with the unchanged 64 MiB guard; do not raise the guard without separate evidence",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "HITOMI_MAX_BYTES"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.SESSION_MISSING",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "gap",
+      "stage": "capture",
+      "component": "extension/background.js",
+      "humanMeaning": "Background capture intent is absent; suspension/restart is only a hypothesis",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Reopen the gallery and review the retained queued request",
+      "agentNextDiagnostic": "Inspect missing capture session evidence; test restart loss without claiming suspension was the confirmed cause",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "No active gallery capture"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.CHUNK_INVALID",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "capture",
+      "component": "extension/background.js",
+      "humanMeaning": "Observed chunk exceeds expected size or per-message budget",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "Invalid gallery ZIP chunk"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.INCOMPLETE",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "capture",
+      "component": "extension/background.js",
+      "humanMeaning": "Aggregated received bytes differ from reported ZIP size",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "Incomplete gallery ZIP"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.BYTES_READY",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "capture",
+      "component": "extension/background.js",
+      "humanMeaning": "All expected ZIP bytes received; no per-chunk event logging",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "intent.state=\"uploading\""
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.ERROR_REPORTED",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "capture",
+      "component": "extension/background.js",
+      "humanMeaning": "Page capture reported an error; original private error text is omitted",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "hitomiCaptureError"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.TRANSFER.REQUEST.NOT_STARTED",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "policy",
+      "component": "extension/background.js",
+      "humanMeaning": "Browser byte upload was not started; a control-plane or preparation branch threw. Remote acceptance may still be unknown",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "async function ingestCloudflareAtPrefix"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.TRANSFER.UPLOAD.STARTED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "upload",
+      "component": "extension/background.js",
+      "humanMeaning": "Byte upload started on the selected path",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "const response=await fetch(prepared.workerUrl"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.R2.UPLOAD.RESPONSE_503",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "upload",
+      "component": "remote/adapters/r2-gateway.mjs",
+      "humanMeaning": "Destination returned HTTP 503; underlying provider cause is unknown",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Keep the original job and inspect its retry/reconciliation state",
+      "agentNextDiagnostic": "Reproduce the gateway 503 fixture and inspect the safe action field; do not infer final object absence or delete anything",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "remote/adapters/r2-gateway.mjs",
+          "anchor": "async request"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.R2.UPLOAD.HTTP_REJECTED",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "upload",
+      "component": "remote/adapters/r2-gateway.mjs",
+      "humanMeaning": "Destination returned an unsuccessful HTTP status",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "remote/adapters/r2-gateway.mjs",
+          "anchor": "async request"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.R2.UPLOAD.NETWORK_UNKNOWN",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "upload",
+      "component": "remote/adapters/r2-gateway.mjs",
+      "humanMeaning": "Destination response unavailable; a write may have occurred",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "remote/adapters/r2-gateway.mjs",
+          "anchor": "catch"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.TRANSFER.UPLOAD.ACKNOWLEDGED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "upload",
+      "component": "extension/background.js",
+      "humanMeaning": "Destination acknowledged upload; independent integrity remains separate",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Retain the acknowledgment and request separate verification evidence if needed",
+      "agentNextDiagnostic": "Inspect verification coverage; acknowledgment alone establishes neither source identity nor current object integrity",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "body.publicUrl"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.TRANSFER.UPLOAD.FAILED",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "upload",
+      "component": "extension/background.js",
+      "humanMeaning": "Upload boundary threw; original private exception is omitted",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "async function ingestCloudflareAtPrefix"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.VERIFICATION.READBACK.NOT_OBSERVED",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "gap",
+      "stage": "verification",
+      "component": "extension/background.js",
+      "humanMeaning": "No independent readback evidence was collected on this path",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Keep the acknowledgment distinct from verified integrity",
+      "agentNextDiagnostic": "Propose separately scoped independent readback against the exact destination and an observed source digest",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/background.js",
+          "anchor": "async function ingestCloudflareAtPrefix"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.CLEANUP.POLICY.DISABLED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "safety-block",
+      "stage": "cleanup",
+      "component": "extension/diagnostic-core.js",
+      "humanMeaning": "Diagnostics and chronicle never authorize file deletion",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Review policy without disabling safety automatically",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/diagnostic-core.js",
+          "anchor": "const STAGES="
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.CHRONICLE.JOURNAL.APPENDED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "journal",
+      "component": "extension/diagnostic-recorder.js",
+      "humanMeaning": "Sanitized batch persisted by the recorder adapter",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "async function flush"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.CHRONICLE.JOURNAL.WRITE_FAILED",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "journal",
+      "component": "extension/diagnostic-recorder.js",
+      "humanMeaning": "Recorder adapter write rejected; download outcome remains independent",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "async function flush"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.CHRONICLE.JOURNAL.QUOTA_EXHAUSTED",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "symptom",
+      "stage": "journal",
+      "component": "extension/diagnostic-recorder.js",
+      "humanMeaning": "Storage adapter reported QuotaExceededError",
+      "knownCauses": [
+        "Not established by this symptom alone"
+      ],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export available history and choose shorter diagnostics retention",
+      "agentNextDiagnostic": "Run the quota adapter fixture; confirm recorder failure remains independent of transfer acknowledgment",
+      "retryability": "policy-dependent",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "async function flush"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.CHRONICLE.JOURNAL.RETRY",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "decision",
+      "stage": "journal",
+      "component": "extension/diagnostic-recorder.js",
+      "humanMeaning": "Same immutable event batch scheduled for another append attempt",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "async function flush"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.CHRONICLE.JOURNAL.RECORDING_GAP",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "gap",
+      "stage": "journal",
+      "component": "extension/diagnostic-recorder.js",
+      "humanMeaning": "Recorder queue/budget exhausted or batch could not persist; missing observations are unknown",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export currently available evidence before closing the browser",
+      "agentNextDiagnostic": "Inspect gap count and missing event links; reproduce bounded overflow, not a fabricated downstream outcome",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "function gap"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.CHRONICLE.RECOVERY.TAIL_CORRUPT",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "gap",
+      "stage": "recovery",
+      "component": "packages/content-chronicle/file-journal.mjs",
+      "humanMeaning": "Journal has a torn or malformed tail; only validated prefix is recoverable",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Preserve the original journal before any explicit tail repair",
+      "agentNextDiagnostic": "Read the validated prefix and corruption marker; reproduce torn-tail handling before proposing repair",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "packages/content-chronicle/file-journal.mjs",
+          "anchor": "recover"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.CHRONICLE.INDEX.ACTIVATED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "success",
+      "stage": "index",
+      "component": "extension/chronicle-index.js",
+      "humanMeaning": "Disposable index activated in one transaction",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Export a sanitized bundle and inspect the correlated timeline",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/chronicle-index.js",
+          "anchor": "activate"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.CHRONICLE.INDEX.UNAVAILABLE",
+      "versionIntroduced": 1,
+      "severity": "warning",
+      "category": "gap",
+      "stage": "index",
+      "component": "extension/diagnostic-recorder.js",
+      "humanMeaning": "Index unavailable; durable journal and file existence are separate",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Retain the journal/export; index loss does not imply file loss",
+      "agentNextDiagnostic": "Rebuild a disposable index from a validated snapshot in the atomic activation fixture",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "projection"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "implemented"
+    },
+    {
+      "code": "REDOWN.CHRONICLE.BACKUP.DISABLED",
+      "versionIntroduced": 1,
+      "severity": "info",
+      "category": "safety-block",
+      "stage": "backup",
+      "component": "extension/diagnostic-core.js",
+      "humanMeaning": "R2 history backup is off; no logs were uploaded",
+      "knownCauses": [],
+      "detectionEvidence": "An event emitted by the cited boundary; absence is not evidence of nonexecution",
+      "userSafeAction": "Review policy without disabling safety automatically",
+      "agentNextDiagnostic": "Inspect evidence references and stage gaps, then propose an isolated fixture test",
+      "retryability": "not-applicable",
+      "isTerminal": false,
+      "redactionClass": "sanitized-metadata",
+      "relatedSourceAnchors": [
+        {
+          "path": "extension/diagnostic-core.js",
+          "anchor": "function bundle"
+        }
+      ],
+      "testFixtureIds": [
+        "chronicle-diagnostics"
+      ],
+      "documentationRef": "docs/agent/chronicle/API.md",
+      "support": "planned"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import {TransferError} from '../../packages/transfer-core/index.mjs';
 export class R2Gateway {
-  constructor({url,token,accountId,bucket,fetchImpl=fetch,timeoutMs=60000}) {Object.assign(this,{url,token,accountId,bucket,fetchImpl,timeoutMs});}
+  constructor({url,token,accountId,bucket,fetchImpl=fetch,timeoutMs=60000,diagnostics,traceId="gateway"}) {Object.assign(this,{url,token,accountId,bucket,fetchImpl,timeoutMs,diagnostics,traceId});}
+  observe(code,details={}) {try{const pending=this.diagnostics?.emit(code,this.traceId,details);pending?.catch?.(()=>{});}catch{} }
   scope(location) {if(location.accountId!==this.accountId||location.bucket!==this.bucket)throw new TransferError('DESTINATION_SCOPE');}
   async request(action,data,bytes) {
     let response;
@@ -8,8 +9,8 @@ export class R2Gateway {
       headers:{authorization:'Bearer '+this.token,'content-type':bytes?'application/octet-stream':'application/json',
         ...(bytes?{'x-transfer-command':encodeURIComponent(JSON.stringify({action,...data}))}:{})},
       body:bytes||JSON.stringify({action,...data})});}
-    catch {throw new TransferError('DESTINATION_NETWORK',true);}
-    if(!response.ok)throw new TransferError('DESTINATION_'+response.status,[429,500,502,503,504].includes(response.status));
+    catch {this.observe('REDOWN.R2.UPLOAD.NETWORK_UNKNOWN',{action});throw new TransferError('DESTINATION_NETWORK',true);}
+    if(!response.ok){this.observe(response.status===503?'REDOWN.R2.UPLOAD.RESPONSE_503':'REDOWN.R2.UPLOAD.HTTP_REJECTED',{status:response.status,action});throw new TransferError('DESTINATION_'+response.status,[429,500,502,503,504].includes(response.status));}
     return response;
   }
   async inspect(location) {this.scope(location);return (await (await this.request('inspect',{key:location.key})).json()).object;}

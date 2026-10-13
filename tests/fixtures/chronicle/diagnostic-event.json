@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "code": "REDOWN.MODE.POLICY.BROWSER_REQUIRED_BLOCK",
+  "traceId": "fixture:blocked",
+  "spanId": "ref-abcc4cb0",
+  "parentSpanId": null,
+  "transferId": "fixture:blocked",
+  "attemptId": null,
+  "eventId": "fixture:blocked:1",
+  "occurredAt": "2026-10-12T00:00:00Z",
+  "clockSource": "wall-clock-utc",
+  "stage": "policy",
+  "component": "extension/background.js",
+  "severity": "info",
+  "outcome": "safety-block",
+  "message": "Policy forbids browser assistance for a browser-generated gallery ZIP",
+  "evidenceRefs": [
+    {
+      "path": "extension/background.js",
+      "anchor": "policy.preferredMode==="
+    }
+  ],
+  "causalLinks": [],
+  "causalLinkSemantics": "preceding-instrumented-boundary",
+  "environmentVersion": "redown-diagnostics-1",
+  "redactionStatus": "sanitized",
+  "observationLevel": "simulated",
+  "details": {}
+}

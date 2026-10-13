@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "redown.chronicle.v1 event",
+  "type": "object",
+  "required": [
+    "id",
+    "time",
+    "page",
+    "references",
+    "recording",
+    "integrity"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9._:-]{1,128}$"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "page": {
+      "type": "object",
+      "required": [
+        "overUrl"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "overUrl": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 512
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "object",
+        "required": [
+          "role",
+          "url"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "enum": [
+              "clicked-url",
+              "metadata-url",
+              "asset-url",
+              "redirect-url",
+              "generated-blob-url",
+              "other"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048
+          }
+        }
+      }
+    },
+    "filename": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "size": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "mime": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "destination": {
+      "type": "object",
+      "required": [
+        "accountId",
+        "bucket",
+        "key"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "bucket": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "key": {
+          "type": "string",
+          "maxLength": 2048
+        }
+      }
+    },
+    "recording": {
+      "enum": [
+        "observed",
+        "partial",
+        "deferred",
+        "failed-to-record",
+        "reconciled"
+      ]
+    },
+    "integrity": {
+      "enum": [
+        "unknown",
+        "candidate",
+        "mismatch"
+      ]
+    },
+    "clickedAction": {
+      "enum": [
+        "context-menu",
+        "gallery-download",
+        "direct-asset"
+      ]
+    },
+    "transferOutcome": {
+      "enum": [
+        "requested",
+        "acknowledged",
+        "failed",
+        "unknown"
+      ]
+    },
+    "siteItemId": {
+      "type": "string",
+      "pattern": "^hitomi:[0-9]+$"
+    }
+  }
+}

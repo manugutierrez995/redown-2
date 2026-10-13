@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "recordId": "fixture:chronicle",
+  "observedAt": "2026-10-12T00:00:00Z",
+  "page": {
+    "overUrl": {
+      "value": "https://hitomi.la/galleries/123.html",
+      "exposure": "redacted",
+      "observedAt": "2026-10-12T00:00:00Z",
+      "stability": "unknown",
+      "method": "observation"
+    },
+    "title": null,
+    "siteItemId": "hitomi:123"
+  },
+  "references": [
+    {
+      "role": "asset-url",
+      "reference": {
+        "value": "https://cdn.test/x",
+        "exposure": "redacted",
+        "observedAt": "2026-10-12T00:00:00Z",
+        "stability": "unknown",
+        "method": "observation"
+      }
+    }
+  ],
+  "recognition": {
+    "status": "hint-only",
+    "keys": [
+      "page-url",
+      "filename",
+      "size"
+    ],
+    "normalizationVersion": 1
+  },
+  "integrity": {
+    "status": "unknown"
+  }
+}

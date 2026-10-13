@@ -1,0 +1,84 @@
+{
+  "ok": true,
+  "apiVersion": 1,
+  "data": {
+    "apiVersion": 1,
+    "operations": [
+      "compareSuccessfulAndFailedTraces",
+      "describeCapabilities",
+      "describeDiagnosticCode",
+      "describeEventSchema",
+      "describeStages",
+      "explainCleanupEligibility",
+      "explainFailure",
+      "explainTransferFailure",
+      "explainVerification",
+      "exportDiagnosticBundle",
+      "findFirstDivergence",
+      "findPossibleDuplicates",
+      "getBackupStatus",
+      "getCausalChain",
+      "getCoverageMatrix",
+      "getDecisionTrace",
+      "getIndexFreshness",
+      "getJournalHealth",
+      "getProvenance",
+      "getQueueSnapshot",
+      "getRetryAndFallbackTrace",
+      "getSourceUrlRoles",
+      "getStageCoverage",
+      "getTimeline",
+      "getTransferTrace",
+      "listAdapters",
+      "listChronicleEvents",
+      "listDiagnosticCodes",
+      "listTraceCodes",
+      "listTransfers",
+      "planVerification",
+      "suggestSafeReproduction",
+      "validateDiagnosticBundle",
+      "validateRecords"
+    ],
+    "boundary": "offline-read-only",
+    "executionAuthorized": false,
+    "coverage": [
+      {
+        "stage": "native",
+        "support": "unavailable",
+        "reason": "No built native companion"
+      },
+      {
+        "stage": "backup",
+        "support": "planned",
+        "reason": "No authorized live R2 history vault adapter"
+      },
+      {
+        "stage": "source",
+        "support": "unavailable",
+        "reason": "Remote DNS, redirects and body events not collected by browser recorder"
+      },
+      {
+        "stage": "index",
+        "support": "implemented",
+        "reason": "Atomic activation after browser metadata append; cache is disposable"
+      },
+      {
+        "stage": "capture",
+        "support": "implemented",
+        "reason": "Background messages; page-world individual button/hook outcomes not instrumented"
+      },
+      {
+        "stage": "verification",
+        "support": "derived",
+        "reason": "Browser upload acknowledgment does not prove integrity; remote job readback remains independent"
+      }
+    ],
+    "limits": {
+      "events": 2000,
+      "lineBytes": 16384,
+      "bundleBytes": 4194304,
+      "depth": 6,
+      "queue": 128
+    }
+  }
+}

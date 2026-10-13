@@ -1,0 +1,150 @@
+[
+  {
+    "file": "agent-api.test.mjs",
+    "pass": 6,
+    "fail": 3,
+    "crashed": false,
+    "failureNames": [
+      "CLI works outside checkout, emits one JSON envelope and uses exit 2 for errors",
+      "catalog IDs, evidence labels, source hashes and references are internally consistent",
+      "offline discovery advertises only implemented operations and distinct versions"
+    ]
+  },
+  {
+    "file": "cloudflare-files.test.mjs",
+    "pass": 6,
+    "fail": 0,
+    "crashed": false,
+    "failureNames": []
+  },
+  {
+    "file": "cloudflare-login.test.mjs",
+    "pass": 2,
+    "fail": 14,
+    "crashed": false,
+    "failureNames": [
+      "Worker deployments cannot overlap and a failed deployment releases the lock",
+      "callback resumes after service worker restart from session state",
+      "click creates a visible window before network navigation; repeated clicks focus it",
+      "closed popup releases attempt and stale window is replaced on next click",
+      "denied consent and missing authorization code fail cleanly",
+      "duplicate navigation events exchange a code only once",
+      "expired attempt clears secrets, closes popup, and permits retry",
+      "failed API verification never stores an access token",
+      "popup creation errors are returned instead of leaving an in-flight lock",
+      "settings and worker observing the same callback exchange the code once across contexts",
+      "state mismatch fails without token exchange and allows a fresh retry",
+      "successful callback exchanges PKCE and verifies access before saving token",
+      "unrelated tab, subframe, lookalike host, and wrong callback path are ignored",
+      "verification network stall aborts and releases the attempt"
+    ]
+  },
+  {
+    "file": "content-chronicle.test.mjs",
+    "pass": 4,
+    "fail": 0,
+    "crashed": false,
+    "failureNames": []
+  },
+  {
+    "file": "debug-api.test.mjs",
+    "pass": 21,
+    "fail": 3,
+    "crashed": false,
+    "failureNames": [
+      "actual CLI entry point works outside the checkout and exits 2 for invalid corpus validation",
+      "original case and proposal Markdown bytes are retained from pinned upstream",
+      "real discovery, case, history, filters and validation are deterministic and honest"
+    ]
+  },
+  {
+    "file": "explorer-worker.test.mjs",
+    "pass": 7,
+    "fail": 0,
+    "crashed": false,
+    "failureNames": []
+  },
+  {
+    "file": "nested-locations.test.mjs",
+    "pass": 9,
+    "fail": 3,
+    "crashed": false,
+    "failureNames": [
+      "native menu mode checkbox changes the same saved setting without downloading anything",
+      "one global mode prevents Simple/Nested collisions and puts nested buckets directly under REDOWN",
+      "settings mode checkbox saves only the active mode and keeps both destination configurations"
+    ]
+  },
+  {
+    "file": "remote-browser.test.mjs",
+    "pass": 3,
+    "fail": 0,
+    "crashed": false,
+    "failureNames": []
+  },
+  {
+    "file": "remote-transfer.test.mjs",
+    "pass": null,
+    "fail": null,
+    "crashed": true,
+    "failureNames": []
+  },
+  {
+    "file": "semantic-api.test.mjs",
+    "pass": 18,
+    "fail": 3,
+    "crashed": false,
+    "failureNames": [
+      "CLI works from outside checkout, emits one JSON result and rejects malformed flags",
+      "full finite public coverage inventory resolves strata and all canonical case links",
+      "real vertical contract resolves intent, three upload invariants, handlers, current source and regression"
+    ]
+  },
+  {
+    "file": "semantic-replacement.test.mjs",
+    "pass": 6,
+    "fail": 0,
+    "crashed": false,
+    "failureNames": []
+  },
+  {
+    "file": "simple-location-rows.test.mjs",
+    "pass": 3,
+    "fail": 0,
+    "crashed": false,
+    "failureNames": []
+  },
+  {
+    "file": "simple-menu-flat.test.mjs",
+    "pass": 0,
+    "fail": 4,
+    "crashed": false,
+    "failureNames": [
+      "Lowest directory preference selects location name rather than a manually entered label",
+      "Menu Label is default for existing profiles without a saved preference",
+      "Simple blank labels honor bucket fallback without adding a submenu or changing explicit names",
+      "Simple menu places default and extra destinations immediately under REDOWN, never inside a preset submenu"
+    ]
+  },
+  {
+    "file": "transfer-forever.test.mjs",
+    "pass": 1,
+    "fail": 0,
+    "crashed": false,
+    "failureNames": []
+  },
+  {
+    "file": "upload-location-builder.test.mjs",
+    "pass": 3,
+    "fail": 0,
+    "crashed": false,
+    "failureNames": []
+  },
+  {
+    "file": "upload-request-context.test.mjs",
+    "pass": 3,
+    "fail": 0,
+    "crashed": false,
+    "failureNames": []
+  }
+]

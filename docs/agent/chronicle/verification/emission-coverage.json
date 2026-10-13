@@ -1,0 +1,458 @@
+{
+  "scope": "simulated actual emitting boundaries; no installed Chrome or live R2 proof",
+  "codes": [
+    {
+      "code": "REDOWN.CONTEXT.SELECTION.OBSERVED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "chrome.contextMenus.onClicked.addListener"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.SOURCE.URL.BROWSER_ONLY",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "const onHitomiGallery="
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.SOURCE.URL.DIRECT_CANDIDATE",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "async function submit"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.DESTINATION.RESOLUTION.SELECTED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "async function ingestCloudflareAtPrefix"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.MODE.POLICY.BROWSER_REQUIRED_BLOCK",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "policy.preferredMode==="
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.MODE.POLICY.BROWSER_SELECTED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "async function submit"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.MODE.POLICY.REMOTE_SELECTED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "async function submit"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.EXECUTOR.PREFLIGHT.NOT_CONFIGURED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "if(!config.enabled)"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.EXECUTOR.PREFLIGHT.HTTPS_REQUIRED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "Executor must use HTTPS"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.EXECUTOR.ACCEPTANCE.PERMISSION_DENIED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "async function request"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.EXECUTOR.ACCEPTANCE.RESPONSE_UNKNOWN",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "Remote acceptance unknown"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.EXECUTOR.ACCEPTANCE.DURABLE_ACK",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "result.durable"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.EXECUTOR.QUEUE.INTENT_PERSISTED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "outbox.push(intent)"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.EXECUTOR.RECOVERY.REPLAY",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/remote-transfers.js",
+          "anchor": "for(const intent"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.HOOK_INSTALLED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "async function initiateHitomiCapture"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.INJECTION_FAILED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "hitomiIntents.delete(tab.id)"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.BLOB_OBSERVED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "hitomiCaptureStart"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.SIZE_LIMIT",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "HITOMI_MAX_BYTES"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.SESSION_MISSING",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "No active gallery capture"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.CHUNK_INVALID",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "Invalid gallery ZIP chunk"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.INCOMPLETE",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "Incomplete gallery ZIP"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.BYTES_READY",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "intent.state=\"uploading\""
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.HITOMI.CAPTURE.ERROR_REPORTED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "hitomiCaptureError"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.TRANSFER.REQUEST.NOT_STARTED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "async function ingestCloudflareAtPrefix"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.TRANSFER.UPLOAD.STARTED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "const response=await fetch(prepared.workerUrl"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.R2.UPLOAD.RESPONSE_503",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "remote/adapters/r2-gateway.mjs",
+          "anchor": "async request"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.R2.UPLOAD.HTTP_REJECTED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "remote/adapters/r2-gateway.mjs",
+          "anchor": "async request"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.R2.UPLOAD.NETWORK_UNKNOWN",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "remote/adapters/r2-gateway.mjs",
+          "anchor": "catch"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.TRANSFER.UPLOAD.ACKNOWLEDGED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "body.publicUrl"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.TRANSFER.UPLOAD.FAILED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "async function ingestCloudflareAtPrefix"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.VERIFICATION.READBACK.NOT_OBSERVED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/background.js",
+          "anchor": "async function ingestCloudflareAtPrefix"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.CLEANUP.POLICY.DISABLED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/diagnostic-core.js",
+          "anchor": "const STAGES="
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.CHRONICLE.JOURNAL.APPENDED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "async function flush"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.CHRONICLE.JOURNAL.WRITE_FAILED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "async function flush"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.CHRONICLE.JOURNAL.QUOTA_EXHAUSTED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "async function flush"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.CHRONICLE.JOURNAL.RETRY",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "async function flush"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.CHRONICLE.JOURNAL.RECORDING_GAP",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "function gap"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.CHRONICLE.RECOVERY.TAIL_CORRUPT",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "packages/content-chronicle/file-journal.mjs",
+          "anchor": "recover"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.CHRONICLE.INDEX.ACTIVATED",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/chronicle-index.js",
+          "anchor": "activate"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.CHRONICLE.INDEX.UNAVAILABLE",
+      "support": "implemented",
+      "emittingBoundaryExercised": true,
+      "source": [
+        {
+          "path": "extension/diagnostic-recorder.js",
+          "anchor": "projection"
+        }
+      ]
+    },
+    {
+      "code": "REDOWN.CHRONICLE.BACKUP.DISABLED",
+      "support": "planned",
+      "emittingBoundaryExercised": false,
+      "source": [
+        {
+          "path": "extension/diagnostic-core.js",
+          "anchor": "function bundle"
+        }
+      ]
+    }
+  ],
+  "testedCodes": 40,
+  "totalCodes": 41
+}
