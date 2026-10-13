@@ -98,3 +98,63 @@ Required fault tests: stale snapshot; incomplete bucket list; missing read permi
 
 ## Deliverable for next Codex task
 Produce `docs/CODEX_REGIONAL_CONTENT_INTELLIGENCE_IMPLEMENTATION.md` with source-backed inspection, selected architecture, actual schema/IDB data model, minimal functional vertical slice and targeted tests. No documentation-only completion claims. Use work-preserving small commits, actual debug/semantic tooling, clear acceptance report and safe rollback. The present proposal alone changes **no runtime behavior**.
+
+
+---
+
+## Addendum A — The Small, Timeless Portable Content Model (owner-approved direction, 2026-10-12)
+
+**Architectural correction:** The design above describes the full desired behavior, not a mandate to implement every named entity as its own subsystem or to construct a general-purpose semantic graph database. Prefer the **smallest comprehensible model** that satisfies the invariants. Do not let today's browser, storage APIs, cloud provider, or convenience libraries define the fundamental data.
+
+### A.1 Five enduring concepts
+
+1. **Identity:** What exact bytes are these? Use content digest, digest algorithm, byte length and the supporting verification evidence.
+2. **Location:** Where is a particular object physically stored? A scoped account/bucket/key or a provider-neutral locator, never an identity substitute.
+3. **Event:** What happened, when, and under what job/actor? Retain repeated download occurrences rather than confusing them with physical copies.
+4. **Evidence:** What observation supports the assertion, when was it made, and what remains unknown? Cached observations are not current remote truth.
+5. **Region:** Which explicit storage scope and policy govern comparison, canonical selection, retention, and potential removal?
+
+Everything else in the proposal (source provenance, aliases, conflict status, authorization, transfers, semantic links) should initially be **fields or relationships of these five concepts**, extracted into additional independently justified modules only when real requirements and tests demand it. A graph can be *derived* for inspectability, rather than forcing a graph database into the runtime.
+
+### A.2 Dependency direction and adapters
+
+```text
+Portable Content Model + Invariants + JSON Schema
+                    |
+          Small storage contract
+          read / write / query /
+          atomic commit / export
+             /       |       \
+        JSON/JSONL IndexedDB  SQLite
+        interchange browser  native/server
+```
+
+The model must be independently implementable with plain records and documented algorithms. **IndexedDB is a browser-local searchable projection/accelerator, not the canonical specification, the only surviving copy, or the authority to delete files.** SQLite can provide durable, transactional updates on a native/server executor. JSON and JSONL are portable human-readable interchange and event formats—not a requirement to rewrite one enormous JSON file for every change. Preserve one transactional authority per managed region and use exported snapshots with explicit provenance/revision/completeness to reconcile projections. The storage adapter must expose real atomicity capabilities instead of promising transactions on backends that do not offer them.
+
+Keep the domain model independent from Chrome extension APIs, browser origin storage rules, Cloudflare R2, SQLite classes, Node-specific primitives, and particular UI frameworks. Explicit boundaries should allow Chrome-to-Firefox-to-plain JavaScript/Node-to-native consumers without rewriting identity or deduplication semantics. No unnecessary dependencies, inheritance hierarchy, speculative plugin ecosystem, or framework requirements.
+
+### A.3 Minimal, explainable operations
+
+Define a concise, versioned public contract for: `observeObject`, `recordOccurrence`, `findCandidates`, `verifyIdentity`, `locateCanonical`, `explainClaim`, `proposeCleanup`, `commitAuthorizedChange`, `exportSnapshot`, and `importSnapshot`. These are **conceptual operations**, not mandated exact function names. Reads and proposed cleanup are non-mutating; durable records are written under explicit transactional authority; remote deletion remains a separately permissioned, audited effect. A programmer should understand the implementation by reading its contracts and invariants, without reading a browser's IndexedDB code.
+
+Snapshots must be schema-versioned and importable without the original application. Edits to exported records or IndexedDB do not automatically authorize remote writes; treat them as proposed changes requiring revision-aware validation and reconciliation.
+
+### A.4 Two definitive portability acceptance tests
+
+**Human comprehensibility:** A programmer unfamiliar with Redown, Cloudflare, Chrome, and current libraries can read the specification and a few JSON records, identify what content is stored where, why a duplicate was detected, and why cleanup is allowed or forbidden. Document these rules without requiring source archaeology or knowledge of a vendor SDK.
+
+**Cross-runtime equivalence:** Export a finite, test-fixture snapshot from one browser implementation, import it into another browser or a plain JS runtime without Chrome APIs, and assert **exactly the same** identity matches, physical locations, occurrence counts, evidence classifications, stale flags, duplicate decisions and cleanup *eligibility*. Physical deletes must not execute in the portability test. Browser storage is origin-scoped; cross-browser portability happens through the interchange format and importer, not by directly reading another browser's IndexedDB.
+
+Also prove round-trip fidelity, deterministic migrations, partial-snapshot handling, bounded-memory JSONL imports, atomic publication of a complete imported revision, and conservative rejection of unsupported future schemas.
+
+### A.5 Complexity budget and evolutionary rule
+
+The system should remain understandable by a single maintainer. Each new type, service, dependency, daemon, index, cache, or abstraction must justify itself by an actual required invariant, measured scaling bottleneck, or demonstrated test. Remove duplicate state and redundant conversion layers before adding new ones. Favor a compact core with tested interchangeable adapters over a universal file-management framework.
+
+If a future platform replaces IndexedDB, Chrome, SQLite, or Cloudflare, only adapters should change; records, semantic meanings, safety invariants, migration rules and conformance fixtures should endure.
+
+**Non-negotiable:** Design for growth without demanding complexity in advance. Simplicity does not relax correctness: preserve independent integrity checks, region-scoped authorization, durable occurrences, verified canonical objects, and fail-closed deletion controls.
+
+### A.6 Implementation priority
+
+Before executing milestones M1–M6 above, Codex should revise the proposed normalized entity/store inventory into this minimal five-concept model, clearly mapping any necessary additional fields and relationships. Deliver the smallest fully functioning slice first: portable JSON records → import into IndexedDB → fast duplicate candidate lookup → evidence/status explanation → export and cross-runtime reimport. Then add authoritative synchronization and authorized cleanup incrementally. Keep the owner's best-current baseline protected and do not confuse this addendum with an already implemented feature.
