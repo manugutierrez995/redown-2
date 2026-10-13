@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://redown.dev/contracts/content-provenance/v1.schema.json",
+  "title": "Redown portable source provenance v1 (proposed)",
+  "description": "Inspectable, portable source reference evidence. Recognition hints are not integrity proof. Export defaults to redacted URLs; secrets and browser credentials are never exported.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "recordId",
+    "observedAt",
+    "page",
+    "references",
+    "recognition",
+    "integrity"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "recordId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "overUrl",
+        "title"
+      ],
+      "properties": {
+        "overUrl": {
+          "$ref": "#/$defs/reference"
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "siteItemId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/roleReference"
+      },
+      "uniqueItems": true
+    },
+    "recognition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "keys"
+      ],
+      "properties": {
+        "status": {
+          "const": "hint-only"
+        },
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "normalizationVersion": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "unknown",
+            "candidate",
+            "verified",
+            "mismatch"
+          ]
+        },
+        "algorithm": {
+          "const": "sha256"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "byteLength": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "evidenceId": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "verified"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "algorithm",
+              "digest",
+              "byteLength",
+              "evidenceId"
+            ]
+          }
+        }
+      ]
+    },
+    "transferId": {
+      "type": "string"
+    },
+    "contentId": {
+      "type": "string"
+    },
+    "destination": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "bucket": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "accountId",
+        "bucket",
+        "key"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "required": [
+        "value",
+        "exposure"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exposure": {
+          "enum": [
+            "public",
+            "redacted",
+            "private-reference"
+          ]
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "stability": {
+          "enum": [
+            "stable",
+            "ephemeral",
+            "unknown"
+          ]
+        },
+        "method": {
+          "type": "string"
+        }
+      }
+    },
+    "roleReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "reference"
+      ],
+      "properties": {
+        "role": {
+          "enum": [
+            "clicked-url",
+            "metadata-url",
+            "asset-url",
+            "redirect-url",
+            "generated-blob-url",
+            "other"
+          ]
+        },
+        "reference": {
+          "$ref": "#/$defs/reference"
+        },
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parentReferenceId": {
+          "type": "string"
+        },
+        "referenceId": {
+          "type": "string"
+        },
+        "responseStatus": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "contentType": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
