@@ -233,3 +233,45 @@ Sensitive signed URLs/query secrets must be redacted in exported/indexed copies;
 **Acceptance criterion:** When verification is unavailable or fails, Redown still attempts the user's permitted download, writes whatever cheap provenance is available, reports *transfer outcome* and *verification outcome* separately, and defers destructive deduplication. A failing chronicler must not suppress a working transfer path or produce a false success claim.
 
 **Design principle: Capture cheaply today; understand more tomorrow. Never sacrifice delivery to perfect the catalog.**
+
+
+---
+
+## Addendum D — Native persistent storage and opt-in R2 history vault (2026-10-12)
+
+**Owner requirement:** A local download and its history must survive Chrome cache eviction, browser profile changes, extension removal, MV3 service-worker suspension, and browser storage clearing where technically possible. Add a user-facing option **“Save JSON history to Cloudflare R2 for recall and recovery”** that backs up the portable chronicle to an explicitly selected account/bucket/prefix. This is an additional safety layer, not a dependency for completing downloads.
+
+### D.1 Persistent local ownership
+
+A future Chute-style Redown native companion shall receive bytes at a **user-configurable durable local working directory**, not a browser-managed blob URL, extension cache, temporary directory or storage quota. Prefer an explicit, user-visible, application-managed location with ordinary filesystem permissions, retention settings, capacity checks and an explanation of what persists. Never imply that all files in the standard Downloads folder are temporary or safe to delete.
+
+Native companion writes must stage as unique `.partial`/working files, durably journal the job, validate the completed extent where possible, then atomically publish the finished file within the same filesystem. On crash, sleep or restart, distinguish partial from complete and recover without silently erasing either. Keep originals and transferred copies until an explicitly authorized cleanup rule with sufficient independent evidence applies. Windows shutdown stops local execution, but persisted files and job state resume after restart; a truly remote job needs a separately powered remote executor. Avoid claiming that browser code alone can provide durable native storage.
+
+Chrome may request initiation and display status, but **does not own the durable bytes or the authoritative journal**. IndexedDB remains a disposable query projection; export/reimport must work after complete browser erasure, assuming the native directory or R2 backup still exists.
+
+### D.2 R2 history backup toggle
+
+Add an opt-in UI control with label similar to **“Save JSON history to Cloudflare R2 (recall & recovery)”**, default OFF. The user explicitly chooses destination account, bucket and separate reserved prefix such as `redown-history/`. Show estimated metadata sensitivity, last successful backup time, verification status, restore controls and any failure. No silent creation, overwriting or deletion of unrelated objects, and no backup of raw downloaded file bytes under a setting labeled *JSON history*.
+
+Export a **schema-versioned, bounded JSON snapshot and append-oriented JSONL events** (or paginated/segmented equivalent) with revision, snapshot ID, covered region, timestamps, file counts, completeness/gaps and integrity digest. The backup covers inexpensive provenance: containing page overUrl and title, clicked reference/action, metadata/asset references when safe, filenames, observed size/type, destination, outcome, occurrence history and evidence quality. Redact source auth tokens, signed query strings, cookies, credentials and sensitive user/browser paths by default. Offer a privacy-conscious choice of what source information can be retained; do not silently upload private browsing metadata.
+
+On backup, write a new immutable versioned object first, independently verify the committed bytes or integrity digest/readback where available, and only then advance a tiny latest-snapshot pointer/manifest using conditional concurrency control. Do not rewrite one giant JSON for every download. Keep prior known-good generations and explicit retention/garbage collection. An unavailable or failing R2 backup must **not block downloads or chronicling locally**; queue bounded retry intent in the durable local journal and show backup status as *pending/failed*, not as successful. Prevent recursion by excluding the history prefix from ordinary transfer/deduplication ingestion.
+
+On restore, explicitly select a known-good generation, validate the JSON schema, file checksums, completeness and account/region identity, then import under a distinct revision with reconciliation/conflict reporting. Never convert restored history records into executable transfers or deletion authority. Treat stale backups as historical observations, not current proof of R2 object existence. Support import by any compatible plain-JS/native runtime independently of Chrome.
+
+### D.3 Durability and resource limits
+
+Persistent storage is not immune to device failure, disk exhaustion, user deletion or ransomware; use atomic writes, filesystem-safe replace, journaling, size and quota checks, backup generation retention and verification. Distinguish *local durable*, *remote backed up*, *cached only* and *unknown* states. Keep the metadata recorder asynchronous and bounded in memory, with disk-backed overflow and explicit recording-gap events on hard exhaustion. The critical file-byte transfer queue must never await metadata export or R2 backup.
+
+### D.4 Acceptance and simplicity
+
+1. Download a file to the companion-managed working directory; close Chrome, clear its cache/IndexedDB and restart the browser. The intact local file and native journal remain usable.
+2. Simulate companion crash and OS restart with an in-progress `.partial` file; demonstrate journal recovery without false completion or premature deletion.
+3. Enable R2 history backup; create multiple events; verify a versioned JSON/JSONL archive at the chosen key, independently retrieve and validate it.
+4. Erase the browser profile; import the latest verified R2 history snapshot and recover the same observed events and references without needing Chrome-specific state.
+5. Block/deny R2 write, exhaust metadata-buffer quota and simulate interrupted backup. The file transfer continues, a pending/failed/gap condition is honestly recorded, and previous remote history generations remain safe.
+6. Verify secrets are absent from exported history and no cleanup is authorized by restored or stale catalog hints.
+
+**Boundary:** Implement only a small native durable-file/journal adapter and a portable snapshot backup/restore adapter. No distributed synchronization framework, universal cloud-drive clone, or browser-dependent database is required.
+
+**Principle:** Chrome is the interface, not the custodian. Keep the bytes and the history under durable, inspectable ownership; copy the history to R2 when the user asks.
