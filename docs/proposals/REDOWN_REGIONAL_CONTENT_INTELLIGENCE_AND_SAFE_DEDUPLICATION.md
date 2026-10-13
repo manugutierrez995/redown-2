@@ -196,3 +196,40 @@ The proposed schema names `page.overUrl`, `page.title`, `page.siteItemId`, order
 Require tests for: one gallery page with multiple clicks; JS-generated downloads lacking a clicked URL; metadata URL distinct from gallery URL; rotating signed CDN asset URL; two mirrors of the same work; unchanged title but changed content; same hash but different titles; interrupted/corrupt ZIP; and non-sensitive redacted export. Preserve prior attempts, including failed ones, as history.
 
 **Implementation order:** Integrate this source-evidence model into the portable content proposal, then capture minimal Hitomi page/click/metadata references during ordinary right-click flow. Use the recipe for remote reconstruction only when independently fetchable; do not reroute Hitomi to generic HTML ingestion. Protect the owner's best-current baseline, run deterministic conformance tests, and do not claim this proposal schema is already captured in production.
+
+
+---
+
+## Addendum C — Lightweight provenance-first chronicler; downloads must not depend on verification (2026-10-12)
+
+**Owner correction and implementation priority:** The initial Redown index is first a **cheap URL grabber and chronicler**, not a full hashing/deduplication engine. Record the trail now so richer understanding is possible later. Prefer low-cost observations: containing page (`overUrl`), clicked control/link, metadata endpoint, observed asset URLs, page title, filename, file extension/type, observed or reported byte size, observation timestamp, chosen R2 location, transfer/job identity and outcome. Capture only what is naturally available during normal processing; avoid extra large network fetches, full-byte rescans, archive decompression or synchronous cryptographic hashing solely for indexing.
+
+### C.1 Nonblocking rule
+
+**Ordinary transfer must proceed even if provenance capture, content hashing, remote readback, IndexedDB, or enrichment fails.** Metadata is best-effort and must never cause an otherwise permitted transfer to be skipped or stuck. Never assert verified equality without independent evidence. Do not silently treat an unverified or matching-hint object as a safe deletion candidate. The existing remote executor's separate integrity rules and existing transfer-policy semantics remain unchanged: a mechanism that explicitly promises *verified* completion must not be weakened by this addendum. Report transfer completion and verification status independently.
+
+Provenance states: `observed`, `partial`, `deferred`, `failed-to-record`, `reconciled` (distinct from transfer states and content verification states). Cheap fingerprints from URL/title/name/size/type are **recognition hints**, not exact-byte identity. A changed CDN URL can remain a distinct provenance occurrence of the same apparent gallery; do not merge objects based on hints alone.
+
+### C.2 Minimal event, bounded write
+
+A compact append-oriented event is sufficient: immutable event ID; observed-at timestamp; page overUrl + title; optional site ID; typed URL references (`clicked-url`, `metadata-url`, `asset-url`, `redirect-url`, ephemeral `generated-blob-url`); optional filename, MIME/type, reported/observed length (with source/confidence), intended destination, transfer ID, and status. Missing fields stay missing/unknown. **Never block download initiation to wait for metadata that isn't already available.**
+
+Use a tiny synchronous capture boundary to enqueue metadata **only**, then asynchronously flush to a durable, bounded journal/outbox. Avoid unbounded arrays and per-asset messages for giant galleries: cap event payload, batched asset references, URL lengths, concurrency and memory; paginate asset reference sets or record a manifest locator/count when limits are hit. Coalesce redundant observations while preserving distinct click/download events. Maintain sequence numbers and idempotency IDs for retries.
+
+### C.3 Buffer pressure, overflow and long-term durability
+
+A queue overflow or browser service-worker suspension must **never stop the actual transfer**. Apply explicit backpressure only to the *metadata recorder*, not to byte transfer. Spill to durable storage when available; process batches and retry later; use bounded-memory buffering, disk quota limits and crash-safe append/recovery on a native or remote executor when present. Do not promise guaranteed long-term durability from browser memory or IndexedDB alone. On hard storage exhaustion, drop only optional redundant metadata first, retain a compact event summary when possible, and record a visible `recording-gap` with time range, reason and approximate count. Never fabricate missing URLs. Preserve an offline JSON/JSONL export path with explicit snapshot coverage, incomplete tail detection and schema versioning.
+
+Sensitive signed URLs/query secrets must be redacted in exported/indexed copies; private URLs needed for authorized execution belong in separately restricted, short-lived storage. Avoid holding raw signed URLs longer than needed, even when the owner asks for long-lived history.
+
+### C.4 Tiny-first milestones
+
+**V0 chronicler:** instrument the existing browser-assisted Hitomi flow and normal URL transfers to record page title, overUrl, clicked reference (or click action), selected metadata/asset source URL *if already observed*, filename, cheap reported size/type, destination, timestamp and status. Make the log exportable as validated JSON/JSONL and consumable by IndexedDB; tests prove failures/overflow don't prevent download, long URLs are bounded/redacted, restart recovery preserves durable records when storage is available, and future browser-agnostic parsers can read it.
+
+**V1 optional enrichment:** asynchronous hash/readback, inventory reconciliation, suggested duplicate groups and corruption investigations; never stall initiation for enrichment. Strong evidence may later upgrade status.
+
+**V2 authorized consolidation:** only with independently verified content, current canonical existence and explicit region-scoped approval may redundant physical objects be deleted. No cleanup based on URL/title/size/type matching alone. Keep all original events.
+
+**Acceptance criterion:** When verification is unavailable or fails, Redown still attempts the user's permitted download, writes whatever cheap provenance is available, reports *transfer outcome* and *verification outcome* separately, and defers destructive deduplication. A failing chronicler must not suppress a working transfer path or produce a false success claim.
+
+**Design principle: Capture cheaply today; understand more tomorrow. Never sacrifice delivery to perfect the catalog.**
