@@ -148,3 +148,71 @@ Do not rewrite or delete the owner's checkpoints, frozen contracts, historical d
 **Definition of success:** A fresh programmer/agent can inspect a fully portable record of what Redown observed, trace a source request through every actually instrumented stage, diagnose why a Hitomi or remote transfer behaves differently, recall history without relying on Chrome's cache, and establish which conclusions are proven versus unknown—without breaking a working download.
 
 **Design maxim:** A small domain core; deep observability at the edges; hard evidence instead of assumptions; browser-independent records; no unnecessary moving parts.
+
+
+---
+
+## Mandatory Addendum — State-of-the-art diagnostic codes and debug-mode causal evidence (owner update, 2026-10-12)
+
+**Priority change:** Build an **exhaustively useful but comprehensible** diagnostic vocabulary across every instrumented Redown boundary. When the owner tests in Debug Mode, the resulting export must give ChatGPT, Codex or an unfamiliar agent enough *concrete, correlated, source-backed evidence to explain WHY something worked, failed, stalled, retried, fell back or was never attempted*. A generic `FAILED`, `unknown error`, HTTP 503 alone, or a pile of uncorrelated console lines is not sufficient.
+
+### D1. Stable codes, not invented one-off strings
+
+Create a versioned, machine-readable **diagnostic code registry** with immutable symbolic IDs, e.g. `REDOWN.HITOMI.CLICK.BUTTON_NOT_FOUND`, `REDOWN.SOURCE.URL.BROWSER_ONLY`, `REDOWN.EXECUTOR.PREFLIGHT.NOT_CONFIGURED`, `REDOWN.R2.UPLOAD.RESPONSE_503`, `REDOWN.CHRONICLE.JOURNAL.QUOTA_EXHAUSTED`. These names are *illustrations*, not claims of present failures. Define a simple naming grammar and coverage hierarchy:
+
+`REDOWN.<DOMAIN>.<STAGE>.<OUTCOME_OR_CAUSE>`
+
+For each registered code, provide structured fields: `code`, `versionIntroduced`, `severity`, `category`, `stage`, `component`, `humanMeaning`, `knownCauses`, `detectionEvidence`, `userSafeAction`, `agentNextDiagnostic`, `retryability`, `isTerminal`, `redactionClass`, `relatedSourceAnchors`, `testFixtureIds`, and `documentationRef`. Distinguish *observed symptom*, *confirmed cause*, *inference/hypothesis*, *successful stage*, *intentional safety block*, *missing instrumentation*, and *unknown*. Do not misleadingly encode an unproven root cause in a code; use symptom codes and attach hypotheses separately.
+
+**Aim for maximal meaningful coverage, not maximal noise or arbitrary code proliferation.** Register a code for each independently actionable outcome or failure mechanism; avoid duplicate synonyms and untestable Cartesian-product combinations. All emitted codes must resolve in the registry. Unknown future codes must survive export/import and render gracefully. Maintain compatibility aliases for renamed/deprecated IDs; never silently reinterpret an existing code.
+
+### D2. Full lifecycle instrumentation and why-not traces
+
+Instrument decision and boundary outcomes with stable codes for:
+- context-menu selection, click target identity, permissions, extension-ID/profile detection, gallery page/title and provenance role classification;
+- Hitomi injection, button detection, capture hook install, click initiation, Blob formation, chunk transfer, buffer/64 MiB safety ceiling, MV3 worker suspension, browser download collision and cleanup absence;
+- Simple/Nested destination selection, account/bucket/prefix availability, Cloudflare OAuth/provisioning readiness, wrong bucket/key and authorization;
+- mode policy, Fully Remote executor discovery/configuration, HTTPS origin/token/permission checks, reachability, durable acceptance, lost response, replay, fallback eligibility and actual byte path;
+- remote DNS/redirect/source accessibility, transient networking, HTTP status, rate limiting, range/ETag behavior, body length, timeout and retry;
+- R2 gateway binding, multipart staging/part acceptance/commit/abort, authorization, object-conflict protection, readback integrity, verification uncertainty and idempotent recovery;
+- local upload/browser queue/native companion if implemented: file identity, durable path, sleep/restart, progress, corruption detection and guarded deletion decisions;
+- cheap chronicler capture, role-aware URLs, redaction, journal write/replay/quota/gaps, IndexedDB import/migration/index freshness, JSONL export, opt-in R2 history backup, snapshot generation/restore and recovery.
+Also emit *positive milestone* and *skipped-for-reason* codes so agents can distinguish “worked up to R2 staging” from “R2 was never reached.” If no code could be produced because the component crashed, the next supervising component must report an evidence **gap**, not counterfeit a child outcome.
+
+### D3. Required diagnostic event envelope
+
+Use a compact, documented JSON Schema and round-trip-compatible JSONL. Every diagnostic event should carry:
+`schemaVersion`, `code`, `traceId`, `spanId`, optional `parentSpanId`, `transferId`, `attemptId`, `eventId`, `occurredAt` (UTC with clock source), `stage`, `component`, `severity`, `outcome`, `message`, `evidenceRefs`, `causalLinks`, `elapsedMs` if measured, `counts/byteCounters` if observed, `environmentVersion`, `redactionStatus`, and `observationLevel` (reported, measured, simulated, inferred, not-observed). Only require fields available at that stage; missing data must be explicit, never fabricated. Stable correlation IDs cross extension UI/background, page world, native helper, executor and R2 gateway through authorized metadata only. Use monotonic durations within one process and UTC for interprocess approximate ordering; document clock skew. Avoid high-volume per-chunk events by aggregating byte/progress counters and sampling with explicit sampling metadata.
+
+### D4. Owner-facing Debug Mode and export
+
+Add an **explicit opt-in Debug Mode** UI with a clear on/off state, short diagnostics retention controls, source-private-data warning, a structured per-transfer timeline, and **Export sanitized diagnostic bundle (JSON/JSONL)**. The bundle should contain:
+- manifest with application/version/adapter revisions, diagnostic registry/schema versions, environment capability matrix and actual test/live provenance;
+- minimal event chronology with correlation/parent IDs, decisions and codes, relevant source and destination *redacted* identifiers, symptoms and observed timings;
+- journal/queue state, actual chosen transfer path, coverage and missing-stage markers, retry/fallback trace, result of R2 acknowledgment vs independently verified readback, pending/stale index/backup state;
+- deterministic “why this happened / what is unknown / next safe check” report with claim-to-evidence links, affected source anchors, registry explanations and incident IDs where available;
+- redaction audit/diagnostic bundle validity status and an importable reproduction fixture where possible.
+
+The export must work offline for captured data and be readable by a small standalone Node/JS CLI or another browser. **Don't require the agent to watch a live browser or acquire user credentials** just to understand a previously recorded failure. In normal mode keep only minimal essential status/history for low resource use; never make verbose diagnostics required for transfer completion.
+
+### D5. Safe, trustworthy diagnostics
+
+Never include raw OAuth tokens, cookies, signed URL query secrets, private file bytes, full filesystem paths or page DOM dumps. Redact prior to persistence and *test* adversarial URL/title/header cases. Consent-based support bundles may selectively include harmless extra metadata, but don't silently broaden collection or upload logs. Put hard limits on event count, line size, depth, retention, total bundle size and per-job tracing overhead; when exceeded, persist an explicit gap/summary instead of blocking the transfer. Do not let diagnostics change program outcomes, introduce source fetches, call deploy/provision, or authorize delete.
+
+### D6. Required agent APIs and validation
+
+Extend sibling read-only API with `listDiagnosticCodes`, `describeDiagnosticCode`, `listTraceCodes`, `explainTransferFailure`, `getCausalChain`, `getStageCoverage`, `findFirstDivergence`, `compareSuccessfulAndFailedTraces`, `validateDiagnosticBundle` and `suggestSafeReproduction` (or equivalent clearly discoverable operations). `compareSuccessfulAndFailedTraces` should contrast stage-by-stage why an MP4 direct URL succeeded while a Hitomi ZIP required the browser, or why Fully Remote refused to start. The engine must distinguish unobserved code paths from confirmed skipped code paths. Outputs include evidence, confidence/uncertainty, applicable code definitions and code-location pointers where verified.
+
+Provide deterministic fault injection for each meaningful registered error family and tests that assert:
+1. A code is emitted from the actual error boundary;
+2. The code maps to source + documented meaning + reproduction fixture;
+3. Sanitized debug bundle survives export/import, process restart and (where durable storage exists) cache loss;
+4. Agent can locate the first *evidence-backed* divergence between success and failure without guessing;
+5. No secrets leak and Debug Mode's normal-case overhead stays bounded;
+6. Existing browser/Hitomi/transfer behavior remains unchanged except intended opt-in diagnostics.
+
+The deliverable is NOT a giant enum without instrumentation. A code with no real emitting path must be labeled `planned` in the coverage matrix, not portrayed as supported. Make the initial small vertical slice exceptionally good, then expand coverage based on tested actual boundaries. Record exact observed/tested/untested codes and supported stages in the implementation report.
+
+**Debug acceptance scenario:** User turns on Debug Mode; right-clicks a Hitomi gallery download using Fully Remote; exports a bundle; an unfamiliar agent, with no live credentials, can read the registry and timeline, identify the mode-policy branch that blocked the browser-generated archive, distinguish this intentional block from network/R2 failure, point to the source rule and evidence, and recommend the safe next test. Repeat for automatic browser-assisted success, remote executor disabled, an R2 503, and metadata recorder overflow. If the relevant evidence is missing, the API must say exactly *which observation is missing* rather than inventing causality.
+
+**Guiding rule:** More meaningful, explainable codes; fewer opaque failures. Every important choice should explain itself; every unexplained gap should be visible.
