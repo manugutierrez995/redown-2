@@ -63,3 +63,7 @@ Forever Works actual pinned schemas/reference implementation were inspected. Exi
 ## Rollback and recovery
 
 Turn Debug Mode off to stop verbose recording; retained exports remain readable. Revert the implementation commit(s) to restore current-main runtime behavior. Preserve any useful diagnostic/history exports before browser cleanup. The owner's checkpoint stays pinned and unchanged. Host tail repair is explicit and outside the read-only API; retain the original damaged journal first. No operation added by inspection authorizes remote or local file deletion.
+
+## Publication
+
+Implementation committed to `main`: `57d8f1bb7fe72f0e54c52dcde15ea14bd2354283` (parent `fff29efa0701f8f91c44859288fb70e8cb1d10eb`, tree `f027dd6c47b4ffc192d44aef3786fa3f12be127a`). GitHub confirmed repository push permission and an unprotected main branch. Publication used a fast-forward update with an exact expected-head lease; no force push or PR merge occurred. The remote tree exactly matches the staged, reviewed local tree. A documentation-only follow-up records this result; its SHA is provided in the durable handoff.

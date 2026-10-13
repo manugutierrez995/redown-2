@@ -1,0 +1,15 @@
+{
+  "status": "committed-to-main",
+  "repository": "thanks-cohn/remote-download-2-cloudfare",
+  "implementationCommit": "57d8f1bb7fe72f0e54c52dcde15ea14bd2354283",
+  "parentMain": "fff29efa0701f8f91c44859288fb70e8cb1d10eb",
+  "implementationTree": "f027dd6c47b4ffc192d44aef3786fa3f12be127a",
+  "protectedFavorite": "4a727792a1cd622e197da9b06c9144a673317448",
+  "implementationComplete": false,
+  "diagnosticCodes": {"registered": 41, "implementedAndExercised": 40, "planned": 1},
+  "verification": {"focusedPassed": 24, "schemaChecksPassed": 4, "targetedRegressionPassed": 25, "broadPassed": 112, "broadFailed": 30, "broadRuntimeAbortedFiles": 1},
+  "installedChromeAcceptance": "not-observed",
+  "liveR2Acceptance": "not-observed",
+  "deploymentPerformed": false,
+  "cleanupAuthorized": false
+}
