@@ -158,3 +158,41 @@ If a future platform replaces IndexedDB, Chrome, SQLite, or Cloudflare, only ada
 ### A.6 Implementation priority
 
 Before executing milestones M1–M6 above, Codex should revise the proposed normalized entity/store inventory into this minimal five-concept model, clearly mapping any necessary additional fields and relationships. Deliver the smallest fully functioning slice first: portable JSON records → import into IndexedDB → fast duplicate candidate lookup → evidence/status explanation → export and cross-runtime reimport. Then add authoritative synchronization and authorized cleanup incrementally. Keep the owner's best-current baseline protected and do not confuse this addendum with an already implemented feature.
+
+
+---
+
+## Addendum B — Multi-URL provenance and cheap recognition fingerprints (2026-10-12)
+
+**Problem:** For browser-generated downloads such as Hitomi gallery archives, the containing gallery page, the actual clicked anchor/control, the metadata discovery endpoint, and the individual byte-producing URLs are different entities. Dynamic download/asset URLs may rotate or expire and must not supplant the stable page identity. Do not collapse these into one `sourceUrl`.
+
+**Normative draft contract:** [`contracts/content-provenance/v1.schema.json`](../../contracts/content-provenance/v1.schema.json). This is an *additive, proposed* portable schema, not a change to the shipped transfer-ledger v1 or v2 contracts. The source references are part of the five-concept model's **Event/Evidence** records; no new framework or graph database is required.
+
+### Identity and provenance roles
+
+- **overUrl / containing page**: the actual top-level gallery page that presented the content. Record its normalized, stable public URL, observed page title, optional site gallery identifier, and observation time. Use this as a primary recognition anchor, not a proof of identical bytes.
+- **clicked-url**: the actual anchor's href or actionable URL at the point of activation. It may be `javascript:`, a same-page HTML link, no usable URL, or a browser-local Blob. If activation was a JS event rather than a URL, record the method and absence of a retrievable link; never invent one.
+- **metadata-url**: endpoints or document references yielding gallery metadata or asset manifests, recorded separately from the clicked control.
+- **asset-url**: ordered URL(s) yielding real bytes, with known filenames/content-types if observed. These may be dynamic, signed, redirected, short-lived or inaccessible to a remote executor; preserve observed time and stability.
+- **redirect-url** and **generated-blob-url**: diagnostic observations when available. A Blob URL is browser-local, not a remote-fetchable URL and must never be passed as remote ingestion input.
+- **destination**: eventual R2 account/bucket/key, connected to the transfer ID and verification evidence.
+
+Do not insist all roles exist: some sites provide only a containing page plus an action and a generated Blob; missing relationships are represented as *unknown*, not fabricated. The same role can appear multiple times; URLs may coincide but roles remain distinct. If clicked control has no URL, omit clicked-url and record its selector/event method as optional event evidence in the future extension.
+
+### Cheap identification versus strong verification
+
+Build a deterministic, versioned **recognition fingerprint** from normalized overUrl / stable site item ID, observed page title, optional intended filename, and any stable cheap metadata (known image count, format/size when observed). A canonicalization algorithm must be documented and preserve distinctions that matter (e.g., gallery IDs and paths); remove tracking parameters only under tested, site-specific rules. Title changes, mirrors, URL changes and case folding must not silently imply content equality.
+
+Use fingerprint match to quickly answer: *“We have seen a gallery that appears to be this one”*, *“This page has N download attempts”*, and *“Its prior completed archive is at bucket/key.”* Show **confidence and freshness**. If a future gallery download has a different verified SHA-256 or page count, flag changed/corrupt/incomplete **candidate**; do not assert which is corrupt without independent evidence. A matching fingerprint, title, URL or byte length is **never** sufficient to authorize duplicate-byte deletion. Strong duplicate identity requires actual verified bytes/hash and current canonical object evidence.
+
+### Sensitive and ephemeral URLs
+
+Signed asset URLs, authentication tokens, cookies, referer-sensitive URLs and query secrets must not leak into downloadable JSON, logs or IndexedDB exports. Redact by default; use opaque reference IDs or restricted executor-side storage for values required for authorized retrieval, with retention/expiry and scope. `overUrl` should be public only if safe; otherwise redact it as well. Never equate URL access with permission to fetch protected content remotely.
+
+### JSON / IndexedDB interoperability and test fixtures
+
+The proposed schema names `page.overUrl`, `page.title`, `page.siteItemId`, ordered `references[]` with explicit `role`, `recognition` hints, `integrity` assurance and optional `transferId`/`destination`. It stays independent of browser extension APIs, R2, SQLite and specific websites. A future IndexedDB adapter should index normalized overUrl, stable site item ID, fingerprint, content digest (when verified), and reference roles/recency. A JSON/JSONL export should round-trip in another browser or plain JavaScript without altering the role distinctions.
+
+Require tests for: one gallery page with multiple clicks; JS-generated downloads lacking a clicked URL; metadata URL distinct from gallery URL; rotating signed CDN asset URL; two mirrors of the same work; unchanged title but changed content; same hash but different titles; interrupted/corrupt ZIP; and non-sensitive redacted export. Preserve prior attempts, including failed ones, as history.
+
+**Implementation order:** Integrate this source-evidence model into the portable content proposal, then capture minimal Hitomi page/click/metadata references during ordinary right-click flow. Use the recipe for remote reconstruction only when independently fetchable; do not reroute Hitomi to generic HTML ingestion. Protect the owner's best-current baseline, run deterministic conformance tests, and do not claim this proposal schema is already captured in production.
