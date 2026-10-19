@@ -1,6 +1,7 @@
 const $=id=>document.getElementById(id);
 let profiles=[];
 let rightClickMode="simple";
+let debugModeEnabled=false;
 let cfAccounts=[];
 let currentAccountId="";
 let workspaceTarget=null;
@@ -403,6 +404,8 @@ function assetCorsControl(profile){
     }
   }
 
+  status.hidden=!debugModeEnabled;
+  endpoints.hidden=!debugModeEnabled;
   status.textContent=profile.customAssetDomain
     ? `Serving through https://${profile.customAssetDomain}`
     : "Using REDOWN's workers.dev endpoint by default. Add a Cloudflare-hosted domain/subdomain to use it instead.";
@@ -590,13 +593,14 @@ function simplePrimaryLocationField(profile){
     bucket.value=name();bucket.disabled=false;
   })();return wrap;
 }
-function simpleExtraOptions(profile){
+function simpleExtraOptions(profile,showIntro=true){
   const wrap=document.createElement("div");wrap.className="card";
   const heading=document.createElement("div");heading.className="section-head";
   const intro=document.createElement("div");const title=document.createElement("strong");title.textContent="Additional Simple destinations";
   const note=document.createElement("div");note.className="meta";note.textContent="Choose existing folders or explicitly create new directories at any level. × only clears the menu location.";
-  intro.append(title,note);const add=document.createElement("button");add.type="button";add.className="ghost";add.textContent="+ Add New Option";
-  heading.append(intro,add);const rows=document.createElement("div");const options=profile.simpleOptions||=[];
+  if(showIntro)intro.append(title,note);const add=document.createElement("button");add.type="button";add.className="ghost";add.textContent="+ Add New Option";
+  if(showIntro)heading.append(intro);
+  heading.append(add);const rows=document.createElement("div");const options=profile.simpleOptions||=[];
   profile.simpleOptions=options;
   function addRow(item){
     item.bucketName||=profile.bucketName;
@@ -705,6 +709,7 @@ function renderProfiles(){
   $("profiles-empty").hidden=visibleProfiles.length>0;
 
   profiles.sort((a,b)=>(a.menuOrder??999)-(b.menuOrder??999));
+  let simpleIntroShown=false;
   visibleProfiles.forEach((p,index)=>{
     const card=document.createElement("article");
     card.className="card";
@@ -760,7 +765,10 @@ function renderProfiles(){
     actions.append(up,down,remove);
 
     card.append(top,grid,actions);
-    if(p.type==="cloudflare-r2")card.append(simpleExtraOptions(p));
+    if(p.type==="cloudflare-r2"){
+      card.append(simpleExtraOptions(p,!simpleIntroShown));
+      simpleIntroShown=true;
+    }
     else card.append(renderTree(p));
     root.append(card);
   });
@@ -3884,6 +3892,13 @@ async function addBucketPreset(bucketName,{forceRepair=false}={}){
   }
   const stored=await chrome.storage.local.get("profiles");
   profiles=stored.profiles||[];
+  debugModeEnabled=stored.debugModeEnabled===true;
+  $("debug-mode-enabled").checked=debugModeEnabled;
+  $("debug-mode-enabled").addEventListener("change",async(event)=>{
+    debugModeEnabled=event.target.checked;
+    await chrome.storage.local.set({debugModeEnabled});
+    renderProfiles();
+  });
   rightClickMode=RedownNestedLocations.menuMode(stored.rightClickMode,profiles);
   if(stored.rightClickMode!=="simple" && stored.rightClickMode!=="nested")await chrome.storage.local.set({rightClickMode});
   renderProfiles();
@@ -4033,7 +4048,7 @@ document.addEventListener("visibilitychange",()=>{if(document.visibilityState===
 window.addEventListener("focus",refreshDownloadsOnAccess);
 
 (async()=>{
-  const stored=await chrome.storage.local.get(["profiles","cloudflareAuth","rightClickMode"]);
+  const stored=await chrome.storage.local.get(["profiles","cloudflareAuth","rightClickMode","debugModeEnabled"]);
   profiles=stored.profiles||[];
   rightClickMode=RedownNestedLocations.menuMode(stored.rightClickMode,profiles);
   if(stored.rightClickMode!=="simple" && stored.rightClickMode!=="nested")await chrome.storage.local.set({rightClickMode});
