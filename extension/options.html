@@ -32,6 +32,15 @@
     .danger{background:#241019;color:#ffb0bc;border:1px solid #4b2130}
     .ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
     .section{margin-top:25px}
+    .rfis-panel{padding:16px 18px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,rgba(255,255,255,.038),rgba(255,255,255,.012));margin-top:12px}
+    .rfis-row{display:flex;justify-content:space-between;align-items:center;gap:18px}
+    .rfis-row+.rfis-row{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+    .rfis-row h2{font-size:16px;margin:0 0 3px}
+    .rfis-row .section-note{max-width:680px;line-height:1.5}
+    .rfis-row .toggle{margin:0;letter-spacing:normal;text-transform:none;font-size:13px;cursor:pointer}
+    .rfis-row .toggle input{accent-color:var(--purple)}
+    .rfis-row .status:empty{display:none}
+    @media(max-width:650px){.rfis-row{flex-wrap:wrap}.rfis-row button{width:100%}}
     .section-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:11px}
     .section h2{margin:0;font-size:17px}
     .section-note{font-size:12px;color:var(--muted)}
@@ -285,6 +294,7 @@
       <label class="toggle"><input id="use-nested-menu" type="checkbox" aria-describedby="right-click-mode-status">Use Nested Menu</label>
     </div>
     <div id="right-click-mode-status" class="meta" role="status" style="margin-bottom:12px"></div>
+    <label class="toggle" style="margin:0 0 12px"><input id="debug-mode-enabled" type="checkbox"> Debug Mode · Show technical endpoint details</label>
     <div id="simple-menu-editor">
       <h3>Simple · Quick send</h3>
       <div id="profiles"></div>
@@ -361,12 +371,16 @@
   </section>
 
   <section class="section">
-    <div class="section-head">
-      <div><h2>Premium file index (experimental)</h2><div class="section-note">Optional preview of RFIS. Basic ReDown does not require this rich index. When enabled, ReDown records R2 listing observations locally; this is not a complete bucket scan.</div></div>
-      <button id="rfis-export" class="ghost">Export index JSON</button>
+    <div class="rfis-panel">
+      <div class="rfis-row">
+        <div><h2>Premium file index <span class="section-note">(experimental)</span></h2><div class="section-note">Optional local index of observed R2 listings; not a full bucket scan.</div></div>
+        <button id="rfis-export" class="ghost">Export index JSON</button>
+      </div>
+      <div class="rfis-row">
+        <label class="toggle"><input id="rfis-preview-enable" type="checkbox"> Enable experimental rich-index preview on this browser</label>
+        <div id="rfis-status" class="status" role="status" aria-live="polite"></div>
+      </div>
     </div>
-    <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><input id="rfis-preview-enable" type="checkbox" style="width:auto" /> Enable experimental rich-index preview on this browser</label>
-    <div id="rfis-status" class="status" role="status" aria-live="polite"></div>
   </section>
 
   <section class="section">
