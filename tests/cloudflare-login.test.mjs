@@ -292,3 +292,12 @@ test('Worker deployments cannot overlap and a failed deployment releases the loc
   assert.equal(result[1].status,'fulfilled');
   assert.equal(h.run('maximum'),1);
 });
+
+test('authorization URL requests only the registered resource scopes, preserving PKCE',async()=>{
+  const h=harness({withoutBackground:true});
+  await h.run('RedownCloudflareAuth.connect()');await h.navigated;
+  const url=new URL(h.calls.find(c=>c[0]==='navigate')[2].url);
+  assert.deepEqual(url.searchParams.get('scope').split(' '),['workers-r2.read','workers-r2.write','workers-scripts.read','workers-scripts.write']);
+  assert.equal(url.searchParams.get('code_challenge_method'),'S256');
+  assert.equal(url.searchParams.get('redirect_uri'),h.session.cloudflareLogin.redirectUri);
+});

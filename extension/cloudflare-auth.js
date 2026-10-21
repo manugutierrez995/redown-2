@@ -116,7 +116,7 @@ async function startCloudflareLoginUnlocked() {
     auth.searchParams.set("code_challenge", await sha256Base64Url(verifier));
     auth.searchParams.set("code_challenge_method", "S256");
     auth.searchParams.set("scope", [
-      "workers-r2.read", "workers-r2.write", "workers-scripts.read", "workers-scripts.write", "offline_access"
+      "workers-r2.read", "workers-r2.write", "workers-scripts.read", "workers-scripts.write"
     ].join(" "));
     auth.searchParams.set("state", state);
     await navigator.locks.request(CF_LOGIN_STATE_LOCK, async () => {

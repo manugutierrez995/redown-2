@@ -21,3 +21,9 @@ Public provider metadata was read from https://dash.cloudflare.com/.well-known/o
 - Browser settings checks at 1366, 900, 768, 390 and 320px, plus Nested mobile, show no overflowing controls or page errors.
 - Full suite: 132 tests, 105 pass, same 27 pre-existing failing names. npm run check and git diff --check pass. Frozen historical evidence was not rewritten.
 - Live Cloudflare authorization, long-duration renewal and real transfers remain unverified. User revocation, missing client refresh-grant permission and network outages can still require renewed authorization or retry; no perpetual-login guarantee is claimed.
+
+## Follow-up: registered-client scope rejection
+
+The user tested sign-in and Cloudflare explicitly rejected offline_access as not allowed for this registered client. Provider metadata advertising a scope did not establish this client's permission to request it. Removed offline_access from the authorization request and README scope list, restoring the original four resource scopes and preserving PKCE, token refresh/error recovery, reconnect controls and drag fixes. The earlier automatic-renewal-scope proposal above is superseded by this observed provider rejection. No claim is made that this client's registration issues refresh tokens; that grant setting must be verified separately. Existing usable refresh tokens are still renewed automatically.
+
+A settings-context regression executes the real OAuth URL builder and verifies the exact four allowed scopes, PKCE method and callback. It passes; the 13 existing focused session/file/reconnect tests and syntax/whitespace checks pass. No live credentials were accessed and no client registration was changed.

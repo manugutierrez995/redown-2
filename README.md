@@ -39,7 +39,6 @@ OAuth request scopes:
 - `workers-r2.write`
 - `workers-scripts.read`
 - `workers-scripts.write`
-- `offline_access` — requests credentials for automatic session renewal. Existing authorizations may need one Reconnect after upgrading. The OAuth client must allow the refresh-token grant.
 
 ## Right-click presets
 
