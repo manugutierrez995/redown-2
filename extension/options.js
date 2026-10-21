@@ -4,6 +4,8 @@ let rightClickMode="simple";
 let debugModeEnabled=false;
 let cfAccounts=[];
 let currentAccountId="";
+let onboardingConnected=false;
+let onboardingBucketState="loading";
 let workspaceTarget=null;
 let workspaceObjects=[];
 let workspacePreviewExpanded=false;
@@ -723,6 +725,7 @@ async function saveProfileOrder(){
   }catch(error){for(const [profile,order] of previous){if(order===undefined)delete profile.menuOrder;else profile.menuOrder=order;}throw error;}
 }
 function renderProfiles(){
+  applyOnboarding();
   renderRightClickMode();
   const root=$("profiles");
   root.replaceChildren();
@@ -3932,6 +3935,8 @@ function refreshCloudflare(){
 async function refreshCloudflareState(){
   const stored=await chrome.storage.local.get("cloudflareAuth");
   const connected=Boolean(stored.cloudflareAuth?.accessToken);
+  onboardingConnected=connected&&!stored.cloudflareAuth?.reconnectRequired;
+  applyOnboarding();
   $("connect-cloudflare").hidden=connected&&!stored.cloudflareAuth?.reconnectRequired;
   $("connect-cloudflare").textContent=connected?"Reconnect Cloudflare":"Connect Cloudflare";
   $("disconnect-cloudflare").hidden=!connected;
@@ -3943,6 +3948,7 @@ async function refreshCloudflareState(){
   setStatus("hero-status","Checking Cloudflare access…");
   const result=await send({type:"cfAccounts"});
   if(!result?.ok){
+    onboardingBucketState="error";applyOnboarding();
     const message=result?.error||"Could not verify Cloudflare access. Retry.";
     setStatus("cf-status",message,"bad");setStatus("hero-status",message,"bad");setStatus("menu-location-status",message,"bad");
     if(/authorization|authenticate|authentication|session expired|connect cloudflare|reconnect cloudflare|unauthorized|\b401\b/i.test(message))$("connect-cloudflare").hidden=false;
@@ -3971,6 +3977,7 @@ $("r2-check").addEventListener("click",async()=>{
 async function refreshBuckets(){
   if(!currentAccountId)return;
   const accountId=currentAccountId;
+  onboardingBucketState="loading";applyOnboarding();
   $("r2-setup").hidden=true;
   $("bucket-grid").replaceChildren();
   $("r2-dashboard").href=`https://dash.cloudflare.com/${encodeURIComponent(accountId)}/r2/overview`;
@@ -3980,15 +3987,17 @@ async function refreshBuckets(){
   if(!result?.ok){
     const message=result?.error||"Could not load buckets";
     const needsActivation=/(?:please\s+)?(?:sign\s*up|subscribe|activate|enable).{0,60}\bR2\b|\bR2\b.{0,60}(?:subscription required|not enabled|not activated|not subscribed)/i.test(message);
+    onboardingBucketState=needsActivation?"activate":"error";applyOnboarding();
     $("r2-setup").hidden=!needsActivation;
     setStatus("cf-status",needsActivation?"Cloudflare connected. Set up R2 storage to continue.":message,needsActivation?"":"bad");
     return;
   }
+  onboardingBucketState=(result.buckets||[]).length?"choose":"empty";applyOnboarding();
   const root=$("bucket-grid");root.replaceChildren();
   (result.buckets||[]).forEach(bucket=>{
     const el=document.createElement("div");el.className="bucket";
     const strong=document.createElement("button");strong.type="button";strong.className="bucket-select";strong.textContent=bucket.name;strong.setAttribute("aria-pressed","false");
-    const ready=profiles.some(p=>p.type==="cloudflare-r2"&&p.accountId===currentAccountId&&p.bucketName===bucket.name);
+    const ready=profiles.some(p=>isSetupDestination(p)&&p.accountId===currentAccountId&&p.bucketName===bucket.name);
     const span=document.createElement("span");span.className="bucket-details debug-only";
     span.textContent=ready
       ? "Configured for REDOWN"
@@ -4033,7 +4042,7 @@ async function addBucketPreset(bucketName,{forceRepair=false}={}){
   const account=cfAccounts.find(a=>a.id===currentAccountId);
   if(!account)return;
   // Selecting an existing destination must never trigger a Worker deployment.
-  if(!forceRepair&&profiles.some(p=>p.type==="cloudflare-r2"&&p.accountId===account.id&&p.bucketName===bucketName)){
+  if(!forceRepair&&profiles.some(p=>isSetupDestination(p)&&p.accountId===account.id&&p.bucketName===bucketName)){
     setStatus("cf-status",bucketName+" is already configured. No Worker redeployment was attempted.","ok");
     await refreshLocationEditors();
     return true;
@@ -4221,7 +4230,34 @@ async function refreshDownloadsOnAccess(){
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refreshDownloadsOnAccess();});
 window.addEventListener("focus",refreshDownloadsOnAccess);
 
+function isSetupDestination(profile){
+  return profile.type==="cloudflare-r2"&&!profile.explorerManaged&&Boolean(profile.workerUrl&&profile.token);
+}
+function applyOnboarding(){
+  const ready=onboardingConnected&&profiles.some(isSetupDestination);
+  document.documentElement.classList.toggle("onboarding-pending",!ready);
+  document.documentElement.classList.toggle("r2-needs-activation",onboardingBucketState==="activate");
+  $("onboarding-step").hidden=!onboardingConnected||ready;
+  const states={
+    loading:["Checking your storage…","REDOWN is looking for your buckets.","Choose a bucket"],
+    empty:["Create your first bucket","A bucket is where REDOWN stores your files in the cloud.","Create a bucket"],
+    choose:["Connect your storage bucket","Choose a bucket below, then click Use this bucket. REDOWN will finish setup for you.","Choose a bucket"],
+    activate:["Set up your cloud storage","Activate Cloudflare R2 below, then click Check connection to continue.","Set up R2 storage"],
+    error:["Check your storage connection","Review the connection message below to continue. Your setup has been retained.","Review connection"]
+  };
+  const [title,copy,action]=states[onboardingBucketState]||states.loading;
+  $("onboarding-title").textContent=title;$("onboarding-copy").textContent=copy;
+  $("onboarding-action").textContent=action;
+  $("onboarding-action").disabled=onboardingBucketState==="loading";
+}
+$("onboarding-action").addEventListener("click",()=>{
+  const target=onboardingBucketState==="empty"?$("new-bucket")
+    :onboardingBucketState==="activate"?$("r2-dashboard")
+    :$("bucket-grid").querySelector(".bucket-use")||$("cf-status");
+  target.scrollIntoView({behavior:"smooth",block:"center"});target.focus();
+});
 function applyDebugMode(){
+  applyOnboarding();
   document.documentElement.classList.toggle("debug-mode",debugModeEnabled);
   $("debug-mode-enabled").checked=debugModeEnabled;
   document.querySelectorAll("[data-debug-detail]").forEach(el=>{el.hidden=!debugModeEnabled;});

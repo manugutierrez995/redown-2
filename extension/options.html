@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html class="onboarding-pending">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +14,11 @@
     }
     *{box-sizing:border-box}
     [hidden],html:not(.debug-mode) .debug-only{display:none!important}
+    html.onboarding-pending:not(.debug-mode) .requires-storage{display:none!important}
+    html.debug-mode #onboarding-step{display:none!important}
+    html.r2-needs-activation:not(.debug-mode) #bucket-create-fields{display:none!important}
+    .onboarding-step{border-color:var(--purple);background:linear-gradient(135deg,var(--panel),var(--panel2))}
+    .onboarding-step h2{margin:0 0 8px}.onboarding-step p{color:var(--muted);line-height:1.6}
     .bucket-select{width:100%;min-height:56px;padding:16px 18px;text-align:left;overflow-wrap:anywhere;background:linear-gradient(145deg,#26344e,#1a263d);color:var(--text);border:1px solid var(--line);transition:border-color .15s,background .15s}
     .bucket-select:hover,.bucket-select:focus-visible{border-color:var(--purple2);background:#354363}
     .bucket.selected .bucket-select{border-color:var(--purple2);box-shadow:0 0 0 2px rgba(139,92,246,.18)}
@@ -381,7 +386,14 @@
     <div id="hero-status" class="status"></div>
   </section>
 
-  <nav class="page-nav" aria-label="Settings sections"><a href="#connections">Connection</a><a class="connected-link" href="#cloudflare-panel">Buckets</a><a href="#right-click-presets">Destinations</a><a class="connected-link" href="#upload-zone">Upload</a><a class="connected-link" href="#explore-zone">Explore</a><a href="#downloads-zone">Downloads</a></nav>
+  <nav class="page-nav" aria-label="Settings sections"><a href="#connections">Connection</a><a class="connected-link" href="#cloudflare-panel">Buckets</a><a class="requires-storage" href="#right-click-presets">Destinations</a><a class="connected-link requires-storage" href="#upload-zone">Upload</a><a class="connected-link requires-storage" href="#explore-zone">Explore</a><a class="requires-storage" href="#downloads-zone">Downloads</a></nav>
+
+  <section id="onboarding-step" class="section onboarding-step" hidden aria-live="polite">
+    <span class="section-kicker">Next step</span>
+    <h2 id="onboarding-title">Choose your cloud storage</h2>
+    <p id="onboarding-copy">Choose or create a bucket below, then click Use this bucket.</p>
+    <button id="onboarding-action" type="button" class="primary">Choose a bucket</button>
+  </section>
 
   <section id="cloudflare-panel" class="section" hidden>
     <div class="section-head">
@@ -390,7 +402,7 @@
     <div class="card">
       <div class="grid two">
         <div><label for="cf-account">Cloudflare account</label><select id="cf-account"></select></div>
-        <div>
+        <div id="bucket-create-fields">
           <label>Create a bucket</label>
           <div class="create-bucket-row">
             <input id="new-bucket" placeholder="my-assets">
@@ -411,7 +423,7 @@
     </div>
   </section>
 
-  <section id="right-click-presets" class="section">
+  <section id="right-click-presets" class="section requires-storage">
     <div class="section-head">
       <div><span class="section-kicker">02 / Destinations</span><h2>Right-click presets</h2><div class="section-note">Drag the ⠿ handles to set menu order. In Nested, folders move with their children; drag within the same parent.</div></div>
       <button id="refresh-menu-locations" class="ghost" type="button">Refresh locations</button>
@@ -434,7 +446,7 @@
     </div>
   </section>
 
-  <div id="local-tools" hidden>
+  <div id="local-tools" class="requires-storage" hidden>
   <section id="upload-zone" class="section">
     <div class="section-head">
       <div><span class="section-kicker">03 / Upload</span><h2>Upload from computer</h2><div class="section-note">Choose an R2 bucket and location, then drag files in.</div></div>
@@ -516,7 +528,7 @@
     </div>
   </section>
 
-  <section id="downloads-zone" class="section">
+  <section id="downloads-zone" class="section requires-storage">
     <div class="section-head">
       <div><span class="section-kicker">05 / Activity</span><h2>Downloads</h2><div class="section-note">Successful downloads first. Newest is on top; errors stay available below.</div></div>
       <button id="refresh-history" class="ghost">Refresh</button>

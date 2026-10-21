@@ -13,13 +13,14 @@ test('verified reconnect refreshes both editors and Explorer, coalescing concurr
   const ctx=vm.createContext({document:dom.window.document,
     $:id=>dom.window.document.getElementById(id),
     chrome:{storage:{local:{get:async()=>({cloudflareAuth:{accessToken:'verified'}})}}},
-    profiles:[],cfAccounts:[],currentAccountId:'retained-account',
+    profiles:[],cfAccounts:[],currentAccountId:'retained-account',onboardingConnected:false,onboardingBucketState:'loading',
     defaultLocationPrefixCache:cache,presetLocationCache:otherCache,
     RedownNestedEditor:{refresh:()=>calls.push('nested')},
     send:async()=>({ok:true,accounts:[{id:'another-account'},{id:'retained-account'}]}),
     refreshBuckets:async()=>calls.push('buckets'),
     loadExplorerInventory:async()=>calls.push('explorer'),setStatus:(id,text)=>{dom.window.document.getElementById(id).textContent=text;},safeUiMessage:x=>x,friendlyError:x=>String(x)
   });
+  vm.runInContext(source.slice(source.indexOf('function isSetupDestination('),source.indexOf('function applyDebugMode(){')),ctx);
   vm.runInContext(source.slice(source.indexOf('async function refreshLocationEditors(){'),source.indexOf('async function refreshBuckets(){')),ctx);
   const a=vm.runInContext('refreshCloudflare()',ctx),b=vm.runInContext('refreshCloudflare()',ctx);
   assert.equal(a,b);

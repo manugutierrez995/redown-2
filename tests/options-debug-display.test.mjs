@@ -8,11 +8,12 @@ const source=await readFile(new URL('../extension/options.js',import.meta.url),'
 function harness(){
   const dom=new JSDOM(html,{runScripts:'outside-only'});
   const calls=[],saved=[];
-  const context=vm.createContext({document:dom.window.document,debugModeEnabled:false,profiles:[],currentAccountId:'account',
+  const context=vm.createContext({document:dom.window.document,debugModeEnabled:false,profiles:[],currentAccountId:'account',onboardingConnected:true,onboardingBucketState:'loading',
     $:id=>dom.window.document.getElementById(id),
     setStatus:(id,text)=>{dom.window.document.getElementById(id).textContent=text;},
     send:async msg=>{calls.push(msg);return {ok:true,buckets:[{name:'test-bucket'}]};},
     addBucketPreset:(...args)=>calls.push(args),chrome:{storage:{local:{set:async value=>saved.push(value)}}}});
+  vm.runInContext(source.slice(source.indexOf('function isSetupDestination('),source.indexOf('function applyDebugMode(){')),context);
   vm.runInContext(source.slice(source.indexOf('async function refreshBuckets(){'),source.indexOf('async function addBucketPreset(')),context);
   vm.runInContext(source.slice(source.indexOf('function applyDebugMode(){'),source.indexOf('(async()=>{\n  const stored=await chrome.storage.local.get(["profiles"')),context);
   return {dom,context,calls,saved};
@@ -71,13 +72,14 @@ test('R2 activation is an actionable neutral step, permission failures remain er
 });
 test('successful provisioning refreshes destination editors and inventory before reporting ready',async()=>{
   const events=[];
-  const context=vm.createContext({currentAccountId:'account',cfAccounts:[{id:'account',name:'Account'}],profiles:[],
+  const context=vm.createContext({currentAccountId:'account',onboardingConnected:true,onboardingBucketState:'loading',cfAccounts:[{id:'account',name:'Account'}],profiles:[],
     setStatus:(id,message)=>events.push(message),
     send:async message=>{events.push(message.type);return {ok:true};},
-    chrome:{storage:{local:{get:async()=>({profiles:[{type:'cloudflare-r2',accountId:'account',bucketName:'assets'}],rightClickMode:'simple'})}}},
+    chrome:{storage:{local:{get:async()=>({profiles:[{type:'cloudflare-r2',accountId:'account',bucketName:'assets',workerUrl:'https://example.workers.dev',token:'fixture'}],rightClickMode:'simple'})}}},
     RedownNestedLocations:{menuMode:()=> 'simple'},
     renderProfiles:()=>events.push('profiles'),refreshLocationEditors:async()=>events.push('locations'),
     loadExplorerInventory:async()=>events.push('inventory')});
+  vm.runInContext(source.slice(source.indexOf('function isSetupDestination('),source.indexOf('function applyOnboarding(')),context);
   vm.runInContext(source.slice(source.indexOf('async function addBucketPreset('),source.indexOf('async function loginRequest(')),context);
   assert.equal(await vm.runInContext('addBucketPreset("assets")',context),true);
   assert.deepEqual(events.slice(1,5),['cfProvision','profiles','locations','inventory']);
@@ -85,4 +87,38 @@ test('successful provisioning refreshes destination editors and inventory before
   events.length=0;
   assert.equal(await vm.runInContext('addBucketPreset("assets")',context),true);
   assert.ok(!events.includes('cfProvision'),'already configured bucket avoids deployment');
+});
+
+test('normal onboarding progressively reveals tools only for a completed destination; debug bypasses gating',async()=>{
+  const h=harness(),d=h.dom.window.document;
+  vm.runInContext('applyOnboarding()',h.context);
+  assert.ok(d.documentElement.classList.contains('onboarding-pending'));
+  for(const id of ['right-click-presets','local-tools','downloads-zone']){
+    // local-tools also has its existing disconnected hidden flag.
+    assert.equal(h.dom.window.getComputedStyle(d.getElementById(id)).display,'none');
+  }
+  h.context.send=async()=>({ok:true,buckets:[]});
+  await vm.runInContext('refreshBuckets()',h.context);
+  assert.match(d.getElementById('onboarding-title').textContent,/Create your first bucket/);
+  assert.ok(d.getElementById('onboarding-step').compareDocumentPosition(d.getElementById('cloudflare-panel'))&4);
+  h.context.profiles=[{type:'cloudflare-r2',bucketName:'assets'}];
+  vm.runInContext('applyOnboarding()',h.context);
+  assert.ok(d.documentElement.classList.contains('onboarding-pending'),'bucket selection alone cannot unlock tools');
+  h.context.profiles=[{type:'cloudflare-r2',workerUrl:'https://fixture.workers.dev',token:'fixture',explorerManaged:true}];
+  vm.runInContext('applyOnboarding()',h.context);
+  assert.ok(d.documentElement.classList.contains('onboarding-pending'),'Explorer-only preparation cannot complete right-click setup');
+  h.context.profiles[0].explorerManaged=false;
+  vm.runInContext('applyOnboarding()',h.context);
+  assert.ok(!d.documentElement.classList.contains('onboarding-pending'));
+  assert.notEqual(h.dom.window.getComputedStyle(d.getElementById('right-click-presets')).display,'none');
+  assert.equal(d.getElementById('onboarding-step').hidden,true);
+  h.context.onboardingConnected=false;
+  vm.runInContext('applyOnboarding()',h.context);
+  assert.ok(d.documentElement.classList.contains('onboarding-pending'));
+  const toggle=d.getElementById('debug-mode-enabled');toggle.checked=true;
+  toggle.dispatchEvent(new h.dom.window.Event('change'));await Promise.resolve();
+  assert.notEqual(h.dom.window.getComputedStyle(d.getElementById('right-click-presets')).display,'none');
+  toggle.checked=false;toggle.dispatchEvent(new h.dom.window.Event('change'));await Promise.resolve();
+  assert.equal(h.dom.window.getComputedStyle(d.getElementById('right-click-presets')).display,'none');
+  h.dom.window.close();
 });
