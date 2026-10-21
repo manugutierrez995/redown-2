@@ -6,6 +6,7 @@ import test from 'node:test';
 import {JSDOM} from 'jsdom';
 
 const modelSource=await readFile(new URL('../extension/nested-locations.js',import.meta.url),'utf8');
+const reorderSource=await readFile(new URL('../extension/menu-reorder.js',import.meta.url),'utf8');
 const editorSource=await readFile(new URL('../extension/nested-menu-editor.js',import.meta.url),'utf8');
 const background=await readFile(new URL('../extension/background.js',import.meta.url),'utf8');
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
@@ -14,7 +15,7 @@ const folder=(id,name,children=[])=>({id,name,ready:true,children});
 function profile(){return {id:'profile',type:'cloudflare-r2',accountId:'account',accountName:'My storage',bucketName:'bucket-one',defaultPrefix:'quick-only',menuTree:[],nestedMenu:{version:1,enabled:true,roots:[{id:'root',bucketName:'bucket-one',ready:true,children:[folder('child','child',[folder('grand','grandchild')])]}]}};}
 function harness(p=profile(),sendOverride){
   const dom=new JSDOM('<main id="editor"></main>',{runScripts:'outside-only',url:'https://settings.test'});
-  dom.window.eval(modelSource);dom.window.eval(editorSource);
+  dom.window.eval(modelSource);dom.window.eval(reorderSource);dom.window.eval(editorSource);
   const calls=[],saved=[],locations=new Map([['',['child','sibling']],['child',['grandchild']],['child/grandchild',[]]]);
   const send=async message=>{
     calls.push(structuredClone(message));
@@ -216,6 +217,20 @@ test('reconnect refresh retries failed Nested lookups and preserves typed drafts
   assert.equal(h.row('grand').querySelector('select').value,'grandchild');
   assert.equal(h.row('child').querySelector('input').value,'draft-to-keep');
   assert.equal(h.row('child').querySelector('select').disabled,false);
+  assert.equal(h.calls.some(c=>c.type==='cfCreateBucket'||c.type==='cfCreateFolder'||c.type==='cfProvision'),false);
+  h.dom.window.close();
+});
+
+
+test('Nested drag-handle keyboard move saves sibling order with descendants and paths intact',async()=>{
+  const p=profile();p.nestedMenu.roots[0].children.push(folder('sibling','sibling'));
+  const h=harness(p);await settled();
+  const children=p.nestedMenu.roots[0].children;
+  h.row('child').querySelector('.reorder-handle').dispatchEvent(new h.dom.window.KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true}));await settled();
+  assert.deepEqual(children.map(x=>x.id),['sibling','child']);
+  assert.equal(children[1].children[0].name,'grandchild');
+  assert.equal(h.row('child').querySelector('select').value,'child');
+  assert.deepEqual(h.saved.at(-1).nestedMenu.roots[0].children.map(x=>x.id),['sibling','child']);
   assert.equal(h.calls.some(c=>c.type==='cfCreateBucket'||c.type==='cfCreateFolder'||c.type==='cfProvision'),false);
   h.dom.window.close();
 });

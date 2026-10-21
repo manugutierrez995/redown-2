@@ -619,19 +619,9 @@ function simpleExtraOptions(profile,showIntro=true){
     first.append(field("Menu label (shown on right-click)",item.label||"",v=>{item.label=v;},"text","My Artwork"));
     const remove=document.createElement("button");remove.type="button";remove.className="ghost";remove.textContent="Remove option";
     remove.addEventListener("click",()=>{const i=options.indexOf(item);if(i>=0)options.splice(i,1);row.remove();saveProfiles();});
-    const moveUp=document.createElement("button");moveUp.type="button";moveUp.className="ghost";moveUp.textContent="Move up";
-    const moveDown=document.createElement("button");moveDown.type="button";moveDown.className="ghost";moveDown.textContent="Move down";
-    const move=(delta)=>{
-      const index=options.indexOf(item),next=index+delta;
-      if(index<0||next<0||next>=options.length)return;
-      [options[index],options[next]]=[options[next],options[index]];
-      if(delta<0)rows.insertBefore(row,row.previousElementSibling);
-      else rows.insertBefore(row.nextElementSibling,row);
-      saveProfiles();
-    };
-    moveUp.addEventListener("click",()=>move(-1));
-    moveDown.addEventListener("click",()=>move(1));
-    first.append(moveUp,moveDown,remove);row.append(first);
+    const handle=globalThis.RedownReorder?.attach(row,{items:()=>options,item,save:saveProfiles,label:item.label||"Simple destination",changed:error=>setStatus("right-click-mode-status",error?"Could not save menu order. Please retry.":"Menu order saved.",error?"bad":"ok")});
+    if(handle)first.prepend(handle);
+    first.append(remove);row.append(first);
     const second=document.createElement("div");second.className="grid simple-option-destination";
     const bucketWrap=document.createElement("div"),bucketLabel=document.createElement("label");bucketLabel.textContent="Bucket";
     const bucket=document.createElement("select");bucketWrap.append(bucketLabel,bucket);
@@ -716,19 +706,34 @@ function simpleBucketCreator(){
   }).catch(()=>{});
   bar.append(heading,note,fallback,form,status);return bar;
 }
+async function saveProfileOrder(){
+  const previous=profiles.map(profile=>[profile,profile.menuOrder]);
+  profiles.forEach((profile,index)=>{profile.menuOrder=index;});
+  try{
+    await nestedSaveQueue.catch(()=>{});
+    await saveProfiles();
+    for(const id of ["profiles","nested-profiles"]){
+      const root=$(id);
+      for(const profile of profiles){
+        const card=Array.from(root.children).find(el=>el.dataset.menuProfileId===profile.id);
+        if(card)root.append(card);
+      }
+    }
+  }catch(error){for(const [profile,order] of previous){if(order===undefined)delete profile.menuOrder;else profile.menuOrder=order;}throw error;}
+}
 function renderProfiles(){
   renderRightClickMode();
   const root=$("profiles");
   root.replaceChildren();
   if(rightClickMode==="simple")root.append(simpleBucketCreator());
+  profiles.sort((a,b)=>(a.menuOrder??999)-(b.menuOrder??999));
   const visibleProfiles=profiles.filter(profile=>!profile.explorerManaged);
   $("profiles-empty").hidden=visibleProfiles.some(p=>debugModeEnabled||p.type!=="github");
 
-  profiles.sort((a,b)=>(a.menuOrder??999)-(b.menuOrder??999));
   let simpleIntroShown=false;
   visibleProfiles.forEach((p,index)=>{
     const card=document.createElement("article");
-    card.className=p.type==="github"?"card debug-only":"card";
+    card.className=p.type==="github"?"card debug-only":"card";card.dataset.menuProfileId=p.id;
 
     const top=document.createElement("div");
     top.className="card-top";
@@ -740,6 +745,8 @@ function renderProfiles(){
       : `GitHub · ${p.repository||"not configured"}`;
     left.append(title,meta);
     const badge=document.createElement("div"); badge.className="badge"; badge.textContent=p.type==="cloudflare-r2"?"R2":"GitHub";
+    const handle=globalThis.RedownReorder?.attach(card,{items:()=>profiles,item:p,save:saveProfileOrder,label:displayName(p),changed:error=>setStatus("right-click-mode-status",error?"Could not save menu order. Please retry.":"Menu order saved.",error?"bad":"ok")});
+    if(handle)top.append(handle);
     top.append(left,badge);
 
     const grid=document.createElement("div"); grid.className="grid profile-fields";
@@ -747,8 +754,7 @@ function renderProfiles(){
       field("Menu label",p.menuLabel||p.name||"",v=>p.menuLabel=v),
       p.type==="cloudflare-r2"
         ? simplePrimaryLocationField(p)
-        : field("Default path",p.defaultPath||"assets/files",v=>p.defaultPath=v),
-      field("Order",String(p.menuOrder??index),v=>p.menuOrder=Number(v)||0,"number")
+        : field("Default path",p.defaultPath||"assets/files",v=>p.defaultPath=v)
     );
 
     if(p.type==="cloudflare-r2"){
@@ -772,13 +778,9 @@ function renderProfiles(){
     toggle.append(check,document.createTextNode(p.type==="cloudflare-r2" ? "Include in Simple mode" : "Show in right-click menu"));
     actions.append(toggle);
 
-    const up=document.createElement("button");up.className="ghost";up.textContent="Move up";
-    up.addEventListener("click",()=>{p.menuOrder=(p.menuOrder??index)-1;renderProfiles();});
-    const down=document.createElement("button");down.className="ghost";down.textContent="Move down";
-    down.addEventListener("click",()=>{p.menuOrder=(p.menuOrder??index)+1;renderProfiles();});
     const remove=document.createElement("button");remove.className="danger";remove.textContent="Remove preset";
     remove.addEventListener("click",()=>{profiles=profiles.filter(x=>x.id!==p.id);renderProfiles();saveProfiles();});
-    actions.append(up,down,remove);
+    actions.append(remove);
 
     card.append(top,grid,actions);
     if(p.type==="cloudflare-r2"){
@@ -796,7 +798,7 @@ function renderProfiles(){
       ensureProfileMenuPrefixes(profile,[profile.defaultPrefix]).catch(()=>{});
   }
   scheduleSave();
-  RedownNestedEditor.mount($("nested-profiles"),{profiles:()=>profiles,save:saveNestedMenu,send});
+  RedownNestedEditor.mount($("nested-profiles"),{profiles:()=>profiles,save:saveNestedMenu,saveOrder:saveProfileOrder,send});
 }
 
 function defaultLocationField(profile){

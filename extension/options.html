@@ -43,11 +43,14 @@
     .page-nav a{flex:1;min-width:100px;text-align:center;padding:10px 12px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:500;color:#b8c6e0}
     .page-nav a:hover,.page-nav a:focus-visible{background:#293751;color:white}
     body:has(#local-tools[hidden]) .page-nav .connected-link{display:none}
+    .reorder-handle{flex:0 0 32px;width:32px;min-height:36px;padding:4px;background:transparent;color:var(--muted);border:1px solid var(--line);font-size:21px;cursor:grab;touch-action:none;user-select:none}
+    .reorder-handle:active{cursor:grabbing}.reorder-handle:hover{color:var(--purple2);border-color:var(--purple)}
+    .reordering{opacity:.6}.reorder-before{box-shadow:0 -3px 0 var(--purple2)!important}.reorder-after{box-shadow:0 3px 0 var(--purple2)!important}
+    .card-top>div:first-of-type,.nested-heading>div:first-of-type{flex:1;min-width:0}
     .section-kicker{display:block;margin-bottom:7px;color:#b9a4f1;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
-    .grid.profile-fields{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+    .grid.profile-fields{grid-template-columns:1fr}
     .profile-fields>.default-location-builder{grid-column:1/-1;grid-row:2;padding:18px;border:1px solid #35445f;border-radius:12px;background:#18243a}
-    .profile-fields:has(>.default-location-builder)>:nth-child(3){grid-column:2;grid-row:1}
-    .grid.simple-option-controls{grid-template-columns:minmax(0,1fr) repeat(3,auto);align-items:end}
+    .grid.simple-option-controls{grid-template-columns:auto minmax(0,1fr) auto;align-items:end}
     .grid.simple-option-destination{grid-template-columns:1fr}
     .simple-option-controls button{white-space:nowrap}
     .section :is(input,select){min-width:0}
@@ -272,9 +275,9 @@
       .grid.profile-fields{grid-template-columns:1fr}
       .wrap{padding:20px 14px 32px}header{align-items:flex-start}.brand img{width:42px;height:42px}.sub{font-size:11px}.pill{font-size:10px;padding:6px 8px}
       .section,.hero{padding:20px;border-radius:16px}.section-head{align-items:flex-start;flex-wrap:wrap}.section h2{font-size:19px}.page-nav{gap:3px}.page-nav a{min-width:80px;padding:9px}
-      .profile-fields:has(>.default-location-builder)>:nth-child(3){grid-column:auto;grid-row:2}.profile-fields>.default-location-builder{grid-row:3;padding:12px}
+      .profile-fields>.default-location-builder{grid-row:auto;padding:12px}
       .section-head>div{flex:1 1 220px}.section-head>button{flex:0 0 auto}
-      .grid.simple-option-controls{grid-template-columns:repeat(3,minmax(0,1fr))}.simple-option-controls>:first-child{grid-column:1/-1}.simple-option-controls button{padding-inline:6px;font-size:11px;white-space:normal}
+      .grid.simple-option-controls{grid-template-columns:auto minmax(0,1fr)}.simple-option-controls>:last-child{grid-column:1/-1}.simple-option-controls button{padding-inline:6px;font-size:11px;white-space:normal}
       .row-actions>*{flex:1}.row-actions .toggle{flex-basis:100%}.connects button{flex:1}
     }
   </style>
@@ -325,7 +328,7 @@
 
   <section id="right-click-presets" class="section">
     <div class="section-head">
-      <div><span class="section-kicker">02 / Destinations</span><h2>Right-click presets</h2><div class="section-note">Choose a direct destination in Simple, or build a location hierarchy in Nested.</div></div>
+      <div><span class="section-kicker">02 / Destinations</span><h2>Right-click presets</h2><div class="section-note">Drag the ⠿ handles to set menu order. In Nested, folders move with their children; drag within the same parent.</div></div>
     </div>
     <div class="right-click-mode" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
       <label class="toggle"><input id="use-simple-menu" type="checkbox" aria-describedby="right-click-mode-status">Use Simple Menu</label>
@@ -443,6 +446,7 @@
 <script src="cloudflare-auth.js"></script>
 <script src="cloudflare-api.js"></script>
 <script src="nested-locations.js"></script>
+<script src="menu-reorder.js"></script>
 <script src="nested-menu-editor.js"></script>
 <script src="options.js"></script>
 </body>
