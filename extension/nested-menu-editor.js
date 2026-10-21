@@ -1,7 +1,7 @@
 /* Settings editor: choose existing locations OR explicitly create a new one. */
 (() => {
   const M=RedownNestedLocations;
-  let context,container,renderVersion=0,lastStatus={text:"",bad:false};
+  let context,container,renderVersion=0,refreshQueued=false,lastStatus={text:"",bad:false};
   const collapsed=new Set(),pending=new Set(),drafts=new Map();
   const nodeElement=(tag,className,text)=>{const el=document.createElement(tag);if(className)el.className=className;if(text!==undefined)el.textContent=text;return el;};
   function button(text,action,className='ghost') {
@@ -14,7 +14,7 @@
     if(pending.size)return;
     pending.add(key);container.setAttribute("aria-busy","true");const locked=[...container.querySelectorAll("input,select,button")];const previous=locked.map(el=>el.disabled);locked.forEach(el=>el.disabled=true);
     try {await task();} catch(error) {live(error?.message || 'Could not finish. Retry.',true);}
-    finally {pending.delete(key);container.setAttribute("aria-busy","false");locked.forEach((el,index)=>{if(el.isConnected)el.disabled=previous[index];});if(reconcile)reconcile();}
+    finally {pending.delete(key);container.setAttribute("aria-busy","false");locked.forEach((el,index)=>{if(el.isConnected)el.disabled=previous[index];});if(reconcile)reconcile();if(refreshQueued){refreshQueued=false;refresh();}}
   }
   function render(profiles) {
     if(!container)return;
@@ -143,5 +143,6 @@
       card.append(footer);container.append(card);
     }
   }
-  globalThis.RedownNestedEditor={mount(root,dependencies){container=root;context=dependencies;render(context.profiles());},render};
+  function refresh(){if(!context||!container)return;if(pending.size){refreshQueued=true;return;}lastStatus={text:"",bad:false};render(context.profiles());}
+  globalThis.RedownNestedEditor={refresh,mount(root,dependencies){container=root;context=dependencies;render(context.profiles());},render};
 })();

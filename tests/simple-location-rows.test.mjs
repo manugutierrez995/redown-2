@@ -30,7 +30,7 @@ function harness(initialPrefix='one/two/three'){
   const editor=vm.runInContext('simpleFolderPathEditor(profile,host,status,()=>profile.bucketName,profile.defaultPrefix,prefix=>{profile.defaultPrefix=prefix})',context);
   const rows=()=>[...parent.querySelectorAll('.location-level-row')];
   const select=(index,name)=>{const el=rows()[index].querySelector('select');el.value=name;el.dispatchEvent(new dom.window.Event('change'));};
-  return {dom,profile,parent,status,stored,calls,tree,editor,rows,select};
+  return {dom,profile,parent,status,stored,calls,tree,editor,rows,select,context};
 }
 test('Simple: removing an ancestor preserves reusable blank descendant rows and does not delete R2 folders',async()=>{
   const h=harness();await settled();
@@ -65,5 +65,22 @@ test('Simple: new directory is created under the exact parent only after Create'
   assert.deepEqual({bucketName:request.bucketName,prefix:request.prefix,name:request.name},{bucketName:'bucket',prefix:'',name:'created-here'});
   assert.equal(h.profile.defaultPrefix,'created-here');
   assert.equal(h.rows()[0].querySelector('.location-level-input').value,'');
+  h.dom.window.close();
+});
+
+
+test('reconnect refresh retries Simple lookups without clearing drafts or saved selections',async()=>{
+  const h=harness();await settled();
+  const input=h.rows()[0].querySelector('input');input.value='keep-me';input.dispatchEvent(new h.dom.window.Event('input'));
+  const original=h.context.send;
+  h.context.send=async()=>({ok:false,error:'Reconnect Cloudflare'});
+  await h.parent.refreshCloudflareLocations();await settled();
+  assert.match(h.status.textContent,/Reconnect/);
+  h.context.send=original;
+  await h.parent.refreshCloudflareLocations();await settled();
+  assert.equal(h.rows()[0].querySelector('input').value,'keep-me');
+  assert.deepEqual(h.rows().map(r=>r.querySelector('select').value),['one','two','three']);
+  assert.equal(h.profile.defaultPrefix,'one/two/three');
+  assert.equal(h.calls.some(c=>c.type!=='cfFolderChildren'),false);
   h.dom.window.close();
 });

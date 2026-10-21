@@ -202,3 +202,20 @@ test('DBG-001: selecting existing child enables + Child after the async save loc
   assert.equal(h.row('child').querySelector('.nested-actions button').disabled,false);
   h.dom.window.close();
 });
+
+
+test('reconnect refresh retries failed Nested lookups and preserves typed drafts and selected paths',async()=>{
+  let connected=true;
+  const h=harness(undefined,async()=>connected?null:{ok:false,error:'Reconnect Cloudflare'});
+  await settled();
+  h.type(h.row('child').querySelector('input'),'draft-to-keep');
+  connected=false;h.dom.window.RedownNestedEditor.refresh();await settled();
+  assert.match(h.dom.window.document.querySelector('.nested-status').textContent,/Reconnect/);
+  connected=true;h.dom.window.RedownNestedEditor.refresh();await settled();
+  assert.equal(h.row('child').querySelector('select').value,'child');
+  assert.equal(h.row('grand').querySelector('select').value,'grandchild');
+  assert.equal(h.row('child').querySelector('input').value,'draft-to-keep');
+  assert.equal(h.row('child').querySelector('select').disabled,false);
+  assert.equal(h.calls.some(c=>c.type==='cfCreateBucket'||c.type==='cfCreateFolder'||c.type==='cfProvision'),false);
+  h.dom.window.close();
+});

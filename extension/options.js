@@ -570,6 +570,8 @@ function simpleFolderPathEditor(profile, host, message, bucketName, initialPrefi
     }
   };
   const reset=(newPrefix="")=>{parts=String(newPrefix||"").split("/").filter(Boolean);if(!parts.length)parts=[""];drafts.clear();draw();};
+  host.classList.add("cloudflare-location-refresh");
+  host.refreshCloudflareLocations=()=>{message.textContent="";return draw();};
   draw();return {reset};
 }
 function simplePrimaryLocationField(profile){
@@ -585,15 +587,21 @@ function simplePrimaryLocationField(profile){
     profile.defaultPrefix=prefix;scheduleSave();
   });
   bucket.addEventListener("change",()=>{profile.simpleBucketName=bucket.value;profile.defaultPrefix="";scheduleSave();editor.reset();});
-  (async()=>{
+  let bucketLoadVersion=0;
+  const loadBuckets=async()=>{
+    const version=++bucketLoadVersion;
+    bucket.replaceChildren();
     bucket.disabled=true;const o=document.createElement("option");o.textContent="Loading buckets…";bucket.append(o);
     const res=await send({type:"cfBuckets",accountId:profile.accountId}).catch(e=>({ok:false,error:e.message}));
-    if(!wrap.isConnected)return;
+    if(!wrap.isConnected||version!==bucketLoadVersion)return;
     bucket.replaceChildren();
     if(!res?.ok){const fail=document.createElement("option");fail.textContent=res?.error||"Bucket lookup failed";bucket.append(fail);return;}
     for(const entry of res.buckets||[]){const opt=document.createElement("option");opt.value=entry.name;opt.textContent=entry.name;bucket.append(opt);}
     bucket.value=name();bucket.disabled=false;
-  })();return wrap;
+  };
+  wrap.classList.add("cloudflare-location-refresh");
+  wrap.refreshCloudflareLocations=loadBuckets;
+  loadBuckets();return wrap;
 }
 function simpleExtraOptions(profile,showIntro=true){
   const wrap=document.createElement("div");wrap.className="card";
@@ -632,16 +640,22 @@ function simpleExtraOptions(profile,showIntro=true){
     const message=document.createElement("div");message.className="meta";row.append(message);
     const editor=simpleFolderPathEditor(profile,folders,message,()=>item.bucketName,item.prefix,prefix=>{item.prefix=prefix;saveProfiles();});
     bucket.addEventListener("change",()=>{item.bucketName=bucket.value;item.prefix="";saveProfiles();editor.reset();});
-    (async()=>{
+    let bucketLoadVersion=0;
+    const loadBuckets=async()=>{
+      const version=++bucketLoadVersion;
+      bucket.replaceChildren();
       bucket.disabled=true;const wait=document.createElement("option");wait.textContent="Loading buckets…";bucket.append(wait);
       const result=await send({type:"cfBuckets",accountId:profile.accountId}).catch(e=>({ok:false,error:e.message}));
-      if(!row.isConnected)return;
+      if(!row.isConnected||version!==bucketLoadVersion)return;
       bucket.replaceChildren();
       if(!result?.ok){const opt=document.createElement("option");opt.textContent=result?.error||"Unable to load buckets";bucket.append(opt);return;}
       for(const entry of result.buckets||[]){const opt=document.createElement("option");opt.value=entry.name;opt.textContent=entry.name;bucket.append(opt);}
       if(!Array.from(bucket.options).some(o=>o.value===item.bucketName))item.bucketName=profile.bucketName;
       bucket.value=item.bucketName;bucket.disabled=false;
-    })();
+    };
+    row.classList.add("cloudflare-location-refresh");
+    row.refreshCloudflareLocations=loadBuckets;
+    loadBuckets();
     rows.append(row);
   }
   for(const item of options)addRow(item);
@@ -3798,7 +3812,20 @@ async function renderHistory({markSeen=true}={}){
   }
 }
 
-async function refreshCloudflare(){
+async function refreshLocationEditors(){
+  defaultLocationPrefixCache.clear();
+  presetLocationCache.clear();
+  const refreshes=Array.from(document.querySelectorAll(".cloudflare-location-refresh"),el=>el.refreshCloudflareLocations());
+  RedownNestedEditor.refresh();
+  await Promise.allSettled(refreshes);
+}
+let cloudflareRefreshTask=null;
+function refreshCloudflare(){
+  if(cloudflareRefreshTask)return cloudflareRefreshTask;
+  cloudflareRefreshTask=refreshCloudflareState().finally(()=>{cloudflareRefreshTask=null;});
+  return cloudflareRefreshTask;
+}
+async function refreshCloudflareState(){
   const stored=await chrome.storage.local.get("cloudflareAuth");
   const connected=Boolean(stored.cloudflareAuth?.accessToken);
   $("connect-cloudflare").hidden=connected;
@@ -3811,10 +3838,12 @@ async function refreshCloudflare(){
   const result=await send({type:"cfAccounts"});
   if(!result?.ok){setStatus("cf-status",result?.error||"Could not load accounts","bad");return;}
   cfAccounts=result.accounts||[];
-  const select=$("cf-account");select.replaceChildren();
+  const select=$("cf-account");const previousAccountId=currentAccountId;select.replaceChildren();
   cfAccounts.forEach(a=>{const o=document.createElement("option");o.value=a.id;o.textContent=a.name||a.id;select.append(o);});
+  if(cfAccounts.some(a=>a.id===previousAccountId))select.value=previousAccountId;
   currentAccountId=select.value||"";
   if(currentAccountId)await refreshBuckets();
+  await refreshLocationEditors();
   await loadExplorerInventory().catch((error)=>{
     $("explorer-status").textContent=safeUiMessage(friendlyError(error,"load Cloudflare storage"));
   });
@@ -4024,6 +4053,9 @@ $("refresh-history").addEventListener("click",()=>renderHistory({markSeen:true})
 let downloadsDirty=false;
 chrome.storage.onChanged.addListener((changes,area)=>{
   if(area!=="local")return;
+  if(changes.cloudflareAuth && changes.cloudflareAuth.newValue?.accessToken!==changes.cloudflareAuth.oldValue?.accessToken){
+    refreshCloudflare().catch(error=>setStatus("hero-status",safeUiMessage(error?.message||String(error)),"bad"));
+  }
   if(changes.rightClickMode){rightClickMode=RedownNestedLocations.menuMode(changes.rightClickMode.newValue,profiles);renderRightClickMode();}
   if(!changes.transferHistory)return;
   downloadsDirty=true;
