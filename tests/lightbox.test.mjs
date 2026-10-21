@@ -24,7 +24,7 @@ test('dialog keyboard and buttons navigate; Escape closes and Tab stays inside',
  const layer=h.w.workspaceLightboxLayer(),close=layer.querySelector('.preview-lightbox-close');
  close.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
  layer.querySelector('[aria-label="Previous file"]').click();assert.deepEqual(h.navigated,[1,-1]);
- close.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Tab',bubbles:true,cancelable:true}));assert.equal(h.w.document.activeElement,layer.querySelector('[aria-label="Previous file"]'));
+ const last=layer.querySelector('[aria-label="Next file"]');last.focus();last.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Tab',bubbles:true,cancelable:true}));assert.equal(h.w.document.activeElement,close);
  close.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));assert.equal(h.w.workspaceLightboxOpen(),false);h.dom.window.close();
 });
 test('next preview replaces overlay media and title; failed next load clears stale media',async()=>{

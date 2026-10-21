@@ -1537,7 +1537,8 @@ function appendDetails(root,obj,key,url,type){
   link.href=url;
   link.target="_blank";
   link.rel="noopener";
-  link.textContent=url;
+  link.textContent="Open original file ↗";
+  link.setAttribute("aria-label",`Open original file: ${key}`);
   root.append(link);
 }
 async function showWorkspacePreview(obj,row,urlOverride=""){
@@ -1576,7 +1577,7 @@ async function showWorkspacePreview(obj,row,urlOverride=""){
   root.replaceChildren();
   const type=objectContentType(obj,key);
   const head=document.createElement("div");head.className="preview-head";
-  const title=document.createElement("div");title.className="preview-title";title.textContent=key;
+  const title=document.createElement("div");title.className="preview-title";title.textContent=String(key).split("/").pop()||key;title.title=key;
   const controls=document.createElement("div");controls.className="preview-nav";
   const previous=document.createElement("button");previous.className="ghost preview-arrow";previous.type="button";previous.setAttribute("aria-label","Previous file");previous.title="Previous file";previous.textContent="←";previous.addEventListener("click",()=>navigatePreview(-1));
   const next=document.createElement("button");next.className="ghost preview-arrow";next.type="button";next.setAttribute("aria-label","Next file");next.title="Next file";next.textContent="→";next.addEventListener("click",()=>navigatePreview(1));
@@ -1590,7 +1591,8 @@ async function showWorkspacePreview(obj,row,urlOverride=""){
 
   if(type.startsWith("image/")){
     const img=document.createElement("img");
-    img.src=url;img.alt=key;
+    img.src=url;img.alt=key;img.title="Open in lightbox";
+    img.addEventListener("click",()=>setWorkspacePreviewLightbox(true));
     media.append(img);
     root.append(media);
   }else if(type.startsWith("video/")){
@@ -1740,14 +1742,14 @@ function setWorkspacePreviewLightbox(enabled){
   const close=document.createElement("button");
   close.type="button";
   close.className="ghost preview-lightbox-close";
-  close.textContent="Close";
+  close.textContent="×";close.setAttribute("aria-label","Close lightbox");close.title="Close · Esc";
   close.addEventListener("click",()=>setWorkspacePreviewLightbox(false));
 
   const stage=document.createElement("div");
   stage.className="preview-lightbox-stage";
   layer.returnFocus=document.activeElement;
-  const previous=document.createElement("button");previous.type="button";previous.className="ghost";previous.textContent="←";previous.setAttribute("aria-label","Previous file");previous.addEventListener("click",()=>navigatePreview(-1));
-  const next=document.createElement("button");next.type="button";next.className="ghost";next.textContent="→";next.setAttribute("aria-label","Next file");next.addEventListener("click",()=>navigatePreview(1));
+  const previous=document.createElement("button");previous.type="button";previous.className="ghost preview-lightbox-arrow preview-lightbox-previous";previous.title="Previous · Left arrow";previous.textContent="←";previous.setAttribute("aria-label","Previous file");previous.addEventListener("click",()=>navigatePreview(-1));
+  const next=document.createElement("button");next.type="button";next.className="ghost preview-lightbox-arrow preview-lightbox-next";next.title="Next · Right arrow";next.textContent="→";next.setAttribute("aria-label","Next file");next.addEventListener("click",()=>navigatePreview(1));
   layer.addEventListener("keydown",event=>{
     if(event.key==="Escape"){event.preventDefault();event.stopPropagation();setWorkspacePreviewLightbox(false);return;}
     if(event.key==="Tab"){
@@ -1761,8 +1763,9 @@ function setWorkspacePreviewLightbox(enabled){
     if(event.key==="ArrowLeft"||event.key==="ArrowRight"){event.preventDefault();event.stopPropagation();navigatePreview(event.key==="ArrowRight"?1:-1);}
   });
 
-  head.append(title,previous,next,close);
-  panel.append(head,stage);
+  const caption=document.createElement("div");caption.className="preview-lightbox-caption";caption.textContent="←  Browse files  →   ·   Esc to close";
+  head.append(title,close);
+  panel.append(head,stage,previous,next,caption);
   layer.append(backdrop,panel);
   document.body.append(layer);
   mountWorkspaceLightboxMedia();
