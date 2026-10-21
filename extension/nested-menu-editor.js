@@ -140,10 +140,20 @@
       }
       model.roots.forEach(rootRow);
       const footer=nodeElement('div','nested-footer');
-      footer.append(button('+ Add bucket',()=>run('add-bucket',[],async()=>{const newRoot={id:crypto.randomUUID(),bucketName:'',ready:false,children:[]};model.roots.push(newRoot);await save(profile);rootRow(newRoot);})),button('Refresh locations',()=>rerender()));
+      footer.append(button('Refresh locations',()=>rerender()));
       card.append(footer);container.append(card);
     }
   }
   function refresh(){if(!context||!container)return;if(pending.size){refreshQueued=true;return;}lastStatus={text:"",bad:false};render(context.profiles());}
-  globalThis.RedownNestedEditor={refresh,mount(root,dependencies){container=root;context=dependencies;render(context.profiles());},render};
+  async function addLocation(profileId){
+    if(pending.size)throw new Error('Finish the current location change first.');
+    const profile=context.profiles().find(p=>p.id===profileId&&p.type==='cloudflare-r2'&&!p.explorerManaged);
+    if(!profile)throw new Error('Choose an available destination.');
+    const model=profile.nestedMenu ||= M.fromLegacy(profile);
+    model.roots.push({id:crypto.randomUUID(),bucketName:'',ready:false,children:[]});
+    await save(profile);render(context.profiles());
+    const card=Array.from(container.querySelectorAll('.nested-card')).find(el=>el.dataset.menuProfileId===profileId);
+    const rows=card?.querySelectorAll('.nested-existing');const last=rows?.[rows.length-1];last?.scrollIntoView?.({block:'nearest'});last?.focus();
+  }
+  globalThis.RedownNestedEditor={refresh,addLocation,mount(root,dependencies){container=root;context=dependencies;render(context.profiles());},render};
 })();

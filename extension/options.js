@@ -484,6 +484,28 @@ $("use-nested-menu").addEventListener("change",()=>chooseRightClickMode("nested"
 
 // Simple destinations share one path editor: dropdowns are selections, inputs are drafts.
 // Removing a level preserves lower rows as blank, reusable selectors; no R2 deletion.
+async function addMenuLocation(profileId){
+  if(rightClickMode==="nested")return RedownNestedEditor.addLocation(profileId);
+  const host=Array.from(document.querySelectorAll("[data-simple-location-profile]")).find(el=>el.dataset.simpleLocationProfile===profileId);
+  if(!host)throw new Error("Refresh destinations and try again.");
+  host.addLocation();
+}
+$("add-menu-location").addEventListener("click",async()=>{
+  const available=profiles.filter(p=>p.type==="cloudflare-r2"&&!p.explorerManaged);
+  if(!available.length)return setStatus("menu-location-status","Use a storage bucket first.");
+  try{
+    if(available.length===1){await addMenuLocation(available[0].id);return;}
+    const select=$("add-location-profile");select.replaceChildren();
+    for(const profile of available){const option=document.createElement("option");option.value=profile.id;option.textContent=[displayName(profile),profile.accountName].filter(Boolean).join(" · ");select.append(option);}
+    $("add-location-dialog").showModal();select.focus();
+  }catch(error){setStatus("menu-location-status",error.message||"Could not add location.","bad");}
+});
+$("add-location-cancel").addEventListener("click",()=>$("add-location-dialog").close());
+$("add-location-form").addEventListener("submit",async event=>{
+  event.preventDefault();
+  try{await addMenuLocation($("add-location-profile").value);$("add-location-dialog").close();}
+  catch(error){setStatus("menu-location-status",error.message||"Could not add location.","bad");}
+});
 function simpleFolderPathEditor(profile, host, message, bucketName, initialPrefix, persist){
   let parts=String(initialPrefix||"").split("/").filter(Boolean);
   if(!parts.length)parts=[""];
@@ -619,9 +641,10 @@ function simpleExtraOptions(profile,showIntro=true){
   const heading=document.createElement("div");heading.className="section-head";
   const intro=document.createElement("div");const title=document.createElement("strong");title.textContent="Additional Simple destinations";
   const note=document.createElement("div");note.className="meta";note.textContent="Choose existing folders or explicitly create new directories at any level. × only clears the menu location.";
-  if(showIntro)intro.append(title,note);const add=document.createElement("button");add.type="button";add.className="ghost";add.textContent="+ Add New Option";
+  if(showIntro)intro.append(title,note);
   if(showIntro)heading.append(intro);
-  heading.append(add);const rows=document.createElement("div");const options=profile.simpleOptions||=[];
+  const rows=document.createElement("div");const options=profile.simpleOptions||=[];
+  wrap.dataset.simpleLocationProfile=profile.id;
   profile.simpleOptions=options;
   function addRow(item){
     item.bucketName||=profile.bucketName;
@@ -660,10 +683,10 @@ function simpleExtraOptions(profile,showIntro=true){
     rows.append(row);
   }
   for(const item of options)addRow(item);
-  add.addEventListener("click",()=>{
+  wrap.addLocation=()=>{
     const item={id:uid(),label:"New destination",bucketName:profile.bucketName,prefix:""};
-    options.push(item);addRow(item);saveProfiles();rows.lastElementChild?.querySelector("input")?.focus();
-  });
+    options.push(item);addRow(item);saveProfiles();rows.lastElementChild?.scrollIntoView?.({block:"nearest"});rows.lastElementChild?.querySelector("input")?.focus();
+  };
   wrap.append(heading,rows);return wrap;
 }
 function simpleBucketCreator(){

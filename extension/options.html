@@ -438,7 +438,19 @@
     <div class="right-click-mode" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
       <label class="toggle"><input id="use-simple-menu" type="checkbox" aria-describedby="right-click-mode-status">Use Simple Menu</label>
       <label class="toggle"><input id="use-nested-menu" type="checkbox" aria-describedby="right-click-mode-status">Use Nested Menu</label>
+      <button id="add-menu-location" type="button" class="ghost" style="margin-left:auto">+ Add new location</button>
     </div>
+    <dialog id="add-location-dialog" style="max-width:calc(100vw - 28px);width:380px">
+      <form method="dialog" id="add-location-form">
+        <h3>Add new location</h3>
+        <label for="add-location-profile">Destination</label>
+        <select id="add-location-profile"></select>
+        <div class="row-actions" style="margin-top:16px">
+          <button type="button" id="add-location-cancel" class="ghost">Cancel</button>
+          <button type="submit" class="secondary">Add location</button>
+        </div>
+      </form>
+    </dialog>
     <div id="right-click-mode-status" class="meta" role="status" style="margin-bottom:12px"></div>
     <div id="menu-location-status" class="status" role="status" aria-live="polite"></div>
 

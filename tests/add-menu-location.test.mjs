@@ -1,0 +1,25 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import vm from 'node:vm';
+import {JSDOM} from 'jsdom';
+const source=await readFile(new URL('../extension/options.js',import.meta.url),'utf8');
+const html=await readFile(new URL('../extension/options.html',import.meta.url),'utf8');
+test('one shared add control targets Simple or Nested and asks which destination when needed',async()=>{
+ const dom=new JSDOM(html),d=dom.window.document,calls=[];
+ const dialog=d.getElementById('add-location-dialog');dialog.showModal=()=>dialog.open=true;dialog.close=()=>dialog.open=false;
+ const host=d.createElement('div');host.dataset.simpleLocationProfile='one';host.addLocation=()=>calls.push('simple-one');d.body.append(host);
+ const ctx=vm.createContext({document:d,$:id=>d.getElementById(id),profiles:[{id:'one',type:'cloudflare-r2'}],rightClickMode:'simple',displayName:p=>p.id,setStatus:()=>{},RedownNestedEditor:{addLocation:async id=>calls.push('nested-'+id)}});
+ vm.runInContext(source.slice(source.indexOf('async function addMenuLocation('),source.indexOf('function simpleFolderPathEditor(')),ctx);
+ const tick=()=>new Promise(resolve=>setImmediate(resolve));
+ assert.equal(d.querySelectorAll('#add-menu-location').length,1);
+ assert.equal(d.getElementById('add-menu-location').parentElement.className,'right-click-mode');
+ d.getElementById('add-menu-location').click();await tick();assert.deepEqual(calls,['simple-one']);
+ ctx.rightClickMode='nested';d.getElementById('add-menu-location').click();await tick();assert.equal(calls.at(-1),'nested-one');
+ ctx.profiles.push({id:'two',type:'cloudflare-r2'});
+ d.getElementById('add-menu-location').click();await tick();assert.equal(dialog.open,true);
+ d.getElementById('add-location-profile').value='two';
+ d.getElementById('add-location-form').dispatchEvent(new dom.window.Event('submit',{cancelable:true}));await tick();
+ assert.equal(calls.at(-1),'nested-two');assert.equal(dialog.open,false);
+ dom.window.close();
+});
