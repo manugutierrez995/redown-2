@@ -1,8 +1,8 @@
 # REDOWN
 
-**Remote downloads, without the download.**
+**Remote files, organized in your cloud.**
 
-REDOWN is a Chrome/Edge extension that sends remote files directly to a configured Cloudflare R2 bucket or GitHub repository. The source file does not need to pass through the user's computer.
+REDOWN is a Chrome/Edge extension that sends remote files directly to a configured Cloudflare R2 bucket or GitHub repository. Supported direct transfers run through a Cloudflare Worker. Browser-assisted fallback and local uploads use the user's computer.
 
 ## Chrome Web Store preparation
 
@@ -29,7 +29,7 @@ REDOWN provisions a small Worker bound to that bucket so the data path stays:
 remote source -> Cloudflare Worker -> R2
 ```
 
-The user's computer sends control metadata only.
+For this direct Worker transfer path, the user's computer sends control metadata. Other supported paths, including browser-assisted transfers and local uploads, can pass file contents through the computer.
 
 OAuth publisher:
 - Client ID: `d9db0f71eb24cd2eed86b50a650a045e`
@@ -105,3 +105,7 @@ If a request loses its response, REDOWN may not know whether R2 committed the ob
 ## License
 
 Original REDOWN material is source-available under the [REDOWN Noncommercial Source License 1.0](LICENSE). Commercial use requires a separate written agreement. Third-party licenses and previously granted rights remain intact. See [licensing details](docs/LICENSING.md) for scope, commercial permission and enforcement limits.
+
+## Chrome Web Store branch
+
+The `chrome-web-store` branch contains submission preparation. See [store preparation status](docs/store/README.md) and run `python scripts/package_chrome_store.py` to build a candidate ZIP. Packaging success does not mean live release gates or store review have passed.

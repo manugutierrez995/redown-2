@@ -7,3 +7,6 @@ node_modules/
 
 # Agent scratch outputs (durable evidence lives under docs/agent/semantic/verification).
 work/
+
+# Chrome Web Store build outputs
+dist/

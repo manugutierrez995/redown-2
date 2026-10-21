@@ -2,6 +2,8 @@
 
 Preparation baseline: 20 October 2026. This is a release gate and working checklist, not a declaration of compliance or store approval.
 
+Branch packaging progress is tracked in [store preparation status](store/README.md). Checklist boxes still require candidate-specific evidence.
+
 **Current decision: prepare the submission; hold public launch until the blocking checks below have evidence.** Recent interface and reorder fixes have focused automated and mocked-browser coverage. Long-lived Cloudflare sessions and a fresh store-installed user's complete workflow remain unverified.
 
 ## How to use this page

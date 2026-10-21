@@ -723,7 +723,7 @@ async function recordTransfer(entry) {
 async function notify(title, message) {
   try {
     await chrome.notifications.create({
-      type: "basic", iconUrl: "icon.svg", title, message: String(message || "")
+      type: "basic", iconUrl: "icons/icon128.png", title, message: String(message || "")
     });
   } catch (error) {
     // Notifications are cosmetic. A Chrome image/icon failure must never mark
