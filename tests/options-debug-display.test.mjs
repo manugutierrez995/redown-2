@@ -18,10 +18,13 @@ function harness(){
   vm.runInContext(source.slice(source.indexOf('function applyDebugMode(){'),source.indexOf('(async()=>{\n  const stored=await chrome.storage.local.get(["profiles"')),context);
   return {dom,context,calls,saved};
 }
-test('debug-only sections start hidden in CSS and switch remains last',()=>{
+test('debug-only sections start hidden and toggle exists only inside header disclosure',()=>{
   const h=harness(),d=h.dom.window.document;
   for(const id of ['rfis-section','add-github'])assert.equal(h.dom.window.getComputedStyle(d.getElementById(id)).display,'none');
-  assert.ok(d.querySelector('.wrap > section:last-child #debug-mode-enabled'));
+  assert.ok(d.querySelector('header details:not([open]) #debug-mode-enabled'));
+  assert.equal(d.querySelectorAll('#debug-mode-enabled').length,1);
+  assert.equal(d.querySelector('.debug-settings'),null);
+  assert.equal(d.querySelector('header summary').textContent,'');
   const panel=d.getElementById('nested-menu-editor-panel');
   assert.equal(h.dom.window.getComputedStyle(panel).display,'none','hidden attribute wins over author layout styles');
   h.dom.window.close();
@@ -146,5 +149,20 @@ test('activation stays in connection header; Storage appears only after R2 is av
   assert.ok(!d.getElementById('create-bucket').classList.contains('setup-go'));
   assert.ok(d.querySelector('.bucket-use').classList.contains('setup-go'));
   assert.ok(d.documentElement.classList.contains('onboarding-pending'));
+  h.dom.window.close();
+});
+
+test('settings disclosure dismisses outside and Escape restores focus',()=>{
+  const h=harness(),d=h.dom.window.document;
+  vm.runInContext(source.slice(source.indexOf('function wireSettingsDisclosure(){'),source.indexOf('function applyDebugMode(){')),h.context);
+  const disclosure=d.getElementById('settings-disclosure');
+  disclosure.open=true;
+  d.getElementById('debug-mode-enabled').click();
+  assert.equal(disclosure.open,true,'inside interaction retains disclosure');
+  d.getElementById('connections').click();assert.equal(disclosure.open,false);
+  disclosure.open=true;
+  d.dispatchEvent(new h.dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+  assert.equal(disclosure.open,false);
+  assert.equal(d.activeElement,disclosure.querySelector('summary'));
   h.dom.window.close();
 });

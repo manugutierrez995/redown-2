@@ -4252,6 +4252,18 @@ function checkR2OnReturn(){
 }
 window.addEventListener("focus",checkR2OnReturn);
 document.addEventListener("visibilitychange",checkR2OnReturn);
+function wireSettingsDisclosure(){
+  const disclosure=$("settings-disclosure");
+  document.addEventListener("click",event=>{
+    if(disclosure.open&&!disclosure.contains(event.target))disclosure.open=false;
+  });
+  document.addEventListener("keydown",event=>{
+    if(event.key==="Escape"&&disclosure.open){
+      disclosure.open=false;disclosure.querySelector("summary").focus();event.preventDefault();
+    }
+  });
+}
+wireSettingsDisclosure();
 function applyDebugMode(){
   applyOnboarding();
   document.documentElement.classList.toggle("debug-mode",debugModeEnabled);

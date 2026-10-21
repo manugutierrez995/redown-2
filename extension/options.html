@@ -25,7 +25,16 @@
     .bucket.selected .bucket-select{border-color:var(--purple2);box-shadow:0 0 0 2px rgba(139,92,246,.18)}
     .bucket .bucket-details{display:block;margin:9px 0}
     .bucket .bucket-prepare{width:100%}
-    .section.debug-settings{background:transparent;box-shadow:none;padding:18px 22px;border-style:dashed}.debug-settings .toggle{margin:0;text-transform:none;letter-spacing:0}
+    .header-actions{display:flex;align-items:center;gap:12px;flex-shrink:0}
+    .settings-disclosure{position:relative}
+    .settings-disclosure > summary{list-style:none;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:1px solid var(--line);border-radius:10px;background:var(--panel);cursor:pointer}
+    .settings-disclosure > summary::-webkit-details-marker{display:none}
+    .settings-disclosure > summary span{width:18px;height:2px;border-radius:2px;background:var(--text)}
+    .settings-disclosure > summary:hover{border-color:var(--purple)}
+    .settings-disclosure > summary:focus-visible{outline:2px solid var(--purple);outline-offset:3px}
+    .settings-popover{position:absolute;right:0;top:calc(100% + 10px);z-index:100;width:210px;max-width:calc(100vw - 28px);padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+    .settings-popover .toggle{margin:0;text-transform:none;letter-spacing:0}
+
 
     body{margin:0;background:radial-gradient(ellipse at 50% 0,rgba(87,102,158,.12),transparent 650px),var(--bg);color:var(--text);font:14px/1.55 "DM Sans",ui-sans-serif,system-ui,sans-serif}
     .wrap{max-width:1240px;margin:0 auto;padding:32px 32px 48px}
@@ -372,7 +381,15 @@
       <img src="icon.svg" alt="">
       <div><div class="wordmark">REDOWN</div><div class="sub">Remote downloads, without the download.</div></div>
     </div>
-    <div class="pill">v0.5.13</div>
+    <div class="header-actions">
+      <div class="pill">v0.5.13</div>
+      <details id="settings-disclosure" class="settings-disclosure">
+        <summary aria-label="Settings"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></summary>
+        <div class="settings-popover">
+          <label class="toggle"><input id="debug-mode-enabled" type="checkbox"> Debug Mode</label>
+        </div>
+      </details>
+    </div>
   </header>
 
   <section id="connections" class="hero">
@@ -526,9 +543,6 @@
     <div id="history" class="card"></div>
   </section>
 
-  <section class="section debug-settings">
-    <label class="toggle"><input id="debug-mode-enabled" type="checkbox"> Debug Mode</label>
-  </section>
 
 </div>
 <script type="module" src="model-viewer.min.js"></script>

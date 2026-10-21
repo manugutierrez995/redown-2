@@ -25,3 +25,7 @@ Verification: syntax checks passed; 13 focused options/reconnect/Cloudflare file
 Removed the separate next-step panel. New users initially see Connection; normal navigation and downstream sections are hidden. When R2 explicitly requires activation, **Set up R2** and **Check connection** appear in Connection beside account controls, and Storage remains hidden. Returning focus/visibility rechecks bucket availability only while activation is pending. Available R2 reveals Storage: Create is green for an empty account; Use this bucket is green for existing buckets. Later sections remain gated until a prepared destination is saved. Debug bypasses the new CSS restrictions. Returning connected users with a completed destination retain their full normal interface, including Storage during background checks; startup uses saved auth/profile state.
 
 Validation: syntax checks passed; 14 focused options/reconnect/file tests passed; full suite 146 tests, 119 passed and 27 existing failures. Live provider/browser end-to-end is still unverified.
+
+## Debug access placement
+
+Debug Mode now lives only inside a closed-by-default, top-right native details disclosure. Its square summary contains three CSS lines and no visible label (accessible name: Settings). Removed the bottom-page Debug toggle. Existing saved Debug preference and mode logic remain. Outside click dismisses; Escape dismisses and restores focus. Syntax checks and nine focused options/reconnect tests passed. Browser visual verification remains outstanding.
