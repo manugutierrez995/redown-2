@@ -1,0 +1,83 @@
+REDOWN Noncommercial Source License 1.0
+Effective date: 20 October 2026
+
+Copyright (c) 2026 the respective REDOWN copyright holders.
+All rights reserved except as expressly granted below.
+
+1. Scope and ownership
+
+This license applies to original REDOWN software, documentation and assets in
+this repository that the relevant copyright holders have authority to license
+under these terms (the "Software"). It does not transfer ownership. Third-party
+material and material carrying a separate license remain under their own terms.
+The repository maintainer cannot grant rights belonging to others.
+
+2. Noncommercial permission
+
+Subject to these conditions, you may use, reproduce, inspect, modify and share
+the Software solely for noncommercial purposes. Noncommercial means not
+primarily intended for or directed toward commercial advantage or monetary
+compensation. Personal unpaid use, unpaid study and noncommercial research
+are permitted. Copies and modifications must retain this license, applicable
+copyright and third-party notices, identify material modifications, and must
+not be distributed on terms that grant broader rights in the Software.
+
+No trademark rights or right to claim endorsement are granted. Rights and
+exceptions that applicable law grants independently of this license are not
+restricted by this license.
+
+3. Commercial use requires a separate agreement
+
+No commercial use is granted by this license. Commercial use includes selling
+or commercially licensing the Software or a derivative, incorporating it into
+a paid or monetized product or service, operating a paid hosted version, and
+using it internally to support a commercial business or paid client work.
+Nonprofit or educational status alone does not make a commercial activity
+noncommercial. If a proposed use is uncertain, obtain written permission first.
+
+Commercial use requires a separate written agreement from the relevant rights
+holders, including agreement on any license fees or royalties, before that use
+begins. Request commercial licensing through the maintainer of the canonical
+repository: https://github.com/thanks-cohn/remote-download-2-cloudfare
+Opening an inquiry does not grant permission. No particular commercial price,
+royalty or availability is promised by this license.
+
+4. Unauthorized use and remedies
+
+The permissions in section 2 are conditioned on compliance with this license.
+They terminate automatically upon breach. Termination does not authorize
+continued copying, distribution or use that otherwise requires permission.
+
+The rights holders reserve the right to seek remedies available under
+applicable law for unauthorized use, including injunctive relief, actual
+damages, attributable profits, and statutory damages, costs or attorneys'
+fees where legally available. This clause does not establish an automatic
+debt, predetermined penalty, guaranteed award, or retroactive commercial
+license. Compensation and liability depend on applicable law and any valid
+separate agreement or adjudication. Copying expressly permitted by this
+license does not itself create a payment obligation.
+
+5. Earlier grants and third-party rights
+
+This license applies prospectively to material distributed under it. It does
+not revoke rights validly granted under earlier licenses, relicense third-party
+components, or restrict independently created works or rights provided by law.
+Earlier versions, contributions and separately licensed portions must be
+assessed under their applicable terms. No claim is made that this notice can
+convert previously MIT-licensed material into exclusively noncommercial code.
+
+6. Warranty and liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SOFTWARE IS PROVIDED "AS IS",
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+TO THAT EXTENT, THE AUTHORS AND COPYRIGHT HOLDERS ARE NOT LIABLE FOR CLAIMS,
+DAMAGES OR OTHER LIABILITY ARISING FROM THE SOFTWARE OR ITS USE. NOTHING
+EXCLUDES LIABILITY THAT APPLICABLE LAW DOES NOT PERMIT TO BE EXCLUDED.
+
+7. Separate agreements and retained rights
+
+A separate written agreement may grant additional rights for the material its
+licensor controls. All rights not expressly granted here are reserved. This is
+a custom source-available license with commercial restrictions; it is not the
+MIT License and is not represented as an OSI-approved open-source license.

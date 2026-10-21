@@ -4,6 +4,10 @@
 
 REDOWN is a Chrome/Edge extension that sends remote files directly to a configured Cloudflare R2 bucket or GitHub repository. The source file does not need to pass through the user's computer.
 
+## Chrome Web Store preparation
+
+See the detailed [Pre-submission Checklist](docs/PRE_SUBMISSION_CHECKLIST.md) for release blockers, privacy and permission requirements, live testing, listing assets, and reviewer instructions.
+
 ## Install from GitHub
 
 1. Download this repository as a ZIP.
@@ -97,3 +101,7 @@ The local upload batch uses a **round-robin retry queue**. A file confirmed to e
 **Keep the REDOWN settings page open during the entire upload.** The queue holds browser `File` objects in page memory; it is not persisted and cannot resume after the settings page/browser closes or reloads. Files do not upload in the background after that. Persistent restart recovery and chunk-level resume are not implemented.
 
 If a request loses its response, REDOWN may not know whether R2 committed the object. The existence check and matching size are **not integrity verification** and must not be treated as proof of a successful overwrite. A later retry may overwrite that key again. For persistent `Failed to fetch` errors, inspect the browser Console/Network logs (for example, `net::ERR_NETWORK_CHANGED`) and stabilize the network. Source implementation exists, but live Cloudflare/Chrome acceptance and interruption tests remain pending.
+
+## License
+
+Original REDOWN material is source-available under the [REDOWN Noncommercial Source License 1.0](LICENSE). Commercial use requires a separate written agreement. Third-party licenses and previously granted rights remain intact. See [licensing details](docs/LICENSING.md) for scope, commercial permission and enforcement limits.
