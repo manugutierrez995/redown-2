@@ -61,3 +61,18 @@ test('right-click image menu zooms in/out, fits, and Escape dismisses only the m
  open();stage.querySelector('[role="menu"]').children[1].click();assert.match(stage.querySelector('img').style.transform,/scale\(1\)/);
  open();stage.querySelector('[role="menu"]').dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));assert.equal(stage.querySelector('[role="menu"]'),null);assert.equal(h.w.workspaceLightboxOpen(),true);open();stage.querySelector('[role="menu"]').children[2].click();stage.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'ArrowLeft',bubbles:true,cancelable:true}));assert.deepEqual(h.navigated,[-1]);h.dom.window.close();
 });
+
+test('Expand/Collapse never relabels arrows and lightbox exit resets expansion controls',async()=>{
+ const h=harness();await h.w.showWorkspacePreview({key:'first.png'});
+ const expand=h.root.querySelector('[data-preview-action="expand"]');
+ for(let i=0;i<3;i++){
+   expand.click();assert.equal(expand.textContent,'Collapse');assert.equal(h.w.document.querySelector('.explorer-body').classList.contains('expanded'),true);
+   expand.click();assert.equal(expand.textContent,'Expand');assert.equal(h.w.document.querySelector('.explorer-body').classList.contains('expanded'),false);
+   assert.deepEqual([...h.root.querySelectorAll('.preview-arrow')].map(b=>b.textContent),['←','→']);
+ }
+ expand.click();h.root.querySelector('[data-preview-action="lightbox"]').click();
+ assert.equal(expand.textContent,'Expand');assert.equal(expand.getAttribute('aria-expanded'),'false');
+ h.w.workspaceLightboxLayer().querySelector('.preview-lightbox-close').dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));
+ assert.equal(expand.textContent,'Expand');expand.click();assert.equal(expand.textContent,'Collapse');assert.equal(h.w.document.querySelector('.explorer-body').classList.contains('expanded'),true);
+ assert.deepEqual([...h.root.querySelectorAll('.preview-arrow')].map(b=>b.textContent),['←','→']);h.dom.window.close();
+});

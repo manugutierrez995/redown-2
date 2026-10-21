@@ -1582,8 +1582,8 @@ async function showWorkspacePreview(obj,row,urlOverride=""){
   const controls=document.createElement("div");controls.className="preview-nav";
   const previous=document.createElement("button");previous.className="ghost preview-arrow";previous.type="button";previous.setAttribute("aria-label","Previous file");previous.title="Previous file";previous.textContent="←";previous.addEventListener("click",()=>navigatePreview(-1));
   const next=document.createElement("button");next.className="ghost preview-arrow";next.type="button";next.setAttribute("aria-label","Next file");next.title="Next file";next.textContent="→";next.addEventListener("click",()=>navigatePreview(1));
-  const lightbox=document.createElement("button");lightbox.className="ghost";lightbox.type="button";lightbox.textContent=workspaceLightboxOpen()?"Close lightbox":"Lightbox";lightbox.addEventListener("click",()=>setWorkspacePreviewLightbox(!workspaceLightboxOpen()));
-  const expand=document.createElement("button");expand.className="ghost";expand.type="button";expand.textContent=workspacePreviewExpanded?"Collapse":"Expand";expand.addEventListener("click",()=>setWorkspacePreviewExpanded(!workspacePreviewExpanded));
+  const lightbox=document.createElement("button");lightbox.className="ghost";lightbox.type="button";lightbox.dataset.previewAction="lightbox";lightbox.textContent=workspaceLightboxOpen()?"Close lightbox":"Lightbox";lightbox.addEventListener("click",()=>setWorkspacePreviewLightbox(!workspaceLightboxOpen()));
+  const expand=document.createElement("button");expand.className="ghost";expand.type="button";expand.dataset.previewAction="expand";expand.textContent=workspacePreviewExpanded?"Collapse":"Expand";expand.addEventListener("click",()=>setWorkspacePreviewExpanded(!workspacePreviewExpanded));
   const browsing=document.createElement("div");browsing.className="preview-control-group";browsing.append(previous,next);
   const viewing=document.createElement("div");viewing.className="preview-control-group";viewing.append(lightbox,expand);
   controls.append(browsing,viewing);
@@ -1699,8 +1699,13 @@ function workspaceLightboxOpen(){
 function syncWorkspaceLightboxButtons(){
   const open=workspaceLightboxOpen();
   workspacePreviewLightbox=open;
-  document.querySelectorAll("#workspace-preview .preview-head button").forEach((button)=>{
-    if(/lightbox/i.test(button.textContent))button.textContent=open?"Close lightbox":"Lightbox";
+  document.querySelectorAll('#workspace-preview [data-preview-action="lightbox"], #preview-lightbox').forEach(button=>{
+    button.textContent=open?"Close lightbox":"Lightbox";
+    button.setAttribute("aria-pressed",String(open));
+  });
+  document.querySelectorAll('#workspace-preview [data-preview-action="expand"], #preview-expand').forEach(button=>{
+    button.textContent=workspacePreviewExpanded?"Collapse":"Expand";
+    button.setAttribute("aria-expanded",String(workspacePreviewExpanded));
   });
 }
 function setWorkspacePreviewExpanded(expanded){
@@ -1710,8 +1715,7 @@ function setWorkspacePreviewExpanded(expanded){
   const grid=document.querySelector(".explorer-body");
   grid?.classList.toggle("expanded",workspacePreviewExpanded);
   if (workspacePreviewExpanded) $("explorer")?.focus?.({ preventScroll:true });
-  const button=$("preview-expand")||document.querySelector("#workspace-preview .preview-head button:last-child");
-  if(button)button.textContent=workspacePreviewExpanded?"Collapse":"Expand";
+  syncWorkspaceLightboxButtons();
 }
 function mountWorkspaceLightboxMedia(){
   const layer=workspaceLightboxLayer(),preview=$("workspace-preview");
@@ -2827,8 +2831,8 @@ async function previewExplorerItem(item) {
     const head=document.createElement("div");head.className="preview-head";
     const title=document.createElement("div");title.className="preview-title";title.textContent=item.name;
     const controls=document.createElement("div");controls.className="preview-nav";
-    const lightbox=document.createElement("button");lightbox.className="ghost";lightbox.type="button";lightbox.textContent=workspaceLightboxOpen()?"Close lightbox":"Lightbox";lightbox.addEventListener("click",()=>setWorkspacePreviewLightbox(!workspaceLightboxOpen()));
-    const expand=document.createElement("button");expand.className="ghost";expand.type="button";expand.textContent=workspacePreviewExpanded?"Collapse":"Expand";expand.addEventListener("click",()=>setWorkspacePreviewExpanded(!workspacePreviewExpanded));
+    const lightbox=document.createElement("button");lightbox.className="ghost";lightbox.type="button";lightbox.dataset.previewAction="lightbox";lightbox.textContent=workspaceLightboxOpen()?"Close lightbox":"Lightbox";lightbox.addEventListener("click",()=>setWorkspacePreviewLightbox(!workspaceLightboxOpen()));
+    const expand=document.createElement("button");expand.className="ghost";expand.type="button";expand.dataset.previewAction="expand";expand.textContent=workspacePreviewExpanded?"Collapse":"Expand";expand.addEventListener("click",()=>setWorkspacePreviewExpanded(!workspacePreviewExpanded));
     controls.append(lightbox,expand);head.append(title,controls);
     const note=document.createElement("div");note.className="preview-folder";note.innerHTML=iconSvg("folder")+"<strong>Folder</strong><span>Press Enter to open this folder.</span>";
     root.append(head,note);
