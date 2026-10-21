@@ -1,3 +1,16 @@
+# Current branding sync — 21 October 2026
+
+Main through `8ac89c63ef96cc0cf9db860d7364012ec0a44ce1` is merged. Includes the supplied favicon as tab/toolbar/notification icons, fixed idle-fading settings mascot, latest onboarding/location editor changes, simplified README and current license. Store version remains 0.5.14. Mascot script/image are added to the explicit packaging list.
+
+- Syntax and diff checks passed.
+- 27 relevant mascot, default-display, location editor, reconnect, Simple rows and lightbox tests passed.
+- Candidate ZIP built twice with identical SHA-256: `0b434582fa8528fbb2fded76f04676b74e27dad806a11445bfb491a62998256c`.
+- Package: `dist/redown-chrome-0.5.14.zip`, 25 allowlisted files; required local assets, PNG dimensions and ZIP integrity checked.
+- Root and packaged license are identical.
+- No new installed-Chrome or live Cloudflare acceptance run. Earlier full-suite results below are historical and were not rerun for this sync. Privacy/publisher/live-session release gates remain open.
+
+## Prior verification record (superseded archive digest)
+
 # Synced store candidate verification
 
 Date: 20 October 2026. Branch: `chrome-web-store`. Version: **0.5.14**.

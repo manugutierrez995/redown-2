@@ -484,3 +484,24 @@ In the **Simple right-click menu** settings panel, a small change to an existing
 
 **Investigation:** Trace `extension/options.js` Simple Mode rendering and profile save/refresh paths, relevant callbacks and bucket/folder fetches; distinguish a necessary native context-menu rebuild from an avoidable settings-panel DOM rebuild. Related but independent: BUG-004 (Nested Mode full-editor refresh), BUG-005 (multiple independent Simple destinations).
 
+
+## BUG-017 — Simple and Nested location editors are visually cluttered and difficult to decipher
+
+**Status:** Open · user-reported usability/design defect · recorded October 21, 2026
+
+**User report:** Both location editors feel cluttered, insufficiently aesthetic, and hard for a new user to understand. REDOWN needs simplicity and elegance that inspire trust. Consolidating Add new location into one toolbar button reduces repetition, but does not resolve the broader layout and hierarchy problem.
+
+**Expected experience:** A new user can understand the selected account/bucket, existing destination, creation draft, and next action at a glance. The interface should feel calm, polished, predictable and trustworthy, with deliberate grouping rather than a dense wall of competing controls.
+
+**Design requirements and acceptance criteria:**
+
+- Establish clear visual hierarchy between mode selection, account/bucket context, destination rows, folder levels and contextual actions. Make parent/child relationships legible without decoding repeated labels.
+- Use purposeful containers, consistent internal padding, spacing between groups and aligned controls. Avoid excessive nested borders/cards, cramped rows, arbitrary gaps, and visually ambiguous ownership of buttons.
+- Give important actions distinctive palettes that complement the overall REDOWN aesthetic. **Red text on a silver button for Add new location is a user-suggested direction to explore, not an approved final palette.** Action emphasis should be consistent and deliberate; do not give every control equal visual weight or make routine creation look destructive.
+- Preserve the established green next-step treatment for onboarding. Keep destructive, primary and secondary actions distinguishable using labels and hierarchy as well as color, with readable contrast and clear hover/focus/disabled states.
+- Retain the single toolbar-level Add new location action and the existing functionality of both modes; improve presentation without removing needed folder creation, selection, ordering or hierarchy controls.
+- Validate layout at narrow and wide viewports, long bucket/folder names, empty states, and deep hierarchies. Controls must wrap predictably with adequate spacing and no clipping or overlap.
+- Review loading, error and success states as part of the design so feedback stays close to the relevant action and does not rearrange the editor unexpectedly.
+- Assess the result with a fresh-user walkthrough: choose a mode, identify the destination, add a location and explain where a file will go without Debug Mode or external guidance.
+
+**Scope:** Record this as a future focused UX/design pass. No palette selection, redesign implementation, visual acceptance or usability-test result is claimed by this report. Related: BUG-003, BUG-004, BUG-010 and BUG-016.

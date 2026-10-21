@@ -1,8 +1,9 @@
 <!doctype html>
-<html>
+<html class="onboarding-pending storage-pending">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon32.png">
   <title>REDOWN — Destinations</title>
   <style>
     @font-face{font-family:"DM Sans";src:url("fonts/dm-sans-latin-variable.woff") format("woff");font-style:normal;font-weight:100 1000;font-display:swap}
@@ -14,12 +15,27 @@
     }
     *{box-sizing:border-box}
     [hidden],html:not(.debug-mode) .debug-only{display:none!important}
+    html.onboarding-pending:not(.debug-mode) .requires-storage{display:none!important}
+    html.storage-pending:not(.debug-mode) #cloudflare-panel,
+    html.onboarding-pending:not(.debug-mode) .page-nav{display:none!important}
+    .setup-go{background:var(--green)!important;color:#09281c!important;border-color:var(--green)!important;font-weight:700}
+    .setup-go:hover:not(:disabled){background:#95edc6!important}
+    a.setup-go{display:inline-flex;align-items:center;justify-content:center;padding:11px 16px;border:1px solid;border-radius:10px;text-decoration:none}
     .bucket-select{width:100%;min-height:56px;padding:16px 18px;text-align:left;overflow-wrap:anywhere;background:linear-gradient(145deg,#26344e,#1a263d);color:var(--text);border:1px solid var(--line);transition:border-color .15s,background .15s}
     .bucket-select:hover,.bucket-select:focus-visible{border-color:var(--purple2);background:#354363}
     .bucket.selected .bucket-select{border-color:var(--purple2);box-shadow:0 0 0 2px rgba(139,92,246,.18)}
     .bucket .bucket-details{display:block;margin:9px 0}
     .bucket .bucket-prepare{width:100%}
-    .section.debug-settings{background:transparent;box-shadow:none;padding:18px 22px;border-style:dashed}.debug-settings .toggle{margin:0;text-transform:none;letter-spacing:0}
+    .header-actions{display:flex;align-items:center;gap:12px;flex-shrink:0}
+    .settings-disclosure{position:relative}
+    .settings-disclosure > summary{list-style:none;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:1px solid var(--line);border-radius:10px;background:var(--panel);cursor:pointer}
+    .settings-disclosure > summary::-webkit-details-marker{display:none}
+    .settings-disclosure > summary span{width:18px;height:2px;border-radius:2px;background:var(--text)}
+    .settings-disclosure > summary:hover{border-color:var(--purple)}
+    .settings-disclosure > summary:focus-visible{outline:2px solid var(--purple);outline-offset:3px}
+    .settings-popover{position:absolute;right:0;top:calc(100% + 10px);z-index:100;width:210px;max-width:calc(100vw - 28px);padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+    .settings-popover .toggle{margin:0;text-transform:none;letter-spacing:0}
+
 
     body{margin:0;background:radial-gradient(ellipse at 50% 0,rgba(87,102,158,.12),transparent 650px),var(--bg);color:var(--text);font:14px/1.55 "DM Sans",ui-sans-serif,system-ui,sans-serif}
     .wrap{max-width:1240px;margin:0 auto;padding:32px 32px 48px}
@@ -357,6 +373,11 @@
     #workspace-preview .preview-folder strong{display:block;font-size:14px;font-weight:500;color:#e4ddd3}
     #workspace-preview .preview-folder span{display:block;max-width:24ch}
     @media(max-width:760px){.explorer-body{height:auto}.explorer-main{height:clamp(420px,70vh,760px)}#workspace-preview{max-height:80vh}.explorer-pagination{flex-wrap:wrap}.explorer-pagination .explorer-page-numbers{margin-left:auto}}
+    .settings-mascot{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));width:96px;height:auto;z-index:20;pointer-events:none;user-select:none;opacity:0;transform:translateY(8px);transition:opacity .75s ease,transform .75s ease;filter:drop-shadow(0 6px 12px #0004)}
+    .settings-mascot.is-visible{opacity:1;transform:translateY(0)}
+    body.preview-lightbox-open .settings-mascot{visibility:hidden}
+    @media(max-width:600px){.settings-mascot{width:64px;left:8px;bottom:8px}}
+    @media(prefers-reduced-motion:reduce){.settings-mascot{transition:none;transform:none}}
 </style>
 </head>
 <body>
@@ -366,7 +387,15 @@
       <img src="icon.svg" alt="">
       <div><div class="wordmark">REDOWN</div><div class="sub">Remote downloads, without the download.</div></div>
     </div>
-    <div class="pill">v0.5.14</div>
+    <div class="header-actions">
+      <div class="pill">v0.5.14</div>
+      <details id="settings-disclosure" class="settings-disclosure">
+        <summary aria-label="Settings"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></summary>
+        <div class="settings-popover">
+          <label class="toggle"><input id="debug-mode-enabled" type="checkbox"> Debug Mode</label>
+        </div>
+      </details>
+    </div>
   </header>
 
   <section id="connections" class="hero">
@@ -375,13 +404,17 @@
     <p>Connect once. REDOWN remembers your destinations, then lets you right-click any remote link or media item and send it straight to a bucket or repository.</p>
     <div class="connects">
       <button id="connect-cloudflare" class="primary">Connect Cloudflare</button>
+      <span id="r2-setup" hidden>
+        <a id="r2-dashboard" class="setup-go" href="https://dash.cloudflare.com/?to=%2F%3Aaccount%2Fr2%2Foverview" target="_blank" rel="noopener noreferrer">Set up R2 ↗</a>
+        <button id="r2-check" type="button" class="ghost">Check connection</button>
+      </span>
       <button id="disconnect-cloudflare" class="ghost" hidden>Disconnect Cloudflare</button>
       <button id="add-github" class="secondary debug-only">Add GitHub destination</button>
     </div>
     <div id="hero-status" class="status"></div>
   </section>
 
-  <nav class="page-nav" aria-label="Settings sections"><a href="#connections">Connection</a><a class="connected-link" href="#cloudflare-panel">Buckets</a><a href="#right-click-presets">Destinations</a><a class="connected-link" href="#upload-zone">Upload</a><a class="connected-link" href="#explore-zone">Explore</a><a href="#downloads-zone">Downloads</a></nav>
+  <nav class="page-nav" aria-label="Settings sections"><a href="#connections">Connection</a><a class="connected-link" href="#cloudflare-panel">Buckets</a><a class="requires-storage" href="#right-click-presets">Destinations</a><a class="connected-link requires-storage" href="#upload-zone">Upload</a><a class="connected-link requires-storage" href="#explore-zone">Explore</a><a class="requires-storage" href="#downloads-zone">Downloads</a></nav>
 
   <section id="cloudflare-panel" class="section" hidden>
     <div class="section-head">
@@ -390,7 +423,7 @@
     <div class="card">
       <div class="grid two">
         <div><label for="cf-account">Cloudflare account</label><select id="cf-account"></select></div>
-        <div>
+        <div id="bucket-create-fields">
           <label>Create a bucket</label>
           <div class="create-bucket-row">
             <input id="new-bucket" placeholder="my-assets">
@@ -403,7 +436,7 @@
     </div>
   </section>
 
-  <section id="right-click-presets" class="section">
+  <section id="right-click-presets" class="section requires-storage">
     <div class="section-head">
       <div><span class="section-kicker">02 / Destinations</span><h2>Right-click presets</h2><div class="section-note">Drag the ⠿ handles to set menu order. In Nested, folders move with their children; drag within the same parent.</div></div>
       <button id="refresh-menu-locations" class="ghost" type="button">Refresh locations</button>
@@ -411,7 +444,19 @@
     <div class="right-click-mode" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
       <label class="toggle"><input id="use-simple-menu" type="checkbox" aria-describedby="right-click-mode-status">Use Simple Menu</label>
       <label class="toggle"><input id="use-nested-menu" type="checkbox" aria-describedby="right-click-mode-status">Use Nested Menu</label>
+      <button id="add-menu-location" type="button" class="ghost" style="margin-left:auto">+ Add new location</button>
     </div>
+    <dialog id="add-location-dialog" style="max-width:calc(100vw - 28px);width:380px">
+      <form method="dialog" id="add-location-form">
+        <h3>Add new location</h3>
+        <label for="add-location-profile">Destination</label>
+        <select id="add-location-profile"></select>
+        <div class="row-actions" style="margin-top:16px">
+          <button type="button" id="add-location-cancel" class="ghost">Cancel</button>
+          <button type="submit" class="secondary">Add location</button>
+        </div>
+      </form>
+    </dialog>
     <div id="right-click-mode-status" class="meta" role="status" style="margin-bottom:12px"></div>
     <div id="menu-location-status" class="status" role="status" aria-live="polite"></div>
 
@@ -426,7 +471,7 @@
     </div>
   </section>
 
-  <div id="local-tools" hidden>
+  <div id="local-tools" class="requires-storage" hidden>
   <section id="upload-zone" class="section">
     <div class="section-head">
       <div><span class="section-kicker">03 / Upload</span><h2>Upload from computer</h2><div class="section-note">Choose an R2 bucket and location, then drag files in.</div></div>
@@ -508,7 +553,7 @@
     </div>
   </section>
 
-  <section id="downloads-zone" class="section">
+  <section id="downloads-zone" class="section requires-storage">
     <div class="section-head">
       <div><span class="section-kicker">05 / Activity</span><h2>Downloads</h2><div class="section-note">Successful downloads first. Newest is on top; errors stay available below.</div></div>
       <button id="refresh-history" class="ghost">Refresh</button>
@@ -516,11 +561,10 @@
     <div id="history" class="card"></div>
   </section>
 
-  <section class="section debug-settings">
-    <label class="toggle"><input id="debug-mode-enabled" type="checkbox"> Debug Mode</label>
-  </section>
 
 </div>
+<img class="settings-mascot" src="settings-mascot.png" alt="" aria-hidden="true" draggable="false" width="96">
+<script src="settings-mascot.js"></script>
 <script type="module" src="model-viewer.min.js"></script>
 <script src="cloudflare-auth.js"></script>
 <script src="cloudflare-api.js"></script>

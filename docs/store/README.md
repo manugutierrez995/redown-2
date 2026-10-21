@@ -6,7 +6,7 @@ This branch is prepared for packaging and release work. **Do not describe it as 
 
 ## Latest main fixes incorporated
 
-Main through `60504d65ab366659a71e95ba4f757faac52416fc` is merged into this candidate: lightbox opening/navigation, gallery styling, retained-image loading, right-click zoom, compact anchored pagination, preview spacing and explicit Expand/Collapse synchronization. Store-specific PNG icons, version 0.5.14 and packaging are retained. See [current verification](VERIFICATION.md) for results and remaining blockers.
+Main through `8ac89c63ef96cc0cf9db860d7364012ec0a44ce1` is merged into this candidate: lightbox opening/navigation, gallery styling, retained-image loading, right-click zoom, compact anchored pagination, preview spacing and explicit Expand/Collapse synchronization. The new owner-supplied favicon replaces the old letter icons; settings gain the idle-fading scrolling mascot. Latest onboarding/location editor fixes, simplified README and current license are included. Store version 0.5.14 and packaging are retained. See [current verification](VERIFICATION.md) for results and remaining blockers.
 
 ## Prepared here
 
@@ -14,7 +14,7 @@ Main through `60504d65ab366659a71e95ba4f757faac52416fc` is merged into this cand
 - Manifest and visible settings version updated together.
 - Manifest/README descriptions distinguish direct cloud transfer from browser-assisted/local paths.
 - Standard-library Python packaging script with an explicit runtime allowlist, referenced HTML asset checks, PNG dimensions, ZIP integrity, per-file hashes and archive digest.
-- The noncommercial project license and existing font/model-viewer notices remain included. Extra untracked fonts and development files cannot enter via the package allowlist.
+- The current project license and existing font/model-viewer notices remain included. Extra untracked fonts and development files cannot enter via the package allowlist.
 - Listing draft and reviewer walkthrough below.
 
 ## Build locally

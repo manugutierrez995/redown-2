@@ -4,6 +4,8 @@ let rightClickMode="simple";
 let debugModeEnabled=false;
 let cfAccounts=[];
 let currentAccountId="";
+let onboardingConnected=false;
+let onboardingBucketState="loading";
 let workspaceTarget=null;
 let workspaceObjects=[];
 let workspacePreviewExpanded=false;
@@ -482,6 +484,28 @@ $("use-nested-menu").addEventListener("change",()=>chooseRightClickMode("nested"
 
 // Simple destinations share one path editor: dropdowns are selections, inputs are drafts.
 // Removing a level preserves lower rows as blank, reusable selectors; no R2 deletion.
+async function addMenuLocation(profileId){
+  if(rightClickMode==="nested")return RedownNestedEditor.addLocation(profileId);
+  const host=Array.from(document.querySelectorAll("[data-simple-location-profile]")).find(el=>el.dataset.simpleLocationProfile===profileId);
+  if(!host)throw new Error("Refresh destinations and try again.");
+  host.addLocation();
+}
+$("add-menu-location").addEventListener("click",async()=>{
+  const available=profiles.filter(p=>p.type==="cloudflare-r2"&&!p.explorerManaged);
+  if(!available.length)return setStatus("menu-location-status","Use a storage bucket first.");
+  try{
+    if(available.length===1){await addMenuLocation(available[0].id);return;}
+    const select=$("add-location-profile");select.replaceChildren();
+    for(const profile of available){const option=document.createElement("option");option.value=profile.id;option.textContent=[displayName(profile),profile.accountName].filter(Boolean).join(" · ");select.append(option);}
+    $("add-location-dialog").showModal();select.focus();
+  }catch(error){setStatus("menu-location-status",error.message||"Could not add location.","bad");}
+});
+$("add-location-cancel").addEventListener("click",()=>$("add-location-dialog").close());
+$("add-location-form").addEventListener("submit",async event=>{
+  event.preventDefault();
+  try{await addMenuLocation($("add-location-profile").value);$("add-location-dialog").close();}
+  catch(error){setStatus("menu-location-status",error.message||"Could not add location.","bad");}
+});
 function simpleFolderPathEditor(profile, host, message, bucketName, initialPrefix, persist){
   let parts=String(initialPrefix||"").split("/").filter(Boolean);
   if(!parts.length)parts=[""];
@@ -533,22 +557,30 @@ function simpleFolderPathEditor(profile, host, message, bucketName, initialPrefi
       });
       create.addEventListener("click",async()=>{
         const name=input.value.trim();
-        if(!name||name==="."||name===".."||/[\\/\\\\\\0-\\x1f]/.test(name)){
+        if(!name||name==="."||name===".."||/[\/\\\x00-\x1f\x7f]/.test(name)){
           message.textContent="Enter one valid folder name, without slashes.";return;
         }
         if(!parentReady){message.textContent="Choose a parent first.";return;}
+        if(create.disabled)return;
         create.disabled=true;message.textContent="Creating directory…";
+        let creationTimer;
         try{
-          const response=await send({type:"cfCreateFolder",accountId:profile.accountId,bucketName:bucket,accountName:profile.accountName,prefix:parent.join("/"),name});
+          const response=await Promise.race([
+            send({type:"cfCreateFolder",accountId:profile.accountId,bucketName:bucket,accountName:profile.accountName,prefix:parent.join("/"),name}),
+            new Promise((_,reject)=>{creationTimer=setTimeout(()=>reject(new Error("Folder creation has not been confirmed. Refresh locations to check whether it was created before retrying.")),60000);})
+          ]);
           if(!response?.ok)throw new Error(response?.error||"Folder creation failed.");
-          if(token!==generation||bucket!==bucketName()||parent.join("/")!==parts.slice(0,index).join("/")||!row.isConnected)return;
+          if(token!==generation||bucket!==bucketName()||parent.join("/")!==parts.slice(0,index).join("/")||!row.isConnected){
+            if(message.textContent==="Creating directory…")message.textContent="Directory created in the previous location. Refresh locations to see it.";
+            return;
+          }
           if(!Array.from(selected.options).some(o=>o.value===name))option(selected,name,name);
           selected.value=name;selected.disabled=false;
           parts[index]=name;drafts.delete(index);input.value="";
           invalidateBelow();add.disabled=false;message.textContent="Directory created: /"+prefix();
           draw(index+1);
         }catch(error){message.textContent=error?.message||"Could not create directory.";}
-        finally{if(row.isConnected)create.disabled=false;}
+        finally{clearTimeout(creationTimer);if(row.isConnected)create.disabled=false;}
       });
       if(!parentReady){option(selected,"","Select an ancestor first");continue;}
       try{
@@ -609,9 +641,10 @@ function simpleExtraOptions(profile,showIntro=true){
   const heading=document.createElement("div");heading.className="section-head";
   const intro=document.createElement("div");const title=document.createElement("strong");title.textContent="Additional Simple destinations";
   const note=document.createElement("div");note.className="meta";note.textContent="Choose existing folders or explicitly create new directories at any level. × only clears the menu location.";
-  if(showIntro)intro.append(title,note);const add=document.createElement("button");add.type="button";add.className="ghost";add.textContent="+ Add New Option";
+  if(showIntro)intro.append(title,note);
   if(showIntro)heading.append(intro);
-  heading.append(add);const rows=document.createElement("div");const options=profile.simpleOptions||=[];
+  const rows=document.createElement("div");const options=profile.simpleOptions||=[];
+  wrap.dataset.simpleLocationProfile=profile.id;
   profile.simpleOptions=options;
   function addRow(item){
     item.bucketName||=profile.bucketName;
@@ -650,10 +683,10 @@ function simpleExtraOptions(profile,showIntro=true){
     rows.append(row);
   }
   for(const item of options)addRow(item);
-  add.addEventListener("click",()=>{
+  wrap.addLocation=()=>{
     const item={id:uid(),label:"New destination",bucketName:profile.bucketName,prefix:""};
-    options.push(item);addRow(item);saveProfiles();rows.lastElementChild?.querySelector("input")?.focus();
-  });
+    options.push(item);addRow(item);saveProfiles();rows.lastElementChild?.scrollIntoView?.({block:"nearest"});rows.lastElementChild?.querySelector("input")?.focus();
+  };
   wrap.append(heading,rows);return wrap;
 }
 function simpleBucketCreator(){
@@ -723,6 +756,7 @@ async function saveProfileOrder(){
   }catch(error){for(const [profile,order] of previous){if(order===undefined)delete profile.menuOrder;else profile.menuOrder=order;}throw error;}
 }
 function renderProfiles(){
+  applyOnboarding();
   renderRightClickMode();
   const root=$("profiles");
   root.replaceChildren();
@@ -3932,16 +3966,21 @@ function refreshCloudflare(){
 async function refreshCloudflareState(){
   const stored=await chrome.storage.local.get("cloudflareAuth");
   const connected=Boolean(stored.cloudflareAuth?.accessToken);
+  onboardingConnected=connected&&!stored.cloudflareAuth?.reconnectRequired;
+  applyOnboarding();
   $("connect-cloudflare").hidden=connected&&!stored.cloudflareAuth?.reconnectRequired;
+  $("connect-cloudflare").classList.toggle("setup-go",!connected);
   $("connect-cloudflare").textContent=connected?"Reconnect Cloudflare":"Connect Cloudflare";
   $("disconnect-cloudflare").hidden=!connected;
   $("cloudflare-panel").hidden=!connected;
+  if(!connected)$("r2-setup").hidden=true;
   $("local-tools").hidden=!connected;
   if(!connected){setStatus("menu-location-status","Connect Cloudflare to refresh locations.","bad");return false;}
 
   setStatus("hero-status","Checking Cloudflare access…");
   const result=await send({type:"cfAccounts"});
   if(!result?.ok){
+    onboardingBucketState="error";applyOnboarding();
     const message=result?.error||"Could not verify Cloudflare access. Retry.";
     setStatus("cf-status",message,"bad");setStatus("hero-status",message,"bad");setStatus("menu-location-status",message,"bad");
     if(/authorization|authenticate|authentication|session expired|connect cloudflare|reconnect cloudflare|unauthorized|\b401\b/i.test(message))$("connect-cloudflare").hidden=false;
@@ -3961,16 +4000,38 @@ async function refreshCloudflareState(){
   });
   return true;
 }
+$("r2-check").addEventListener("click",async()=>{
+  const button=$("r2-check");
+  button.disabled=true;
+  try{await refreshBuckets();}
+  finally{button.disabled=false;}
+});
 async function refreshBuckets(){
   if(!currentAccountId)return;
+  const accountId=currentAccountId;
+  onboardingBucketState="loading";applyOnboarding();
+  $("r2-setup").hidden=true;
+  $("bucket-grid").replaceChildren();
+  $("r2-dashboard").href=`https://dash.cloudflare.com/${encodeURIComponent(accountId)}/r2/overview`;
   setStatus("cf-status","Loading buckets…");
-  const result=await send({type:"cfBuckets",accountId:currentAccountId});
-  if(!result?.ok){setStatus("cf-status",result?.error||"Could not load buckets","bad");return;}
+  const result=await send({type:"cfBuckets",accountId}).catch(error=>({ok:false,error:error?.message||"Could not load buckets"}));
+  if(accountId!==currentAccountId)return;
+  if(!result?.ok){
+    const message=result?.error||"Could not load buckets";
+    const needsActivation=/(?:please\s+)?(?:sign\s*up|subscribe|activate|enable).{0,60}\bR2\b|\bR2\b.{0,60}(?:subscription required|not enabled|not activated|not subscribed)/i.test(message);
+    onboardingBucketState=needsActivation?"activate":"error";applyOnboarding();
+    $("r2-setup").hidden=!needsActivation;
+    if(needsActivation)setStatus("hero-status","✓ Cloudflare connected. Set up R2 to continue.","ok");
+    setStatus("cf-status",needsActivation?"Cloudflare connected. Set up R2 storage to continue.":message,needsActivation?"":"bad");
+    return;
+  }
+  onboardingBucketState=(result.buckets||[]).length?"choose":"empty";applyOnboarding();
+  setStatus("hero-status","✓ Cloudflare connected.","ok");
   const root=$("bucket-grid");root.replaceChildren();
   (result.buckets||[]).forEach(bucket=>{
     const el=document.createElement("div");el.className="bucket";
     const strong=document.createElement("button");strong.type="button";strong.className="bucket-select";strong.textContent=bucket.name;strong.setAttribute("aria-pressed","false");
-    const ready=profiles.some(p=>p.type==="cloudflare-r2"&&p.accountId===currentAccountId&&p.bucketName===bucket.name);
+    const ready=profiles.some(p=>isSetupDestination(p)&&p.accountId===currentAccountId&&p.bucketName===bucket.name);
     const span=document.createElement("span");span.className="bucket-details debug-only";
     span.textContent=ready
       ? "Configured for REDOWN"
@@ -3994,7 +4055,19 @@ async function refreshBuckets(){
       selectBucket();
       addBucketPreset(bucket.name,{forceRepair:true});
     });
-    el.append(prepare);
+    const use=document.createElement("button");
+    use.type="button";use.className="secondary bucket-use setup-go";
+    use.textContent="Use this bucket";
+    use.addEventListener("click",async()=>{
+      if(use.disabled)return;
+      selectBucket();use.disabled=true;use.textContent="Setting up…";
+      try{
+        const done=await addBucketPreset(bucket.name);
+        use.textContent=done?"✓ Ready to use":"Retry setup";
+      }catch(error){setStatus("cf-status",error?.message||"Setup interrupted. Retry.","bad");use.textContent="Retry setup";}
+      finally{use.disabled=false;}
+    });
+    el.append(use,prepare);
     root.append(el);
   });
   setStatus("cf-status",(result.buckets||[]).length?"Choose a bucket.":"No buckets yet. Create one above.");
@@ -4003,10 +4076,12 @@ async function addBucketPreset(bucketName,{forceRepair=false}={}){
   const account=cfAccounts.find(a=>a.id===currentAccountId);
   if(!account)return;
   // Selecting an existing destination must never trigger a Worker deployment.
-  if(!forceRepair&&profiles.some(p=>p.type==="cloudflare-r2"&&p.accountId===account.id&&p.bucketName===bucketName)){
+  if(!forceRepair&&profiles.some(p=>isSetupDestination(p)&&p.accountId===account.id&&p.bucketName===bucketName)){
     setStatus("cf-status",bucketName+" is already configured. No Worker redeployment was attempted.","ok");
-    return;
+    await refreshLocationEditors();
+    return true;
   }
+  const setupAccountId=account.id;
   setStatus("cf-status",`Preparing ${bucketName}… REDOWN is verifying the remote transfer Worker before saving this preset.`);
   try {
   let result;
@@ -4037,7 +4112,11 @@ async function addBucketPreset(bucketName,{forceRepair=false}={}){
   rightClickMode=RedownNestedLocations.menuMode(stored.rightClickMode,profiles);
   if(stored.rightClickMode!=="simple" && stored.rightClickMode!=="nested")await chrome.storage.local.set({rightClickMode});
   renderProfiles();
+  await refreshLocationEditors();
+  await loadExplorerInventory();
+  if(currentAccountId!==setupAccountId)return true;
   setStatus("cf-status",`${bucketName} is ready. REDOWN verified a real R2 write and prepared its default locations. Right-click a link, image, video, audio item, or GLB link → REDOWN → ${bucketName}.`,"ok");
+  return true;
   } catch(error) {
     const message=error?.message||String(error);
     setStatus("cf-status",/failed to fetch|network/i.test(message)
@@ -4185,7 +4264,39 @@ async function refreshDownloadsOnAccess(){
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refreshDownloadsOnAccess();});
 window.addEventListener("focus",refreshDownloadsOnAccess);
 
+function isSetupDestination(profile){
+  return profile.type==="cloudflare-r2"&&!profile.explorerManaged&&Boolean(profile.workerUrl&&profile.token);
+}
+function applyOnboarding(){
+  const ready=onboardingConnected&&profiles.some(isSetupDestination);
+  document.documentElement.classList.toggle("onboarding-pending",!ready);
+  const activation=onboardingConnected&&onboardingBucketState==="activate";
+  const storageAvailable=ready||(onboardingConnected&&["empty","choose","error"].includes(onboardingBucketState));
+  document.documentElement.classList.toggle("storage-pending",!storageAvailable);
+  $("r2-setup").hidden=!activation;
+  $("create-bucket").classList.toggle("setup-go",onboardingBucketState==="empty");
+}
+let r2ReturnCheck=null;
+function checkR2OnReturn(){
+  if(document.visibilityState!=="visible"||onboardingBucketState!=="activate"||!onboardingConnected||r2ReturnCheck)return;
+  r2ReturnCheck=refreshBuckets().finally(()=>{r2ReturnCheck=null;});
+}
+window.addEventListener("focus",checkR2OnReturn);
+document.addEventListener("visibilitychange",checkR2OnReturn);
+function wireSettingsDisclosure(){
+  const disclosure=$("settings-disclosure");
+  document.addEventListener("click",event=>{
+    if(disclosure.open&&!disclosure.contains(event.target))disclosure.open=false;
+  });
+  document.addEventListener("keydown",event=>{
+    if(event.key==="Escape"&&disclosure.open){
+      disclosure.open=false;disclosure.querySelector("summary").focus();event.preventDefault();
+    }
+  });
+}
+wireSettingsDisclosure();
 function applyDebugMode(){
+  applyOnboarding();
   document.documentElement.classList.toggle("debug-mode",debugModeEnabled);
   $("debug-mode-enabled").checked=debugModeEnabled;
   document.querySelectorAll("[data-debug-detail]").forEach(el=>{el.hidden=!debugModeEnabled;});
@@ -4200,6 +4311,7 @@ $("debug-mode-enabled").addEventListener("change",async(event)=>{
 (async()=>{
   const stored=await chrome.storage.local.get(["profiles","cloudflareAuth","rightClickMode","debugModeEnabled"]);
   profiles=stored.profiles||[];
+  onboardingConnected=Boolean(stored.cloudflareAuth?.accessToken)&&!stored.cloudflareAuth?.reconnectRequired;
   debugModeEnabled=stored.debugModeEnabled===true;
   applyDebugMode();
   rightClickMode=RedownNestedLocations.menuMode(stored.rightClickMode,profiles);

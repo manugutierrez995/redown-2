@@ -21,7 +21,7 @@ function harness(initialPrefix='one/two/three'){
     }
     throw Error('Unexpected: '+request.type);
   };
-  const context=vm.createContext({document:dom.window.document,send,scheduleSave:()=>{},saveProfiles:async()=>{},uid:()=>String(Math.random()),field:()=>dom.window.document.createElement('input')});
+  const context=vm.createContext({document:dom.window.document,send,setTimeout,clearTimeout,scheduleSave:()=>{},saveProfiles:async()=>{},uid:()=>String(Math.random()),field:()=>dom.window.document.createElement('input')});
   vm.runInContext(editorCode,context);
   const profile={type:'cloudflare-r2',accountId:'account',accountName:'Account',bucketName:'bucket',defaultPrefix:initialPrefix};
   context.profile=profile;
@@ -83,4 +83,45 @@ test('reconnect refresh retries Simple lookups without clearing drafts or saved 
   assert.equal(h.profile.defaultPrefix,'one/two/three');
   assert.equal(h.calls.some(c=>c.type!=='cfFolderChildren'),false);
   h.dom.window.close();
+});
+
+test('Simple: valid names including zero and f create at bucket root',async()=>{
+  for(const name of ['new02','folder','x-files','0','Family Photos','資料']){
+    const h=harness('');await settled();
+    const row=h.rows()[0];row.querySelector('input').value=name;
+    row.querySelector('button:nth-last-child(3)').click();await settled();
+    const request=h.calls.find(c=>c.type==='cfCreateFolder');
+    assert.equal(request?.name,name);assert.equal(request.prefix,'');
+    assert.equal(h.profile.defaultPrefix,name);
+    assert.doesNotMatch(h.status.textContent,/Creating directory/);
+    h.dom.window.close();
+  }
+});
+test('Simple: invalid path segments never send creation requests',async()=>{
+  for(const name of ['', '.', '..','a/b','a\\b','a'+String.fromCharCode(0)+'b']){
+    const h=harness('');await settled();const row=h.rows()[0];
+    row.querySelector('input').value=name;row.querySelector('button:nth-last-child(3)').click();await settled();
+    assert.equal(h.calls.some(c=>c.type==='cfCreateFolder'),false);
+    h.dom.window.close();
+  }
+});
+test('Simple: stalled creation releases button and explains uncertain outcome',async()=>{
+  const h=harness('');await settled();let expire;
+  h.context.setTimeout=fn=>{expire=fn;return 1;};h.context.clearTimeout=()=>{};
+  h.context.send=()=>new Promise(()=>{});
+  const row=h.rows()[0],button=row.querySelector('button:nth-last-child(3)');
+  row.querySelector('input').value='new02';button.click();await settled();
+  assert.equal(button.disabled,true);expire();await settled();
+  assert.equal(button.disabled,false);assert.match(h.status.textContent,/not been confirmed/);
+  assert.equal(row.querySelector('input').value,'new02');
+  h.dom.window.close();
+});
+test('Simple: refreshing during creation cannot leave a permanent Creating status',async()=>{
+  const h=harness('');await settled();let finish;const original=h.context.send;
+  h.context.send=request=>request.type==='cfCreateFolder'?new Promise(resolve=>{finish=resolve;}):original(request);
+  h.rows()[0].querySelector('input').value='new02';
+  h.rows()[0].querySelector('button:nth-last-child(3)').click();await settled();
+  h.editor.reset('');await settled();finish({ok:true});await settled();
+  assert.doesNotMatch(h.status.textContent,/Creating directory/);
+  assert.equal(h.profile.defaultPrefix,'');h.dom.window.close();
 });
