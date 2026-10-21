@@ -8,6 +8,7 @@ function setStatus(message, kind=""){
 }
 async function loadProfiles(){
   const {profiles=[]}=await chrome.storage.local.get("profiles");
+  const previous=profileSelect.value;
   profileSelect.replaceChildren();
   for(const profile of profiles){
     const option=document.createElement("option");
@@ -16,6 +17,7 @@ async function loadProfiles(){
     option.textContent=profile.name+(detail ? " · "+detail : "");
     profileSelect.append(option);
   }
+  if(profiles.some(profile=>profile.id===previous))profileSelect.value=previous;
   const empty=!profiles.length;
   send.hidden=empty;
   setup.hidden=!empty;
@@ -53,5 +55,8 @@ send.addEventListener("click",async()=>{
     send.disabled=false;
     send.textContent="Send with REDOWN";
   }
+});
+chrome.storage.onChanged.addListener((changes,area)=>{
+  if(area==="local"&&changes.profiles)loadProfiles();
 });
 loadProfiles();

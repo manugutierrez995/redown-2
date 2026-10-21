@@ -3936,6 +3936,7 @@ async function refreshCloudflareState(){
   $("connect-cloudflare").textContent=connected?"Reconnect Cloudflare":"Connect Cloudflare";
   $("disconnect-cloudflare").hidden=!connected;
   $("cloudflare-panel").hidden=!connected;
+  if(!connected)$("r2-setup").hidden=true;
   $("local-tools").hidden=!connected;
   if(!connected){setStatus("menu-location-status","Connect Cloudflare to refresh locations.","bad");return false;}
 
@@ -3961,11 +3962,28 @@ async function refreshCloudflareState(){
   });
   return true;
 }
+$("r2-check").addEventListener("click",async()=>{
+  const button=$("r2-check");
+  button.disabled=true;
+  try{await refreshBuckets();}
+  finally{button.disabled=false;}
+});
 async function refreshBuckets(){
   if(!currentAccountId)return;
+  const accountId=currentAccountId;
+  $("r2-setup").hidden=true;
+  $("bucket-grid").replaceChildren();
+  $("r2-dashboard").href=`https://dash.cloudflare.com/${encodeURIComponent(accountId)}/r2/overview`;
   setStatus("cf-status","Loading buckets…");
-  const result=await send({type:"cfBuckets",accountId:currentAccountId});
-  if(!result?.ok){setStatus("cf-status",result?.error||"Could not load buckets","bad");return;}
+  const result=await send({type:"cfBuckets",accountId}).catch(error=>({ok:false,error:error?.message||"Could not load buckets"}));
+  if(accountId!==currentAccountId)return;
+  if(!result?.ok){
+    const message=result?.error||"Could not load buckets";
+    const needsActivation=/(?:please\s+)?(?:sign\s*up|subscribe|activate|enable).{0,60}\bR2\b|\bR2\b.{0,60}(?:subscription required|not enabled|not activated|not subscribed)/i.test(message);
+    $("r2-setup").hidden=!needsActivation;
+    setStatus("cf-status",needsActivation?"Cloudflare connected. Set up R2 storage to continue.":message,needsActivation?"":"bad");
+    return;
+  }
   const root=$("bucket-grid");root.replaceChildren();
   (result.buckets||[]).forEach(bucket=>{
     const el=document.createElement("div");el.className="bucket";
@@ -3994,7 +4012,19 @@ async function refreshBuckets(){
       selectBucket();
       addBucketPreset(bucket.name,{forceRepair:true});
     });
-    el.append(prepare);
+    const use=document.createElement("button");
+    use.type="button";use.className="secondary bucket-use";
+    use.textContent="Use this bucket";
+    use.addEventListener("click",async()=>{
+      if(use.disabled)return;
+      selectBucket();use.disabled=true;use.textContent="Setting up…";
+      try{
+        const done=await addBucketPreset(bucket.name);
+        use.textContent=done?"✓ Ready to use":"Retry setup";
+      }catch(error){setStatus("cf-status",error?.message||"Setup interrupted. Retry.","bad");use.textContent="Retry setup";}
+      finally{use.disabled=false;}
+    });
+    el.append(use,prepare);
     root.append(el);
   });
   setStatus("cf-status",(result.buckets||[]).length?"Choose a bucket.":"No buckets yet. Create one above.");
@@ -4005,8 +4035,10 @@ async function addBucketPreset(bucketName,{forceRepair=false}={}){
   // Selecting an existing destination must never trigger a Worker deployment.
   if(!forceRepair&&profiles.some(p=>p.type==="cloudflare-r2"&&p.accountId===account.id&&p.bucketName===bucketName)){
     setStatus("cf-status",bucketName+" is already configured. No Worker redeployment was attempted.","ok");
-    return;
+    await refreshLocationEditors();
+    return true;
   }
+  const setupAccountId=account.id;
   setStatus("cf-status",`Preparing ${bucketName}… REDOWN is verifying the remote transfer Worker before saving this preset.`);
   try {
   let result;
@@ -4037,7 +4069,11 @@ async function addBucketPreset(bucketName,{forceRepair=false}={}){
   rightClickMode=RedownNestedLocations.menuMode(stored.rightClickMode,profiles);
   if(stored.rightClickMode!=="simple" && stored.rightClickMode!=="nested")await chrome.storage.local.set({rightClickMode});
   renderProfiles();
+  await refreshLocationEditors();
+  await loadExplorerInventory();
+  if(currentAccountId!==setupAccountId)return true;
   setStatus("cf-status",`${bucketName} is ready. REDOWN verified a real R2 write and prepared its default locations. Right-click a link, image, video, audio item, or GLB link → REDOWN → ${bucketName}.`,"ok");
+  return true;
   } catch(error) {
     const message=error?.message||String(error);
     setStatus("cf-status",/failed to fetch|network/i.test(message)

@@ -43,3 +43,46 @@ test('bucket name button selects without provisioning; debug reveals separate re
   assert.equal(h.dom.window.getComputedStyle(repair).display,'none');
   h.dom.window.close();
 });
+
+test('normal mode offers one setup action without exposing repair',async()=>{
+  const h=harness(),d=h.dom.window.document;
+  await vm.runInContext('refreshBuckets()',h.context);
+  const use=d.querySelector('.bucket-use');
+  assert.notEqual(h.dom.window.getComputedStyle(use).display,'none');
+  use.click();await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(h.calls[1][0],'test-bucket');
+  assert.equal(h.calls[1].length,1,'normal setup must not force redeployment');
+  h.dom.window.close();
+});
+test('R2 activation is an actionable neutral step, permission failures remain errors',async()=>{
+  const h=harness(),d=h.dom.window.document;
+  h.context.send=async()=>({ok:false,error:'Please sign up for R2 in the dashboard'});
+  await vm.runInContext('refreshBuckets()',h.context);
+  assert.equal(d.getElementById('r2-setup').hidden,false);
+  assert.match(d.getElementById('r2-dashboard').href,/account\/r2\/overview/);
+  h.context.send=async()=>({ok:false,error:'Permission denied'});
+  await vm.runInContext('refreshBuckets()',h.context);
+  assert.equal(d.getElementById('r2-setup').hidden,true);
+  assert.equal(d.getElementById('cf-status').textContent,'Permission denied');
+  h.context.send=async()=>({ok:true,buckets:[]});
+  await vm.runInContext('refreshBuckets()',h.context);
+  assert.match(d.getElementById('cf-status').textContent,/Create one/);
+  h.dom.window.close();
+});
+test('successful provisioning refreshes destination editors and inventory before reporting ready',async()=>{
+  const events=[];
+  const context=vm.createContext({currentAccountId:'account',cfAccounts:[{id:'account',name:'Account'}],profiles:[],
+    setStatus:(id,message)=>events.push(message),
+    send:async message=>{events.push(message.type);return {ok:true};},
+    chrome:{storage:{local:{get:async()=>({profiles:[{type:'cloudflare-r2',accountId:'account',bucketName:'assets'}],rightClickMode:'simple'})}}},
+    RedownNestedLocations:{menuMode:()=> 'simple'},
+    renderProfiles:()=>events.push('profiles'),refreshLocationEditors:async()=>events.push('locations'),
+    loadExplorerInventory:async()=>events.push('inventory')});
+  vm.runInContext(source.slice(source.indexOf('async function addBucketPreset('),source.indexOf('async function loginRequest(')),context);
+  assert.equal(await vm.runInContext('addBucketPreset("assets")',context),true);
+  assert.deepEqual(events.slice(1,5),['cfProvision','profiles','locations','inventory']);
+  assert.match(events.at(-1),/is ready/);
+  events.length=0;
+  assert.equal(await vm.runInContext('addBucketPreset("assets")',context),true);
+  assert.ok(!events.includes('cfProvision'),'already configured bucket avoids deployment');
+});
