@@ -3824,6 +3824,16 @@ async function refreshLocationEditors(){
   RedownNestedEditor.refresh();
   await Promise.allSettled(refreshes);
 }
+$("refresh-menu-locations").addEventListener("click",async()=>{
+  const button=$("refresh-menu-locations");if(button.disabled)return;
+  button.disabled=true;button.textContent="Refreshing…";
+  setStatus("right-click-mode-status","Checking Cloudflare and refreshing locations…");
+  try{
+    const refreshed=await refreshCloudflare();
+    if(refreshed)setStatus("right-click-mode-status","Location refresh finished. Any folder lookup errors appear beside the affected location.","ok");
+  }catch(error){setStatus("right-click-mode-status",error?.message||"Could not refresh locations. Retry.","bad");}
+  finally{button.disabled=false;button.textContent="Refresh locations";}
+});
 let cloudflareRefreshTask=null;
 function refreshCloudflare(){
   if(cloudflareRefreshTask)return cloudflareRefreshTask;
@@ -3833,15 +3843,22 @@ function refreshCloudflare(){
 async function refreshCloudflareState(){
   const stored=await chrome.storage.local.get("cloudflareAuth");
   const connected=Boolean(stored.cloudflareAuth?.accessToken);
-  $("connect-cloudflare").hidden=connected;
+  $("connect-cloudflare").hidden=connected&&!stored.cloudflareAuth?.reconnectRequired;
+  $("connect-cloudflare").textContent=connected?"Reconnect Cloudflare":"Connect Cloudflare";
   $("disconnect-cloudflare").hidden=!connected;
   $("cloudflare-panel").hidden=!connected;
   $("local-tools").hidden=!connected;
-  if(!connected)return;
+  if(!connected){setStatus("right-click-mode-status","Connect Cloudflare to refresh locations.","bad");return false;}
 
-  setStatus("hero-status","Cloudflare connected.","ok");
+  setStatus("hero-status","Checking Cloudflare access…");
   const result=await send({type:"cfAccounts"});
-  if(!result?.ok){setStatus("cf-status",result?.error||"Could not load accounts","bad");return;}
+  if(!result?.ok){
+    const message=result?.error||"Could not verify Cloudflare access. Retry.";
+    setStatus("cf-status",message,"bad");setStatus("hero-status",message,"bad");setStatus("right-click-mode-status",message,"bad");
+    if(/authorization|authenticate|authentication|session expired|connect cloudflare|reconnect cloudflare|unauthorized|\b401\b/i.test(message))$("connect-cloudflare").hidden=false;
+    return false;
+  }
+  setStatus("hero-status","Cloudflare connected.","ok");
   cfAccounts=result.accounts||[];
   const select=$("cf-account");const previousAccountId=currentAccountId;select.replaceChildren();
   cfAccounts.forEach(a=>{const o=document.createElement("option");o.value=a.id;o.textContent=a.name||a.id;select.append(o);});
@@ -3852,6 +3869,7 @@ async function refreshCloudflareState(){
   await loadExplorerInventory().catch((error)=>{
     $("explorer-status").textContent=safeUiMessage(friendlyError(error,"load Cloudflare storage"));
   });
+  return true;
 }
 async function refreshBuckets(){
   if(!currentAccountId)return;
@@ -4058,7 +4076,7 @@ $("refresh-history").addEventListener("click",()=>renderHistory({markSeen:true})
 let downloadsDirty=false;
 chrome.storage.onChanged.addListener((changes,area)=>{
   if(area!=="local")return;
-  if(changes.cloudflareAuth && changes.cloudflareAuth.newValue?.accessToken!==changes.cloudflareAuth.oldValue?.accessToken){
+  if(changes.cloudflareAuth && (changes.cloudflareAuth.newValue?.accessToken!==changes.cloudflareAuth.oldValue?.accessToken||changes.cloudflareAuth.newValue?.reconnectRequired!==changes.cloudflareAuth.oldValue?.reconnectRequired)){
     refreshCloudflare().catch(error=>setStatus("hero-status",safeUiMessage(error?.message||String(error)),"bad"));
   }
   if(changes.rightClickMode){rightClickMode=RedownNestedLocations.menuMode(changes.rightClickMode.newValue,profiles);renderRightClickMode();}

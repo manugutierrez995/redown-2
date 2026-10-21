@@ -11,19 +11,36 @@
     return navigator.locks.request("redown-cloudflare-token", async () => {
       let {cloudflareAuth: current} = await chrome.storage.local.get("cloudflareAuth");
       if (!current?.accessToken) throw new Error("Connect Cloudflare first.");
+      if(current.reconnectRequired)throw new Error("Cloudflare authorization needs renewal. Click Reconnect Cloudflare; disconnecting is not required.");
       if (current.accessToken !== rejectedToken && (!current.expiresAt || Date.now() < current.expiresAt - 60000)) return current;
-      if (!current.refreshToken) throw new Error("Cloudflare session expired. Connect Cloudflare again.");
+      if (!current.refreshToken){
+        await chrome.storage.local.set({cloudflareAuth:{...current,reconnectRequired:true}});
+        throw new Error("Cloudflare session expired without a refresh token. Click Reconnect Cloudflare; disconnecting is not required.");
+      }
       const response = await boundedFetch("https://dash.cloudflare.com/oauth2/token", {
         method:"POST", headers:{"content-type":"application/x-www-form-urlencoded"},
         body:new URLSearchParams({grant_type:"refresh_token",client_id:"d9db0f71eb24cd2eed86b50a650a045e",refresh_token:current.refreshToken})
       });
-      const body = await response.json();
-      if (!response.ok || !body.access_token) throw new Error("Cloudflare session could not be renewed. Connect Cloudflare again.");
-      current = {...current,accessToken:body.access_token,refreshToken:body.refresh_token || current.refreshToken,
+      const body = await response.json().catch(()=>({}));
+      if (!response.ok || !body.access_token){
+        if(body.error==='invalid_grant'){
+          await chrome.storage.local.set({cloudflareAuth:{...current,reconnectRequired:true}});
+          throw new Error("Cloudflare authorization needs renewal. Click Reconnect Cloudflare; disconnecting is not required.");
+        }
+        throw new Error("Cloudflare access could not be renewed right now. Retry; your saved connection has been retained.");
+      }
+      current = {...current,reconnectRequired:false,accessToken:body.access_token,refreshToken:body.refresh_token || current.refreshToken,
         expiresAt:body.expires_in ? Date.now()+Number(body.expires_in)*1000 : null};
       await chrome.storage.local.set({cloudflareAuth:current});
       return current;
     });
+  }
+  async function authenticationRejected(response){
+    if(response.status===401)return true;
+    if(response.status!==403)return false;
+    if(/invalid_token/i.test(response.headers.get("www-authenticate")||""))return true;
+    const body=await response.clone().json().catch(()=>({}));
+    return (body.errors||[]).some(error=>/authentication error|invalid (?:access )?token|(?:access )?token (?:has )?expired/i.test(error.message||""));
   }
   async function request(path, options = {}) {
     let token = await auth();
@@ -34,7 +51,8 @@
       return boundedFetch(API+path,{...options,headers});
     };
     let response = await run(token);
-    if (response.status === 401 && token.refreshToken) {
+    if (await authenticationRejected(response) && token.refreshToken) {
+      await response.body?.cancel();
       token = await auth(token.accessToken);
       response = await run(token);
     }

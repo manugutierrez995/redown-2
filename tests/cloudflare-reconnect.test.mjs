@@ -18,7 +18,7 @@ test('verified reconnect refreshes both editors and Explorer, coalescing concurr
     RedownNestedEditor:{refresh:()=>calls.push('nested')},
     send:async()=>({ok:true,accounts:[{id:'another-account'},{id:'retained-account'}]}),
     refreshBuckets:async()=>calls.push('buckets'),
-    loadExplorerInventory:async()=>calls.push('explorer'),setStatus:()=>{},safeUiMessage:x=>x,friendlyError:x=>String(x)
+    loadExplorerInventory:async()=>calls.push('explorer'),setStatus:(id,text)=>{dom.window.document.getElementById(id).textContent=text;},safeUiMessage:x=>x,friendlyError:x=>String(x)
   });
   vm.runInContext(source.slice(source.indexOf('async function refreshLocationEditors(){'),source.indexOf('async function refreshBuckets(){')),ctx);
   const a=vm.runInContext('refreshCloudflare()',ctx),b=vm.runInContext('refreshCloudflare()',ctx);
@@ -27,5 +27,16 @@ test('verified reconnect refreshes both editors and Explorer, coalescing concurr
   assert.deepEqual(calls,['buckets','simple','nested','explorer']);
   assert.equal(cache.size,0);assert.equal(otherCache.size,0);
   assert.equal(ctx.currentAccountId,'retained-account');
+  const send=ctx.send;
+  ctx.send=async()=>({ok:false,error:'Cloudflare session expired. Reconnect Cloudflare.'});
+  assert.equal(await vm.runInContext('refreshCloudflare()',ctx),false);
+  assert.equal(dom.window.document.getElementById('connect-cloudflare').hidden,false);
+  assert.match(dom.window.document.getElementById('hero-status').textContent,/session expired/);
+  assert.match(dom.window.document.getElementById('right-click-mode-status').textContent,/session expired/);
+  ctx.send=send;
+  const refresh=dom.window.document.getElementById('refresh-menu-locations');refresh.click();
+  for(let i=0;i<8;i++)await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(refresh.disabled,false);
+  assert.match(dom.window.document.getElementById('right-click-mode-status').textContent,/refresh finished/);
   dom.window.close();
 });

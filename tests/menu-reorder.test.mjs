@@ -55,3 +55,22 @@ test('native Simple context menu follows saved section and additional destinatio
   await vm.runInContext('buildMenus()',ctx);
   assert.deepEqual(created.filter(x=>x.id!=='REDOWN').map(x=>x.title),['Beta','Alpha','Second','First']);
 });
+
+test('drag continues outside grip and gaps are valid insertion targets',async()=>{
+ const h=harness(),handle=h.rows[0].querySelector('button');
+ h.rows.forEach((row,i)=>row.getBoundingClientRect=()=>({top:i*120,bottom:i*120+100,height:100}));
+ handle.dispatchEvent(new h.dom.window.MouseEvent('pointerdown',{button:0,clientY:20,bubbles:true}));
+ h.dom.window.document.dispatchEvent(new h.dom.window.MouseEvent('pointermove',{clientY:230,clientX:40,bubbles:true}));
+ assert.ok(h.root.classList.contains('reorder-list-dragging'));assert.ok(h.dom.window.document.querySelector('.reorder-ghost'));
+ h.dom.window.document.dispatchEvent(new h.dom.window.MouseEvent('pointerup',{clientY:230,bubbles:true}));await settle();
+ assert.deepEqual(h.items.map(x=>x.id),['two','one','three']);assert.equal(h.saved.length,1);
+ assert.equal(h.dom.window.document.querySelector('.reorder-ghost'),null);assert.equal(h.root.classList.contains('reorder-list-dragging'),false);h.dom.window.close();
+});
+test('Escape cancels lifted drag without saving or leaving compact cards behind',async()=>{
+ const h=harness(),handle=h.rows[0].querySelector('button');
+ h.rows.forEach((row,i)=>row.getBoundingClientRect=()=>({top:i*100,bottom:(i+1)*100,height:100}));
+ handle.dispatchEvent(new h.dom.window.MouseEvent('pointerdown',{button:0,clientY:20,bubbles:true}));
+ h.dom.window.document.dispatchEvent(new h.dom.window.MouseEvent('pointermove',{clientY:260,bubbles:true}));
+ h.dom.window.document.dispatchEvent(new h.dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));await settle();
+ assert.deepEqual(h.items.map(x=>x.id),['one','two','three']);assert.equal(h.saved.length,0);assert.equal(h.root.classList.contains('reorder-list-dragging'),false);assert.equal(h.dom.window.document.querySelector('.reorder-ghost'),null);h.dom.window.close();
+});

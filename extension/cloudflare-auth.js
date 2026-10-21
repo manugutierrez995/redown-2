@@ -31,7 +31,7 @@ async function storeCloudflareToken(token, previous = {}) {
     refreshToken: token.refresh_token || previous.refreshToken || null,
     expiresAt: token.expires_in ? Date.now() + Number(token.expires_in) * 1000 : null
   };
-  await chrome.storage.local.set({ cloudflareAuth: auth });
+  await navigator.locks.request("redown-cloudflare-token",()=>chrome.storage.local.set({ cloudflareAuth: {...auth,reconnectRequired:false} }));
   return auth;
 }
 // Keep the login window visible before Cloudflare finishes loading. Chrome's
@@ -116,7 +116,7 @@ async function startCloudflareLoginUnlocked() {
     auth.searchParams.set("code_challenge", await sha256Base64Url(verifier));
     auth.searchParams.set("code_challenge_method", "S256");
     auth.searchParams.set("scope", [
-      "workers-r2.read", "workers-r2.write", "workers-scripts.read", "workers-scripts.write"
+      "workers-r2.read", "workers-r2.write", "workers-scripts.read", "workers-scripts.write", "offline_access"
     ].join(" "));
     auth.searchParams.set("state", state);
     await navigator.locks.request(CF_LOGIN_STATE_LOCK, async () => {

@@ -751,10 +751,11 @@ importScripts("nested-locations.js");
 importScripts("rfis-index.js");
 async function connectCloudflare() { return RedownCloudflareAuth.connect(); }
 async function disconnectCloudflare() {
+  return navigator.locks.request("redown-cloudflare-token",async()=>{
   const { cloudflareAuth } = await chrome.storage.local.get("cloudflareAuth");
   if (cloudflareAuth?.accessToken) {
     try {
-      await fetch("https://dash.cloudflare.com/oauth2/revoke", {
+      await RedownCloudflareApi.boundedFetch("https://dash.cloudflare.com/oauth2/revoke", {
         method: "POST",
         headers: { "content-type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ token: cloudflareAuth.accessToken, client_id: CF_CLIENT_ID })
@@ -762,6 +763,7 @@ async function disconnectCloudflare() {
     } catch {}
   }
   await chrome.storage.local.remove("cloudflareAuth");
+  });
 }
 async function listCloudflareAccounts() {
   const accounts = [];
