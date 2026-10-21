@@ -404,6 +404,8 @@ function assetCorsControl(profile){
     }
   }
 
+  status.dataset.debugDetail="true";
+  endpoints.dataset.debugDetail="true";
   status.hidden=!debugModeEnabled;
   endpoints.hidden=!debugModeEnabled;
   status.textContent=profile.customAssetDomain
@@ -706,13 +708,13 @@ function renderProfiles(){
   root.replaceChildren();
   if(rightClickMode==="simple")root.append(simpleBucketCreator());
   const visibleProfiles=profiles.filter(profile=>!profile.explorerManaged);
-  $("profiles-empty").hidden=visibleProfiles.length>0;
+  $("profiles-empty").hidden=visibleProfiles.some(p=>debugModeEnabled||p.type!=="github");
 
   profiles.sort((a,b)=>(a.menuOrder??999)-(b.menuOrder??999));
   let simpleIntroShown=false;
   visibleProfiles.forEach((p,index)=>{
     const card=document.createElement("article");
-    card.className="card";
+    card.className=p.type==="github"?"card debug-only":"card";
 
     const top=document.createElement("div");
     top.className="card-top";
@@ -3825,9 +3827,9 @@ async function refreshBuckets(){
   const root=$("bucket-grid");root.replaceChildren();
   (result.buckets||[]).forEach(bucket=>{
     const el=document.createElement("div");el.className="bucket";
-    const strong=document.createElement("strong");strong.textContent=bucket.name;
+    const strong=document.createElement("button");strong.type="button";strong.className="bucket-select";strong.textContent=bucket.name;strong.setAttribute("aria-pressed","false");
     const ready=profiles.some(p=>p.type==="cloudflare-r2"&&p.accountId===currentAccountId&&p.bucketName===bucket.name);
-    const span=document.createElement("span");
+    const span=document.createElement("span");span.className="bucket-details debug-only";
     span.textContent=ready
       ? "Configured for REDOWN"
       : ([bucket.location,bucket.jurisdiction].filter(Boolean).join(" · ")||"R2 bucket")+" · Worker not configured";
@@ -3835,17 +3837,15 @@ async function refreshBuckets(){
     const selectBucket=()=>{
       root.querySelectorAll(".bucket").forEach(item=>{
         item.classList.remove("selected");
-        item.setAttribute("aria-selected","false");
+        item.querySelector(".bucket-select").setAttribute("aria-pressed","false");
       });
       el.classList.add("selected");
-      el.setAttribute("aria-selected","true");
-      setStatus("cf-status",bucket.name+(ready
-        ?" selected. Existing REDOWN configuration preserved; no network setup performed."
-        :" selected. The R2 bucket exists; choose Prepare Worker only if you need a new REDOWN right-click destination."),"ok");
+      strong.setAttribute("aria-pressed","true");
+      setStatus("cf-status",bucket.name+" selected.","ok");
     };
-    el.addEventListener("click",selectBucket);
+    strong.addEventListener("click",selectBucket);
     const prepare=document.createElement("button");
-    prepare.type="button";
+    prepare.type="button";prepare.className="secondary bucket-prepare debug-only";
     prepare.textContent=ready?"Verify / repair Worker":"Prepare Worker for right-click";
     prepare.addEventListener("click",event=>{
       event.stopPropagation();
@@ -3855,7 +3855,7 @@ async function refreshBuckets(){
     el.append(prepare);
     root.append(el);
   });
-  setStatus("cf-status",(result.buckets||[]).length?"Click a bucket to select it. Worker preparation is a separate, optional action.":"No buckets yet. Create one above.");
+  setStatus("cf-status",(result.buckets||[]).length?"Choose a bucket.":"No buckets yet. Create one above.");
 }
 async function addBucketPreset(bucketName,{forceRepair=false}={}){
   const account=cfAccounts.find(a=>a.id===currentAccountId);
@@ -3892,13 +3892,6 @@ async function addBucketPreset(bucketName,{forceRepair=false}={}){
   }
   const stored=await chrome.storage.local.get("profiles");
   profiles=stored.profiles||[];
-  debugModeEnabled=stored.debugModeEnabled===true;
-  $("debug-mode-enabled").checked=debugModeEnabled;
-  $("debug-mode-enabled").addEventListener("change",async(event)=>{
-    debugModeEnabled=event.target.checked;
-    await chrome.storage.local.set({debugModeEnabled});
-    renderProfiles();
-  });
   rightClickMode=RedownNestedLocations.menuMode(stored.rightClickMode,profiles);
   if(stored.rightClickMode!=="simple" && stored.rightClickMode!=="nested")await chrome.storage.local.set({rightClickMode});
   renderProfiles();
@@ -4047,9 +4040,23 @@ async function refreshDownloadsOnAccess(){
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refreshDownloadsOnAccess();});
 window.addEventListener("focus",refreshDownloadsOnAccess);
 
+function applyDebugMode(){
+  document.documentElement.classList.toggle("debug-mode",debugModeEnabled);
+  $("debug-mode-enabled").checked=debugModeEnabled;
+  document.querySelectorAll("[data-debug-detail]").forEach(el=>{el.hidden=!debugModeEnabled;});
+  $("profiles-empty").hidden=profiles.some(p=>!p.explorerManaged&&(debugModeEnabled||p.type!=="github"));
+}
+$("debug-mode-enabled").addEventListener("change",async(event)=>{
+  debugModeEnabled=event.target.checked;
+  applyDebugMode();
+  await chrome.storage.local.set({debugModeEnabled});
+});
+
 (async()=>{
   const stored=await chrome.storage.local.get(["profiles","cloudflareAuth","rightClickMode","debugModeEnabled"]);
   profiles=stored.profiles||[];
+  debugModeEnabled=stored.debugModeEnabled===true;
+  applyDebugMode();
   rightClickMode=RedownNestedLocations.menuMode(stored.rightClickMode,profiles);
   if(stored.rightClickMode!=="simple" && stored.rightClickMode!=="nested")await chrome.storage.local.set({rightClickMode});
   renderProfiles();

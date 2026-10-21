@@ -11,6 +11,14 @@
       --green:#72ddb0;--red:#ff8b9b;--shadow:0 24px 80px rgba(0,0,0,.28);
     }
     *{box-sizing:border-box}
+    [hidden],html:not(.debug-mode) .debug-only{display:none!important}
+    .bucket-select{width:100%;min-height:56px;text-align:left;overflow-wrap:anywhere;background:linear-gradient(135deg,#211530,#140d20);color:var(--text);border:1px solid var(--line);transition:border-color .15s,background .15s}
+    .bucket-select:hover,.bucket-select:focus-visible{border-color:var(--purple2);background:#2b1b40}
+    .bucket.selected .bucket-select{border-color:var(--purple2);box-shadow:0 0 0 2px rgba(139,92,246,.18)}
+    .bucket .bucket-details{display:block;margin:9px 0}
+    .bucket .bucket-prepare{width:100%}
+    .debug-settings{border-top:1px solid var(--line);padding-top:20px}
+
     body{margin:0;background:
       radial-gradient(circle at 82% -10%,rgba(139,92,246,.22),transparent 34%),
       radial-gradient(circle at 10% 18%,rgba(74,37,122,.18),transparent 28%),
@@ -55,8 +63,8 @@
     input,select{width:100%;border:1px solid var(--line);background:#0d0914;color:var(--text);border-radius:11px;padding:10px 11px;outline:none;font:inherit}
     input:focus,select:focus{border-color:#7150bd;box-shadow:0 0 0 3px rgba(139,92,246,.12)}
     .row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
-    .bucket-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:12px}
-    .bucket{border:1px solid var(--line);border-radius:14px;padding:13px;background:#0e0a15;cursor:pointer}
+    .bucket-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:10px;margin-top:12px}
+    .bucket{min-width:0;border-radius:14px}
     .bucket:hover{border-color:#604191}
     .bucket strong{display:block}.bucket span{font-size:11px;color:var(--muted)}
     .status{margin-top:12px;min-height:20px;color:var(--muted);font-size:12px}
@@ -260,7 +268,7 @@
     <div class="connects">
       <button id="connect-cloudflare" class="primary">Connect Cloudflare</button>
       <button id="disconnect-cloudflare" class="ghost" hidden>Disconnect Cloudflare</button>
-      <button id="add-github" class="secondary">Add GitHub destination</button>
+      <button id="add-github" class="secondary debug-only">Add GitHub destination</button>
     </div>
     <div id="hero-status" class="status"></div>
   </section>
@@ -294,7 +302,7 @@
       <label class="toggle"><input id="use-nested-menu" type="checkbox" aria-describedby="right-click-mode-status">Use Nested Menu</label>
     </div>
     <div id="right-click-mode-status" class="meta" role="status" style="margin-bottom:12px"></div>
-    <label class="toggle" style="margin:0 0 12px"><input id="debug-mode-enabled" type="checkbox"> Debug Mode · Show technical endpoint details</label>
+
     <div id="simple-menu-editor">
       <h3>Simple · Quick send</h3>
       <div id="profiles"></div>
@@ -370,7 +378,7 @@
     </dialog>
   </section>
 
-  <section class="section">
+  <section class="section debug-only" id="rfis-section">
     <div class="rfis-panel">
       <div class="rfis-row">
         <div><h2>Premium file index <span class="section-note">(experimental)</span></h2><div class="section-note">Optional local index of observed R2 listings; not a full bucket scan.</div></div>
@@ -391,6 +399,9 @@
     <div id="history" class="card"></div>
   </section>
 
+  <section class="section debug-settings">
+    <label class="toggle"><input id="debug-mode-enabled" type="checkbox"> Debug Mode</label>
+  </section>
 
 </div>
 <script type="module" src="model-viewer.min.js"></script>
