@@ -155,6 +155,18 @@ Run with a separate Chrome profile, disposable authorized cloud resources, Debug
 - [ ] Check overwrite behavior, duplicate names, special characters, Unicode, long filenames and large files within advertised limits.
 - [ ] Document limits and interrupted-transfer behavior. Do not promise restart-safe queue persistence unless verified.
 
+## Lightbox regression gate
+
+The [lightbox repair report](LIGHTBOX_REPAIR_REPORT.md) records confirmed ID lookup, keyboard routing and stale-media defects and their focused fixes on main. Passing UI fixtures do not close the live-media release gate.
+
+- [ ] In the actual installed release candidate, click Lightbox from an image preview and verify it opens immediately.
+- [ ] Use on-screen Previous/Next and Left/Right keys across multiple files, including wraparound; title and media must match the current selection.
+- [ ] Close with Escape, Close and backdrop; verify page scrolling and focus recover and the selected media returns to the sidebar.
+- [ ] Verify a slow earlier request cannot replace a newer selection; failed loads must show an error rather than an old image.
+- [ ] Test private image, video, audio, text and PDF previews plus any advertised model formats. Verify media controls and model Reset view remain functional.
+- [ ] Verify keyboard Tab stays in the dialog, narrow-screen controls remain visible, and selecting a folder leaves no stale overlay.
+- [ ] Incorporate the main lightbox repair into the store preparation branch, rebuild and repeat the candidate checks.
+
 ## 8. Interface and accessibility acceptance
 
 - [ ] Background and sections remain visually distinct; headings, fields and actions form clear groups.
