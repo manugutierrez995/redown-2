@@ -2323,7 +2323,7 @@ function renderSources() {
     label.className = "account-label account-button";
     label.type = "button";
     label.textContent = account.name || account.id;
-    label.title = "Show this account's buckets";
+    label.title = (account.name || account.id) + " — Show buckets";
     label.onclick = () => showBucketRows(account.id);
     group.append(label);
     for (const bucket of explorerBuckets.get(account.id) || []) {
@@ -3233,6 +3233,7 @@ function menuButton(label, action, enabled = true) {
   b.type = "button";
   b.role = "menuitem";
   b.textContent = label;
+  b.title = label;
   b.disabled = !enabled;
   b.onclick = () => {
     hideExplorerMenu();
@@ -3317,6 +3318,7 @@ function showExplorerMenu(x, y, item) {
     sep();
     section("Move to");
     for (const account of explorerAccounts) {
+      if(explorerAccounts.length>1)section(account.name||account.id);
       for (const bucket of explorerBuckets.get(account.id) || []) {
         if (
           workspaceTarget &&
@@ -3325,7 +3327,7 @@ function showExplorerMenu(x, y, item) {
         ) continue;
         menu.append(
           menuButton(
-            account.name + " · " + bucket.name,
+            bucket.name,
             async () => {
               await setExplorerClipboard("move");
               await pasteExplorer({
@@ -3344,6 +3346,7 @@ function showExplorerMenu(x, y, item) {
     sep();
     section("Send to");
     for (const account of explorerAccounts) {
+      if(explorerAccounts.length>1)section(account.name||account.id);
       for (const bucket of explorerBuckets.get(account.id) || []) {
         if (
           workspaceTarget &&
@@ -3352,7 +3355,7 @@ function showExplorerMenu(x, y, item) {
         ) continue;
         menu.append(
           menuButton(
-            account.name + " · " + bucket.name,
+            bucket.name,
             async () => {
               await setExplorerClipboard("copy");
               await pasteExplorer({
