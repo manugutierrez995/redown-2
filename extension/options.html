@@ -332,6 +332,17 @@
     .explorer-body.expanded #workspace-preview .preview-media img{max-height:65vh}
     @media(max-width:1000px){#workspace-preview{display:flex;grid-column:1/-1;border-left:0;border-top:1px solid #ffffff12}.explorer-body.expanded #workspace-preview{grid-column:auto}}
     @media(max-width:600px){#workspace-preview{padding:20px 16px}#workspace-preview .preview-nav{grid-template-columns:38px 38px minmax(0,1fr) minmax(0,1fr)}}
+    #workspace-preview{position:relative}
+    .preview-progress{position:absolute;right:18px;bottom:18px;z-index:3;max-width:min(80%,360px);padding:9px 12px;border:1px solid #ffffff25;border-radius:20px;background:#222126ed;color:#dfd8ce;font-size:11px;box-shadow:0 4px 20px #0003;pointer-events:none}
+    .preview-progress:not(.bad):before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;border:1px solid #ffffff35;border-top-color:#eee2ca;border-radius:50%;animation:spin .8s linear infinite}
+    .preview-lightbox-layer>.preview-progress{top:82px;bottom:auto;right:24px}
+    .preview-progress.bad{color:#ffd1ce;border-color:#a96363;pointer-events:auto}
+    .preview-lightbox-stage img{transform-origin:center;touch-action:none;user-select:none}
+    @media(prefers-reduced-motion:reduce){.preview-progress:not(.bad):before{animation:none}}
+    .image-zoom-menu{position:fixed;z-index:10;min-width:160px;padding:6px;border:1px solid #ffffff25;border-radius:10px;background:#242329;box-shadow:0 12px 45px #0008}
+    .preview-lightbox-layer .image-zoom-menu button{display:block;width:100%;text-align:left;min-height:36px;border:0;border-radius:5px;padding:8px 12px;font-size:12px;transform:none;background:transparent}
+    .preview-lightbox-layer .image-zoom-menu button:hover{background:#ffffff10;transform:none}
+    .preview-lightbox-layer .image-zoom-menu button:disabled{opacity:.35;cursor:default}
 </style>
 </head>
 <body>

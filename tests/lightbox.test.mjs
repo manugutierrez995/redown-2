@@ -27,17 +27,37 @@ test('dialog keyboard and buttons navigate; Escape closes and Tab stays inside',
  const last=layer.querySelector('[aria-label="Next file"]');last.focus();last.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Tab',bubbles:true,cancelable:true}));assert.equal(h.w.document.activeElement,close);
  close.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));assert.equal(h.w.workspaceLightboxOpen(),false);h.dom.window.close();
 });
-test('next preview replaces overlay media and title; failed next load clears stale media',async()=>{
+test('next preview replaces overlay media and title; failed next load preserves current media',async()=>{
  const h=harness();await h.w.showWorkspacePreview({key:'first.png'});h.w.setWorkspacePreviewLightbox(true);
  await h.w.showWorkspacePreview({key:'second.png'});
  assert.equal(h.w.document.querySelector('.preview-lightbox-stage img').alt,'second.png');assert.equal(h.w.workspaceLightboxLayer().querySelector('.preview-title').textContent,'second.png');
  h.w.RedownCloudflareApi.preview=async()=>{throw Error('Read denied');};await h.w.showWorkspacePreview({key:'denied.png'});
- assert.equal(h.w.document.querySelector('.preview-lightbox-stage img'),null);assert.match(h.w.document.querySelector('.preview-lightbox-stage').textContent,/Read denied/);
- h.w.setWorkspacePreviewLightbox(false);assert.match(h.root.textContent,/Read denied/);h.dom.window.close();
+ assert.equal(h.w.document.querySelector('.preview-lightbox-stage img').alt,'second.png');assert.match(h.w.document.querySelector('.preview-progress').textContent,/Read denied/);
+ h.w.setWorkspacePreviewLightbox(false);assert.equal(h.root.querySelector('img').alt,'second.png');h.dom.window.close();
 });
 test('older asynchronous preview cannot overwrite a newer lightbox selection',async()=>{
  const h=harness();await h.w.showWorkspacePreview({key:'first.png'});h.w.setWorkspacePreviewLightbox(true);
  let resolve;h.w.RedownCloudflareApi.preview=()=>new Promise(r=>resolve=r);const old=h.w.showWorkspacePreview({key:'slow.png'});
  h.w.RedownCloudflareApi.preview=async()=> 'blob:latest';await h.w.showWorkspacePreview({key:'latest.png'});resolve('blob:slow');await old;
  assert.equal(h.w.document.querySelector('.preview-lightbox-stage img').alt,'latest.png');h.dom.window.close();
+});
+
+test('pending image leaves current media and title visible, with corner feedback; wheel zoom resets on swap',async()=>{
+ const h=harness();await h.w.showWorkspacePreview({key:'first.png'});h.w.setWorkspacePreviewLightbox(true);
+ const stage=h.w.document.querySelector('.preview-lightbox-stage'),first=stage.querySelector('img');
+ stage.dispatchEvent(new h.w.WheelEvent('wheel',{deltaY:-300,bubbles:true,cancelable:true}));assert.match(first.style.transform,/scale\((?!1\))/);
+ let resolve;h.w.RedownCloudflareApi.preview=()=>new Promise(r=>resolve=r);const pending=h.w.showWorkspacePreview({key:'next.png'});
+ assert.equal(stage.querySelector('img'),first);assert.equal(h.w.workspaceLightboxLayer().querySelector('.preview-title').textContent,'first.png');assert.match(h.w.document.querySelector('.preview-progress').textContent,/Loading/);
+ resolve('blob:next');await pending;assert.equal(stage.querySelector('img').alt,'next.png');assert.match(stage.querySelector('img').style.transform,/scale\(1\)/);assert.equal(h.w.document.querySelector('.preview-progress'),null);
+ stage.dispatchEvent(new h.w.WheelEvent('wheel',{deltaY:-300,bubbles:true,cancelable:true}));stage.dispatchEvent(new h.w.MouseEvent('dblclick',{bubbles:true}));assert.match(stage.querySelector('img').style.transform,/scale\(1\)/);h.dom.window.close();
+});
+
+test('right-click image menu zooms in/out, fits, and Escape dismisses only the menu',async()=>{
+ const h=harness();await h.w.showWorkspacePreview({key:'first.png'});h.w.setWorkspacePreviewLightbox(true);
+ const stage=h.w.document.querySelector('.preview-lightbox-stage');
+ const open=()=>stage.querySelector('img').dispatchEvent(new h.w.MouseEvent('contextmenu',{bubbles:true,cancelable:true,clientX:20,clientY:20}));
+ open();let menu=stage.querySelector('[role="menu"]');assert.deepEqual([...menu.querySelectorAll('button')].map(x=>x.textContent),['Zoom in','Zoom out','Fit to screen']);assert.equal(menu.children[1].disabled,true);
+ menu.children[0].click();assert.match(stage.querySelector('img').style.transform,/scale\(1.25\)/);
+ open();stage.querySelector('[role="menu"]').children[1].click();assert.match(stage.querySelector('img').style.transform,/scale\(1\)/);
+ open();stage.querySelector('[role="menu"]').dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));assert.equal(stage.querySelector('[role="menu"]'),null);assert.equal(h.w.workspaceLightboxOpen(),true);open();stage.querySelector('[role="menu"]').children[2].click();stage.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'ArrowLeft',bubbles:true,cancelable:true}));assert.deepEqual(h.navigated,[-1]);h.dom.window.close();
 });

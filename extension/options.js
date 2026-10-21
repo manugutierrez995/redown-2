@@ -1544,36 +1544,37 @@ function appendDetails(root,obj,key,url,type){
 async function showWorkspacePreview(obj,row,urlOverride=""){
   const requestId=++workspacePreviewRequestId;
   const root=$("workspace-preview");
-  const lightboxLayer=workspaceLightboxLayer();
-  if(lightboxLayer){lightboxLayer.querySelector(".preview-lightbox-stage").textContent="Opening preview…";lightboxLayer.querySelector(".preview-title").textContent=obj.key||obj.name||"Preview";}
-  root.replaceChildren();
-  const loading=document.createElement("div");
-  loading.className="preview-loading";
-  loading.innerHTML='<span class="operation-spinner"></span><strong>Opening preview…</strong><span>Preparing secure remote view</span>';
-  root.append(loading);
+  const hadPreview=Boolean(root.querySelector?.(".preview-head"));
+  if(!hadPreview){
+    root.replaceChildren();
+    const loading=document.createElement("div");loading.className="preview-loading";loading.textContent="Opening preview…";root.append(loading);
+  }
+  setWorkspacePreviewProgress("Loading next file…");
   document.querySelectorAll("#workspace-objects .object.active").forEach(el=>el.classList.remove("active"));
   row?.classList.add("active");
   const key=obj.key||obj.name||String(obj);
   workspacePreviewAbort?.abort();
   workspacePreviewAbort=new AbortController();
-  if(workspacePreviewUrl) URL.revokeObjectURL(workspacePreviewUrl);
-  workspacePreviewUrl="";
   let url=urlOverride;
-  if(!url){
-    try {
-      url=await RedownCloudflareApi.preview(explorerSource(),key,objectContentType(obj,key),workspacePreviewAbort.signal);
-      if(requestId!==workspacePreviewRequestId){URL.revokeObjectURL(url);return;}
-      workspacePreviewUrl=url;
-    } catch(error) {
-      if(requestId===workspacePreviewRequestId){
-        root.textContent=error?.message || "Could not open this preview. Retry.";
-        const stage=workspaceLightboxLayer()?.querySelector(".preview-lightbox-stage");
-        if(stage)stage.textContent=root.textContent;
-      }
-      return;
+  try{
+    if(!url)url=await RedownCloudflareApi.preview(explorerSource(),key,objectContentType(obj,key),workspacePreviewAbort.signal);
+    if(requestId!==workspacePreviewRequestId){if(!urlOverride)URL.revokeObjectURL(url);return;}
+    if(objectContentType(obj,key).startsWith("image/")&&typeof Image!=="undefined"&&Image.prototype.decode){
+      const ready=new Image();ready.src=url;await ready.decode();
     }
+    if(requestId!==workspacePreviewRequestId){if(!urlOverride)URL.revokeObjectURL(url);return;}
+  }catch(error){
+    if(url&&!urlOverride)URL.revokeObjectURL(url);
+    if(requestId===workspacePreviewRequestId){
+      const message=error?.message||"Could not open this preview. Retry.";
+      if(!hadPreview)root.textContent=message;
+      setWorkspacePreviewProgress(`Could not open ${key}: ${message}`,true);
+    }
+    return;
   }
-  if(requestId!==workspacePreviewRequestId)return;
+  if(workspacePreviewUrl)URL.revokeObjectURL(workspacePreviewUrl);
+  workspacePreviewUrl=urlOverride?"":url;
+  setWorkspacePreviewProgress("");
   root.replaceChildren();
   const type=objectContentType(obj,key);
   const head=document.createElement("div");head.className="preview-head";
@@ -1647,6 +1648,46 @@ async function showWorkspacePreview(obj,row,urlOverride=""){
   if(workspaceLightboxOpen())mountWorkspaceLightboxMedia();
 }
 
+function setWorkspacePreviewProgress(message,bad=false){
+  const host=workspaceLightboxLayer()||$("workspace-preview");
+  host?.querySelector?.(".preview-progress")?.remove();
+  if(!message||!host)return;
+  const status=document.createElement("div");status.className="preview-progress"+(bad?" bad":"");status.setAttribute?.("role","status");status.textContent=message;host.append(status);
+}
+function enableWorkspaceImageZoom(stage){
+  let zoom=1,x=0,y=0,drag=null;
+  const image=()=>stage.querySelector("img");
+  const paint=()=>{const img=image();if(!img)return;img.style.transform=`translate(${x}px,${y}px) scale(${zoom})`;img.style.cursor=zoom>1?"grab":"zoom-in";img.draggable=false;};
+  let dismissing=false;
+  const removeMenu=()=>{if(dismissing)return;dismissing=true;try{stage.querySelector(".image-zoom-menu")?.remove();}finally{dismissing=false;}};
+  stage.resetImageZoom=()=>{removeMenu();zoom=1;x=0;y=0;paint();};
+  stage.addEventListener("contextmenu",event=>{
+    if(event.target!==image())return;
+    event.preventDefault();event.stopPropagation();removeMenu();
+    const menu=document.createElement("div");menu.className="image-zoom-menu";menu.setAttribute("role","menu");menu.setAttribute("aria-label","Image zoom");
+    for(const [label,action,disabled] of [["Zoom in",()=>{zoom=Math.min(8,zoom*1.25);paint();},zoom>=8],["Zoom out",()=>{zoom=Math.max(1,zoom/1.25);if(zoom===1)x=y=0;paint();},zoom<=1],["Fit to screen",()=>stage.resetImageZoom(),false]]){
+      const button=document.createElement("button");button.type="button";button.textContent=label;button.disabled=disabled;button.setAttribute("role","menuitem");button.addEventListener("click",()=>{action();removeMenu();stage.focus({preventScroll:true});});menu.append(button);
+    }
+    menu.addEventListener("keydown",e=>{
+      if(e.key==="Escape"){e.preventDefault();e.stopPropagation();removeMenu();stage.focus({preventScroll:true});}
+      if(["ArrowUp","ArrowDown"].includes(e.key)){e.preventDefault();e.stopPropagation();const buttons=Array.from(menu.querySelectorAll("button:not(:disabled)")),index=buttons.indexOf(document.activeElement);buttons[(index+(e.key==="ArrowDown"?1:-1)+buttons.length)%buttons.length]?.focus();}
+    });
+    menu.addEventListener("focusout",e=>{if(!menu.contains(e.relatedTarget))removeMenu();});
+    stage.append(menu);const rect=menu.getBoundingClientRect();menu.style.left=Math.max(8,Math.min(event.clientX,window.innerWidth-rect.width-8))+"px";menu.style.top=Math.max(8,Math.min(event.clientY,window.innerHeight-rect.height-8))+"px";
+    menu.querySelector("button:not(:disabled)")?.focus();
+  });
+  stage.tabIndex=-1;
+  stage.addEventListener("wheel",event=>{
+    if(!image())return;
+    event.preventDefault();zoom=Math.max(1,Math.min(8,zoom*Math.exp(-event.deltaY*(event.deltaMode===1?.04:event.deltaMode===2?.7:.002))));
+    if(zoom===1)x=y=0;paint();
+  },{passive:false});
+  stage.addEventListener("dblclick",()=>stage.resetImageZoom());
+  stage.addEventListener("pointerdown",event=>{if(!event.target.closest(".image-zoom-menu"))removeMenu();if(zoom<=1||event.target!==image()||event.button!==0)return;event.preventDefault();drag={id:event.pointerId,x:event.clientX,y:event.clientY};stage.setPointerCapture?.(event.pointerId);});
+  stage.addEventListener("pointermove",event=>{if(!drag||drag.id!==event.pointerId)return;x+=event.clientX-drag.x;y+=event.clientY-drag.y;drag.x=event.clientX;drag.y=event.clientY;paint();});
+  const end=()=>{drag=null;};stage.addEventListener("pointerup",end);stage.addEventListener("pointercancel",end);stage.addEventListener("lostpointercapture",end);
+}
+
 function workspaceLightboxLayer(){
   return document.querySelector(".preview-lightbox-layer");
 }
@@ -1676,7 +1717,8 @@ function mountWorkspaceLightboxMedia(){
   if(!layer||!source)return;
   const placeholder=document.createComment("Lightbox media returns here");
   source.replaceWith(placeholder);layer.previewPlaceholder=placeholder;
-  layer.querySelector(".preview-lightbox-stage").replaceChildren(source);
+  const stage=layer.querySelector(".preview-lightbox-stage");stage.resetImageZoom?.();stage.replaceChildren(source);stage.resetImageZoom?.();
+  if(document.activeElement===document.body)layer.querySelector(".preview-lightbox-close")?.focus({preventScroll:true});
   layer.querySelector(".preview-title").textContent=preview.querySelector(".preview-title")?.textContent||"Preview";
 }
 function setWorkspacePreviewLightbox(enabled){
@@ -1685,6 +1727,7 @@ function setWorkspacePreviewLightbox(enabled){
 
   if(!shouldOpen){
     const media=existing?.querySelector(".preview-lightbox-stage")?.firstElementChild;
+    existing?.querySelector(".preview-lightbox-stage")?.resetImageZoom?.();
     if(media&&existing.previewPlaceholder?.isConnected)existing.previewPlaceholder.replaceWith(media);
     const returnFocus=existing?.returnFocus;
     existing?.remove();
@@ -1747,6 +1790,7 @@ function setWorkspacePreviewLightbox(enabled){
 
   const stage=document.createElement("div");
   stage.className="preview-lightbox-stage";
+  enableWorkspaceImageZoom(stage);
   layer.returnFocus=document.activeElement;
   const previous=document.createElement("button");previous.type="button";previous.className="ghost preview-lightbox-arrow preview-lightbox-previous";previous.title="Previous · Left arrow";previous.textContent="←";previous.setAttribute("aria-label","Previous file");previous.addEventListener("click",()=>navigatePreview(-1));
   const next=document.createElement("button");next.type="button";next.className="ghost preview-lightbox-arrow preview-lightbox-next";next.title="Next · Right arrow";next.textContent="→";next.setAttribute("aria-label","Next file");next.addEventListener("click",()=>navigatePreview(1));
@@ -1763,7 +1807,7 @@ function setWorkspacePreviewLightbox(enabled){
     if(event.key==="ArrowLeft"||event.key==="ArrowRight"){event.preventDefault();event.stopPropagation();navigatePreview(event.key==="ArrowRight"?1:-1);}
   });
 
-  const caption=document.createElement("div");caption.className="preview-lightbox-caption";caption.textContent="←  Browse files  →   ·   Esc to close";
+  const caption=document.createElement("div");caption.className="preview-lightbox-caption";caption.textContent="←  Browse  →   ·   Right-click to zoom · Double-click to fit";
   head.append(title,close);
   panel.append(head,stage,previous,next,caption);
   layer.append(backdrop,panel);
