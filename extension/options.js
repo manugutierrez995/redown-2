@@ -3938,6 +3938,7 @@ async function refreshCloudflareState(){
   onboardingConnected=connected&&!stored.cloudflareAuth?.reconnectRequired;
   applyOnboarding();
   $("connect-cloudflare").hidden=connected&&!stored.cloudflareAuth?.reconnectRequired;
+  $("connect-cloudflare").classList.toggle("setup-go",!connected);
   $("connect-cloudflare").textContent=connected?"Reconnect Cloudflare":"Connect Cloudflare";
   $("disconnect-cloudflare").hidden=!connected;
   $("cloudflare-panel").hidden=!connected;
@@ -3989,10 +3990,12 @@ async function refreshBuckets(){
     const needsActivation=/(?:please\s+)?(?:sign\s*up|subscribe|activate|enable).{0,60}\bR2\b|\bR2\b.{0,60}(?:subscription required|not enabled|not activated|not subscribed)/i.test(message);
     onboardingBucketState=needsActivation?"activate":"error";applyOnboarding();
     $("r2-setup").hidden=!needsActivation;
+    if(needsActivation)setStatus("hero-status","✓ Cloudflare connected. Set up R2 to continue.","ok");
     setStatus("cf-status",needsActivation?"Cloudflare connected. Set up R2 storage to continue.":message,needsActivation?"":"bad");
     return;
   }
   onboardingBucketState=(result.buckets||[]).length?"choose":"empty";applyOnboarding();
+  setStatus("hero-status","✓ Cloudflare connected.","ok");
   const root=$("bucket-grid");root.replaceChildren();
   (result.buckets||[]).forEach(bucket=>{
     const el=document.createElement("div");el.className="bucket";
@@ -4022,7 +4025,7 @@ async function refreshBuckets(){
       addBucketPreset(bucket.name,{forceRepair:true});
     });
     const use=document.createElement("button");
-    use.type="button";use.className="secondary bucket-use";
+    use.type="button";use.className="secondary bucket-use setup-go";
     use.textContent="Use this bucket";
     use.addEventListener("click",async()=>{
       if(use.disabled)return;
@@ -4236,26 +4239,19 @@ function isSetupDestination(profile){
 function applyOnboarding(){
   const ready=onboardingConnected&&profiles.some(isSetupDestination);
   document.documentElement.classList.toggle("onboarding-pending",!ready);
-  document.documentElement.classList.toggle("r2-needs-activation",onboardingBucketState==="activate");
-  $("onboarding-step").hidden=!onboardingConnected||ready;
-  const states={
-    loading:["Checking your storage…","REDOWN is looking for your buckets.","Choose a bucket"],
-    empty:["Create your first bucket","A bucket is where REDOWN stores your files in the cloud.","Create a bucket"],
-    choose:["Connect your storage bucket","Choose a bucket below, then click Use this bucket. REDOWN will finish setup for you.","Choose a bucket"],
-    activate:["Set up your cloud storage","Activate Cloudflare R2 below, then click Check connection to continue.","Set up R2 storage"],
-    error:["Check your storage connection","Review the connection message below to continue. Your setup has been retained.","Review connection"]
-  };
-  const [title,copy,action]=states[onboardingBucketState]||states.loading;
-  $("onboarding-title").textContent=title;$("onboarding-copy").textContent=copy;
-  $("onboarding-action").textContent=action;
-  $("onboarding-action").disabled=onboardingBucketState==="loading";
+  const activation=onboardingConnected&&onboardingBucketState==="activate";
+  const storageAvailable=ready||(onboardingConnected&&["empty","choose","error"].includes(onboardingBucketState));
+  document.documentElement.classList.toggle("storage-pending",!storageAvailable);
+  $("r2-setup").hidden=!activation;
+  $("create-bucket").classList.toggle("setup-go",onboardingBucketState==="empty");
 }
-$("onboarding-action").addEventListener("click",()=>{
-  const target=onboardingBucketState==="empty"?$("new-bucket")
-    :onboardingBucketState==="activate"?$("r2-dashboard")
-    :$("bucket-grid").querySelector(".bucket-use")||$("cf-status");
-  target.scrollIntoView({behavior:"smooth",block:"center"});target.focus();
-});
+let r2ReturnCheck=null;
+function checkR2OnReturn(){
+  if(document.visibilityState!=="visible"||onboardingBucketState!=="activate"||!onboardingConnected||r2ReturnCheck)return;
+  r2ReturnCheck=refreshBuckets().finally(()=>{r2ReturnCheck=null;});
+}
+window.addEventListener("focus",checkR2OnReturn);
+document.addEventListener("visibilitychange",checkR2OnReturn);
 function applyDebugMode(){
   applyOnboarding();
   document.documentElement.classList.toggle("debug-mode",debugModeEnabled);
@@ -4272,6 +4268,7 @@ $("debug-mode-enabled").addEventListener("change",async(event)=>{
 (async()=>{
   const stored=await chrome.storage.local.get(["profiles","cloudflareAuth","rightClickMode","debugModeEnabled"]);
   profiles=stored.profiles||[];
+  onboardingConnected=Boolean(stored.cloudflareAuth?.accessToken)&&!stored.cloudflareAuth?.reconnectRequired;
   debugModeEnabled=stored.debugModeEnabled===true;
   applyDebugMode();
   rightClickMode=RedownNestedLocations.menuMode(stored.rightClickMode,profiles);

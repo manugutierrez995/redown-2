@@ -19,3 +19,9 @@ Normal mode initially hides Destinations (including Simple / Quick send), Upload
 Debug mode bypasses the new progressive visibility rules and retains existing controls. Switching it off immediately restores onboarding visibility. The initial HTML is gated to avoid briefly displaying downstream tools before storage loads. R2 activation hides bucket creation in normal mode while leaving account switching available.
 
 Verification: syntax checks passed; 13 focused options/reconnect/Cloudflare file tests passed. Full suite: 145 tests, 118 passed, the same 27 existing failures. Updated reconnect harness loads the actual new onboarding helpers; original assertions remain. Browser layout and live Cloudflare end-to-end remain unverified.
+
+## Header-first onboarding refinement (supersedes the next-step panel)
+
+Removed the separate next-step panel. New users initially see Connection; normal navigation and downstream sections are hidden. When R2 explicitly requires activation, **Set up R2** and **Check connection** appear in Connection beside account controls, and Storage remains hidden. Returning focus/visibility rechecks bucket availability only while activation is pending. Available R2 reveals Storage: Create is green for an empty account; Use this bucket is green for existing buckets. Later sections remain gated until a prepared destination is saved. Debug bypasses the new CSS restrictions. Returning connected users with a completed destination retain their full normal interface, including Storage during background checks; startup uses saved auth/profile state.
+
+Validation: syntax checks passed; 14 focused options/reconnect/file tests passed; full suite 146 tests, 119 passed and 27 existing failures. Live provider/browser end-to-end is still unverified.

@@ -8,7 +8,7 @@ const source=await readFile(new URL('../extension/options.js',import.meta.url),'
 function harness(){
   const dom=new JSDOM(html,{runScripts:'outside-only'});
   const calls=[],saved=[];
-  const context=vm.createContext({document:dom.window.document,debugModeEnabled:false,profiles:[],currentAccountId:'account',onboardingConnected:true,onboardingBucketState:'loading',
+  const context=vm.createContext({document:dom.window.document,window:dom.window,debugModeEnabled:false,profiles:[],currentAccountId:'account',onboardingConnected:true,onboardingBucketState:'loading',
     $:id=>dom.window.document.getElementById(id),
     setStatus:(id,text)=>{dom.window.document.getElementById(id).textContent=text;},
     send:async msg=>{calls.push(msg);return {ok:true,buckets:[{name:'test-bucket'}]};},
@@ -99,8 +99,9 @@ test('normal onboarding progressively reveals tools only for a completed destina
   }
   h.context.send=async()=>({ok:true,buckets:[]});
   await vm.runInContext('refreshBuckets()',h.context);
-  assert.match(d.getElementById('onboarding-title').textContent,/Create your first bucket/);
-  assert.ok(d.getElementById('onboarding-step').compareDocumentPosition(d.getElementById('cloudflare-panel'))&4);
+  assert.ok(d.getElementById('create-bucket').classList.contains('setup-go'));
+  assert.equal(d.querySelector('#onboarding-step'),null);
+  assert.ok(!d.documentElement.classList.contains('storage-pending'));
   h.context.profiles=[{type:'cloudflare-r2',bucketName:'assets'}];
   vm.runInContext('applyOnboarding()',h.context);
   assert.ok(d.documentElement.classList.contains('onboarding-pending'),'bucket selection alone cannot unlock tools');
@@ -111,7 +112,10 @@ test('normal onboarding progressively reveals tools only for a completed destina
   vm.runInContext('applyOnboarding()',h.context);
   assert.ok(!d.documentElement.classList.contains('onboarding-pending'));
   assert.notEqual(h.dom.window.getComputedStyle(d.getElementById('right-click-presets')).display,'none');
-  assert.equal(d.getElementById('onboarding-step').hidden,true);
+  assert.ok(!d.documentElement.classList.contains('storage-pending'));
+  h.context.onboardingBucketState='loading';
+  vm.runInContext('applyOnboarding()',h.context);
+  assert.ok(!d.documentElement.classList.contains('storage-pending'),'returning users keep Storage during refresh');
   h.context.onboardingConnected=false;
   vm.runInContext('applyOnboarding()',h.context);
   assert.ok(d.documentElement.classList.contains('onboarding-pending'));
@@ -120,5 +124,27 @@ test('normal onboarding progressively reveals tools only for a completed destina
   assert.notEqual(h.dom.window.getComputedStyle(d.getElementById('right-click-presets')).display,'none');
   toggle.checked=false;toggle.dispatchEvent(new h.dom.window.Event('change'));await Promise.resolve();
   assert.equal(h.dom.window.getComputedStyle(d.getElementById('right-click-presets')).display,'none');
+  h.dom.window.close();
+});
+
+test('activation stays in connection header; Storage appears only after R2 is available',async()=>{
+  const h=harness(),d=h.dom.window.document;
+  h.context.onboardingConnected=false;
+  vm.runInContext('applyOnboarding()',h.context);
+  assert.equal(h.dom.window.getComputedStyle(d.getElementById('cloudflare-panel')).display,'none');
+  assert.equal(d.getElementById('r2-setup').hidden,true);
+  h.context.onboardingConnected=true;
+  h.context.send=async()=>({ok:false,error:'Please sign up for R2'});
+  await vm.runInContext('refreshBuckets()',h.context);
+  assert.equal(d.getElementById('r2-setup').closest('section').id,'connections');
+  assert.equal(d.getElementById('r2-setup').hidden,false);
+  assert.equal(h.dom.window.getComputedStyle(d.getElementById('cloudflare-panel')).display,'none');
+  h.context.send=async()=>({ok:true,buckets:[{name:'assets'}]});
+  await vm.runInContext('refreshBuckets()',h.context);
+  assert.equal(d.getElementById('r2-setup').hidden,true);
+  assert.ok(!d.documentElement.classList.contains('storage-pending'));
+  assert.ok(!d.getElementById('create-bucket').classList.contains('setup-go'));
+  assert.ok(d.querySelector('.bucket-use').classList.contains('setup-go'));
+  assert.ok(d.documentElement.classList.contains('onboarding-pending'));
   h.dom.window.close();
 });

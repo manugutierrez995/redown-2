@@ -10,7 +10,7 @@ test('verified reconnect refreshes both editors and Explorer, coalescing concurr
   const simple=dom.window.document.createElement('div');simple.className='cloudflare-location-refresh';
   simple.refreshCloudflareLocations=async()=>calls.push('simple');dom.window.document.body.append(simple);
   const cache=new Map([['stale',[]]]),otherCache=new Map([['stale',[]]]);
-  const ctx=vm.createContext({document:dom.window.document,
+  const ctx=vm.createContext({document:dom.window.document,window:dom.window,
     $:id=>dom.window.document.getElementById(id),
     chrome:{storage:{local:{get:async()=>({cloudflareAuth:{accessToken:'verified'}})}}},
     profiles:[],cfAccounts:[],currentAccountId:'retained-account',onboardingConnected:false,onboardingBucketState:'loading',

@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="onboarding-pending">
+<html class="onboarding-pending storage-pending">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,10 +15,11 @@
     *{box-sizing:border-box}
     [hidden],html:not(.debug-mode) .debug-only{display:none!important}
     html.onboarding-pending:not(.debug-mode) .requires-storage{display:none!important}
-    html.debug-mode #onboarding-step{display:none!important}
-    html.r2-needs-activation:not(.debug-mode) #bucket-create-fields{display:none!important}
-    .onboarding-step{border-color:var(--purple);background:linear-gradient(135deg,var(--panel),var(--panel2))}
-    .onboarding-step h2{margin:0 0 8px}.onboarding-step p{color:var(--muted);line-height:1.6}
+    html.storage-pending:not(.debug-mode) #cloudflare-panel,
+    html.onboarding-pending:not(.debug-mode) .page-nav{display:none!important}
+    .setup-go{background:var(--green)!important;color:#09281c!important;border-color:var(--green)!important;font-weight:700}
+    .setup-go:hover:not(:disabled){background:#95edc6!important}
+    a.setup-go{display:inline-flex;align-items:center;justify-content:center;padding:11px 16px;border:1px solid;border-radius:10px;text-decoration:none}
     .bucket-select{width:100%;min-height:56px;padding:16px 18px;text-align:left;overflow-wrap:anywhere;background:linear-gradient(145deg,#26344e,#1a263d);color:var(--text);border:1px solid var(--line);transition:border-color .15s,background .15s}
     .bucket-select:hover,.bucket-select:focus-visible{border-color:var(--purple2);background:#354363}
     .bucket.selected .bucket-select{border-color:var(--purple2);box-shadow:0 0 0 2px rgba(139,92,246,.18)}
@@ -380,6 +381,10 @@
     <p>Connect once. REDOWN remembers your destinations, then lets you right-click any remote link or media item and send it straight to a bucket or repository.</p>
     <div class="connects">
       <button id="connect-cloudflare" class="primary">Connect Cloudflare</button>
+      <span id="r2-setup" hidden>
+        <a id="r2-dashboard" class="setup-go" href="https://dash.cloudflare.com/?to=%2F%3Aaccount%2Fr2%2Foverview" target="_blank" rel="noopener noreferrer">Set up R2 ↗</a>
+        <button id="r2-check" type="button" class="ghost">Check connection</button>
+      </span>
       <button id="disconnect-cloudflare" class="ghost" hidden>Disconnect Cloudflare</button>
       <button id="add-github" class="secondary debug-only">Add GitHub destination</button>
     </div>
@@ -387,13 +392,6 @@
   </section>
 
   <nav class="page-nav" aria-label="Settings sections"><a href="#connections">Connection</a><a class="connected-link" href="#cloudflare-panel">Buckets</a><a class="requires-storage" href="#right-click-presets">Destinations</a><a class="connected-link requires-storage" href="#upload-zone">Upload</a><a class="connected-link requires-storage" href="#explore-zone">Explore</a><a class="requires-storage" href="#downloads-zone">Downloads</a></nav>
-
-  <section id="onboarding-step" class="section onboarding-step" hidden aria-live="polite">
-    <span class="section-kicker">Next step</span>
-    <h2 id="onboarding-title">Choose your cloud storage</h2>
-    <p id="onboarding-copy">Choose or create a bucket below, then click Use this bucket.</p>
-    <button id="onboarding-action" type="button" class="primary">Choose a bucket</button>
-  </section>
 
   <section id="cloudflare-panel" class="section" hidden>
     <div class="section-head">
@@ -408,14 +406,6 @@
             <input id="new-bucket" placeholder="my-assets">
             <button id="create-bucket" class="secondary" style="white-space:nowrap">Create</button>
           </div>
-        </div>
-      </div>
-      <div id="r2-setup" hidden style="margin-top:16px">
-        <strong>Connect your R2 storage</strong>
-        <p>Activate R2 in your Cloudflare account, then return here to continue.</p>
-        <div class="row-actions">
-          <a id="r2-dashboard" class="secondary" href="https://dash.cloudflare.com/?to=%2F%3Aaccount%2Fr2%2Foverview" target="_blank" rel="noopener noreferrer">Set up R2 storage ↗</a>
-          <button id="r2-check" type="button" class="secondary">Check connection</button>
         </div>
       </div>
       <div id="bucket-grid" class="bucket-grid"></div>
