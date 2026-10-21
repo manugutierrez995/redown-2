@@ -1584,7 +1584,9 @@ async function showWorkspacePreview(obj,row,urlOverride=""){
   const next=document.createElement("button");next.className="ghost preview-arrow";next.type="button";next.setAttribute("aria-label","Next file");next.title="Next file";next.textContent="→";next.addEventListener("click",()=>navigatePreview(1));
   const lightbox=document.createElement("button");lightbox.className="ghost";lightbox.type="button";lightbox.textContent=workspaceLightboxOpen()?"Close lightbox":"Lightbox";lightbox.addEventListener("click",()=>setWorkspacePreviewLightbox(!workspaceLightboxOpen()));
   const expand=document.createElement("button");expand.className="ghost";expand.type="button";expand.textContent=workspacePreviewExpanded?"Collapse":"Expand";expand.addEventListener("click",()=>setWorkspacePreviewExpanded(!workspacePreviewExpanded));
-  controls.append(previous,next,lightbox,expand);
+  const browsing=document.createElement("div");browsing.className="preview-control-group";browsing.append(previous,next);
+  const viewing=document.createElement("div");viewing.className="preview-control-group";viewing.append(lightbox,expand);
+  controls.append(browsing,viewing);
   head.append(title,controls);root.append(head);
 
   const media=document.createElement("div");
