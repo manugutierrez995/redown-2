@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon32.png">
   <title>REDOWN — Destinations</title>
   <style>
     @font-face{font-family:"DM Sans";src:url("fonts/dm-sans-latin-variable.woff") format("woff");font-style:normal;font-weight:100 1000;font-display:swap}
@@ -372,6 +373,11 @@
     #workspace-preview .preview-folder strong{display:block;font-size:14px;font-weight:500;color:#e4ddd3}
     #workspace-preview .preview-folder span{display:block;max-width:24ch}
     @media(max-width:760px){.explorer-body{height:auto}.explorer-main{height:clamp(420px,70vh,760px)}#workspace-preview{max-height:80vh}.explorer-pagination{flex-wrap:wrap}.explorer-pagination .explorer-page-numbers{margin-left:auto}}
+    .settings-mascot{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));width:96px;height:auto;z-index:20;pointer-events:none;user-select:none;opacity:0;transform:translateY(8px);transition:opacity .75s ease,transform .75s ease;filter:drop-shadow(0 6px 12px #0004)}
+    .settings-mascot.is-visible{opacity:1;transform:translateY(0)}
+    body.preview-lightbox-open .settings-mascot{visibility:hidden}
+    @media(max-width:600px){.settings-mascot{width:64px;left:8px;bottom:8px}}
+    @media(prefers-reduced-motion:reduce){.settings-mascot{transition:none;transform:none}}
 </style>
 </head>
 <body>
@@ -557,6 +563,8 @@
 
 
 </div>
+<img class="settings-mascot" src="settings-mascot.png" alt="" aria-hidden="true" draggable="false" width="96">
+<script src="settings-mascot.js"></script>
 <script type="module" src="model-viewer.min.js"></script>
 <script src="cloudflare-auth.js"></script>
 <script src="cloudflare-api.js"></script>
