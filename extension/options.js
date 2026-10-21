@@ -1537,46 +1537,56 @@ function appendDetails(root,obj,key,url,type){
   link.href=url;
   link.target="_blank";
   link.rel="noopener";
-  link.textContent=url;
+  link.textContent="Open original file ↗";
+  link.setAttribute("aria-label",`Open original file: ${key}`);
   root.append(link);
 }
 async function showWorkspacePreview(obj,row,urlOverride=""){
   const requestId=++workspacePreviewRequestId;
   const root=$("workspace-preview");
-  root.replaceChildren();
-  const loading=document.createElement("div");
-  loading.className="preview-loading";
-  loading.innerHTML='<span class="operation-spinner"></span><strong>Opening preview…</strong><span>Preparing secure remote view</span>';
-  root.append(loading);
+  const hadPreview=Boolean(root.querySelector?.(".preview-head"));
+  if(!hadPreview){
+    root.replaceChildren();
+    const loading=document.createElement("div");loading.className="preview-loading";loading.textContent="Opening preview…";root.append(loading);
+  }
+  setWorkspacePreviewProgress("Loading next file…");
   document.querySelectorAll("#workspace-objects .object.active").forEach(el=>el.classList.remove("active"));
   row?.classList.add("active");
   const key=obj.key||obj.name||String(obj);
   workspacePreviewAbort?.abort();
   workspacePreviewAbort=new AbortController();
-  if(workspacePreviewUrl) URL.revokeObjectURL(workspacePreviewUrl);
-  workspacePreviewUrl="";
   let url=urlOverride;
-  if(!url){
-    try {
-      url=await RedownCloudflareApi.preview(explorerSource(),key,objectContentType(obj,key),workspacePreviewAbort.signal);
-      if(requestId!==workspacePreviewRequestId){URL.revokeObjectURL(url);return;}
-      workspacePreviewUrl=url;
-    } catch(error) {
-      if(requestId===workspacePreviewRequestId) root.textContent=error?.message || "Could not open this preview. Retry.";
-      return;
+  try{
+    if(!url)url=await RedownCloudflareApi.preview(explorerSource(),key,objectContentType(obj,key),workspacePreviewAbort.signal);
+    if(requestId!==workspacePreviewRequestId){if(!urlOverride)URL.revokeObjectURL(url);return;}
+    if(objectContentType(obj,key).startsWith("image/")&&typeof Image!=="undefined"&&Image.prototype.decode){
+      const ready=new Image();ready.src=url;await ready.decode();
     }
+    if(requestId!==workspacePreviewRequestId){if(!urlOverride)URL.revokeObjectURL(url);return;}
+  }catch(error){
+    if(url&&!urlOverride)URL.revokeObjectURL(url);
+    if(requestId===workspacePreviewRequestId){
+      const message=error?.message||"Could not open this preview. Retry.";
+      if(!hadPreview)root.textContent=message;
+      setWorkspacePreviewProgress(`Could not open ${key}: ${message}`,true);
+    }
+    return;
   }
-  if(requestId!==workspacePreviewRequestId)return;
+  if(workspacePreviewUrl)URL.revokeObjectURL(workspacePreviewUrl);
+  workspacePreviewUrl=urlOverride?"":url;
+  setWorkspacePreviewProgress("");
   root.replaceChildren();
   const type=objectContentType(obj,key);
   const head=document.createElement("div");head.className="preview-head";
-  const title=document.createElement("div");title.className="preview-title";title.textContent=key;
+  const title=document.createElement("div");title.className="preview-title";title.textContent=String(key).split("/").pop()||key;title.title=key;
   const controls=document.createElement("div");controls.className="preview-nav";
   const previous=document.createElement("button");previous.className="ghost preview-arrow";previous.type="button";previous.setAttribute("aria-label","Previous file");previous.title="Previous file";previous.textContent="←";previous.addEventListener("click",()=>navigatePreview(-1));
   const next=document.createElement("button");next.className="ghost preview-arrow";next.type="button";next.setAttribute("aria-label","Next file");next.title="Next file";next.textContent="→";next.addEventListener("click",()=>navigatePreview(1));
-  const lightbox=document.createElement("button");lightbox.className="ghost";lightbox.type="button";lightbox.textContent=workspaceLightboxOpen()?"Close lightbox":"Lightbox";lightbox.addEventListener("click",()=>setWorkspacePreviewLightbox(!workspaceLightboxOpen()));
-  const expand=document.createElement("button");expand.className="ghost";expand.type="button";expand.textContent=workspacePreviewExpanded?"Collapse":"Expand";expand.addEventListener("click",()=>setWorkspacePreviewExpanded(!workspacePreviewExpanded));
-  controls.append(previous,next,lightbox,expand);
+  const lightbox=document.createElement("button");lightbox.className="ghost";lightbox.type="button";lightbox.dataset.previewAction="lightbox";lightbox.textContent=workspaceLightboxOpen()?"Close lightbox":"Lightbox";lightbox.addEventListener("click",()=>setWorkspacePreviewLightbox(!workspaceLightboxOpen()));
+  const expand=document.createElement("button");expand.className="ghost";expand.type="button";expand.dataset.previewAction="expand";expand.textContent=workspacePreviewExpanded?"Collapse":"Expand";expand.addEventListener("click",()=>setWorkspacePreviewExpanded(!workspacePreviewExpanded));
+  const browsing=document.createElement("div");browsing.className="preview-control-group";browsing.append(previous,next);
+  const viewing=document.createElement("div");viewing.className="preview-control-group";viewing.append(lightbox,expand);
+  controls.append(browsing,viewing);
   head.append(title,controls);root.append(head);
 
   const media=document.createElement("div");
@@ -1584,7 +1594,8 @@ async function showWorkspacePreview(obj,row,urlOverride=""){
 
   if(type.startsWith("image/")){
     const img=document.createElement("img");
-    img.src=url;img.alt=key;
+    img.src=url;img.alt=key;img.title="Open in lightbox";
+    img.addEventListener("click",()=>setWorkspacePreviewLightbox(true));
     media.append(img);
     root.append(media);
   }else if(type.startsWith("video/")){
@@ -1636,6 +1647,47 @@ async function showWorkspacePreview(obj,row,urlOverride=""){
   }
 
   appendDetails(root,obj,key,url,type);
+  if(workspaceLightboxOpen())mountWorkspaceLightboxMedia();
+}
+
+function setWorkspacePreviewProgress(message,bad=false){
+  const host=workspaceLightboxLayer()||$("workspace-preview");
+  host?.querySelector?.(".preview-progress")?.remove();
+  if(!message||!host)return;
+  const status=document.createElement("div");status.className="preview-progress"+(bad?" bad":"");status.setAttribute?.("role","status");status.textContent=message;host.append(status);
+}
+function enableWorkspaceImageZoom(stage){
+  let zoom=1,x=0,y=0,drag=null;
+  const image=()=>stage.querySelector("img");
+  const paint=()=>{const img=image();if(!img)return;img.style.transform=`translate(${x}px,${y}px) scale(${zoom})`;img.style.cursor=zoom>1?"grab":"zoom-in";img.draggable=false;};
+  let dismissing=false;
+  const removeMenu=()=>{if(dismissing)return;dismissing=true;try{stage.querySelector(".image-zoom-menu")?.remove();}finally{dismissing=false;}};
+  stage.resetImageZoom=()=>{removeMenu();zoom=1;x=0;y=0;paint();};
+  stage.addEventListener("contextmenu",event=>{
+    if(event.target!==image())return;
+    event.preventDefault();event.stopPropagation();removeMenu();
+    const menu=document.createElement("div");menu.className="image-zoom-menu";menu.setAttribute("role","menu");menu.setAttribute("aria-label","Image zoom");
+    for(const [label,action,disabled] of [["Zoom in",()=>{zoom=Math.min(8,zoom*1.25);paint();},zoom>=8],["Zoom out",()=>{zoom=Math.max(1,zoom/1.25);if(zoom===1)x=y=0;paint();},zoom<=1],["Fit to screen",()=>stage.resetImageZoom(),false]]){
+      const button=document.createElement("button");button.type="button";button.textContent=label;button.disabled=disabled;button.setAttribute("role","menuitem");button.addEventListener("click",()=>{action();removeMenu();stage.focus({preventScroll:true});});menu.append(button);
+    }
+    menu.addEventListener("keydown",e=>{
+      if(e.key==="Escape"){e.preventDefault();e.stopPropagation();removeMenu();stage.focus({preventScroll:true});}
+      if(["ArrowUp","ArrowDown"].includes(e.key)){e.preventDefault();e.stopPropagation();const buttons=Array.from(menu.querySelectorAll("button:not(:disabled)")),index=buttons.indexOf(document.activeElement);buttons[(index+(e.key==="ArrowDown"?1:-1)+buttons.length)%buttons.length]?.focus();}
+    });
+    menu.addEventListener("focusout",e=>{if(!menu.contains(e.relatedTarget))removeMenu();});
+    stage.append(menu);const rect=menu.getBoundingClientRect();menu.style.left=Math.max(8,Math.min(event.clientX,window.innerWidth-rect.width-8))+"px";menu.style.top=Math.max(8,Math.min(event.clientY,window.innerHeight-rect.height-8))+"px";
+    menu.querySelector("button:not(:disabled)")?.focus();
+  });
+  stage.tabIndex=-1;
+  stage.addEventListener("wheel",event=>{
+    if(!image())return;
+    event.preventDefault();zoom=Math.max(1,Math.min(8,zoom*Math.exp(-event.deltaY*(event.deltaMode===1?.04:event.deltaMode===2?.7:.002))));
+    if(zoom===1)x=y=0;paint();
+  },{passive:false});
+  stage.addEventListener("dblclick",()=>stage.resetImageZoom());
+  stage.addEventListener("pointerdown",event=>{if(!event.target.closest(".image-zoom-menu"))removeMenu();if(zoom<=1||event.target!==image()||event.button!==0)return;event.preventDefault();drag={id:event.pointerId,x:event.clientX,y:event.clientY};stage.setPointerCapture?.(event.pointerId);});
+  stage.addEventListener("pointermove",event=>{if(!drag||drag.id!==event.pointerId)return;x+=event.clientX-drag.x;y+=event.clientY-drag.y;drag.x=event.clientX;drag.y=event.clientY;paint();});
+  const end=()=>{drag=null;};stage.addEventListener("pointerup",end);stage.addEventListener("pointercancel",end);stage.addEventListener("lostpointercapture",end);
 }
 
 function workspaceLightboxLayer(){
@@ -1647,8 +1699,13 @@ function workspaceLightboxOpen(){
 function syncWorkspaceLightboxButtons(){
   const open=workspaceLightboxOpen();
   workspacePreviewLightbox=open;
-  document.querySelectorAll("#workspace-preview .preview-head button").forEach((button)=>{
-    if(/lightbox/i.test(button.textContent))button.textContent=open?"Close lightbox":"Lightbox";
+  document.querySelectorAll('#workspace-preview [data-preview-action="lightbox"], #preview-lightbox').forEach(button=>{
+    button.textContent=open?"Close lightbox":"Lightbox";
+    button.setAttribute("aria-pressed",String(open));
+  });
+  document.querySelectorAll('#workspace-preview [data-preview-action="expand"], #preview-expand').forEach(button=>{
+    button.textContent=workspacePreviewExpanded?"Collapse":"Expand";
+    button.setAttribute("aria-expanded",String(workspacePreviewExpanded));
   });
 }
 function setWorkspacePreviewExpanded(expanded){
@@ -1658,19 +1715,32 @@ function setWorkspacePreviewExpanded(expanded){
   const grid=document.querySelector(".explorer-body");
   grid?.classList.toggle("expanded",workspacePreviewExpanded);
   if (workspacePreviewExpanded) $("explorer")?.focus?.({ preventScroll:true });
-  const button=$("#preview-expand")||document.querySelector("#workspace-preview .preview-head button:last-child");
-  if(button)button.textContent=workspacePreviewExpanded?"Collapse":"Expand";
+  syncWorkspaceLightboxButtons();
+}
+function mountWorkspaceLightboxMedia(){
+  const layer=workspaceLightboxLayer(),preview=$("workspace-preview");
+  const source=preview?.querySelector(".preview-media, .text-preview");
+  if(!layer||!source)return;
+  const placeholder=document.createComment("Lightbox media returns here");
+  source.replaceWith(placeholder);layer.previewPlaceholder=placeholder;
+  const stage=layer.querySelector(".preview-lightbox-stage");stage.resetImageZoom?.();stage.replaceChildren(source);stage.resetImageZoom?.();
+  if(document.activeElement===document.body)layer.querySelector(".preview-lightbox-close")?.focus({preventScroll:true});
+  layer.querySelector(".preview-title").textContent=preview.querySelector(".preview-title")?.textContent||"Preview";
 }
 function setWorkspacePreviewLightbox(enabled){
   const existing=workspaceLightboxLayer();
   const shouldOpen=Boolean(enabled);
 
   if(!shouldOpen){
+    const media=existing?.querySelector(".preview-lightbox-stage")?.firstElementChild;
+    existing?.querySelector(".preview-lightbox-stage")?.resetImageZoom?.();
+    if(media&&existing.previewPlaceholder?.isConnected)existing.previewPlaceholder.replaceWith(media);
+    const returnFocus=existing?.returnFocus;
     existing?.remove();
     document.body.classList.remove("preview-lightbox-open");
     workspacePreviewLightbox=false;
     syncWorkspaceLightboxButtons();
-    $("explorer")?.focus?.({preventScroll:true});
+    (returnFocus?.isConnected?returnFocus:$("explorer"))?.focus?.({preventScroll:true});
     return;
   }
 
@@ -1680,7 +1750,7 @@ function setWorkspacePreviewLightbox(enabled){
     return;
   }
 
-  const preview=$("#workspace-preview");
+  const preview=$("workspace-preview");
   if(!preview)return;
 
   const source=preview.querySelector(".preview-media, .text-preview");
@@ -1721,19 +1791,34 @@ function setWorkspacePreviewLightbox(enabled){
   const close=document.createElement("button");
   close.type="button";
   close.className="ghost preview-lightbox-close";
-  close.textContent="Close";
+  close.textContent="×";close.setAttribute("aria-label","Close lightbox");close.title="Close · Esc";
   close.addEventListener("click",()=>setWorkspacePreviewLightbox(false));
 
   const stage=document.createElement("div");
   stage.className="preview-lightbox-stage";
-  const clone=source.cloneNode(true);
-  clone.classList.add("lightbox-copy");
-  stage.append(clone);
+  enableWorkspaceImageZoom(stage);
+  layer.returnFocus=document.activeElement;
+  const previous=document.createElement("button");previous.type="button";previous.className="ghost preview-lightbox-arrow preview-lightbox-previous";previous.title="Previous · Left arrow";previous.textContent="←";previous.setAttribute("aria-label","Previous file");previous.addEventListener("click",()=>navigatePreview(-1));
+  const next=document.createElement("button");next.type="button";next.className="ghost preview-lightbox-arrow preview-lightbox-next";next.title="Next · Right arrow";next.textContent="→";next.setAttribute("aria-label","Next file");next.addEventListener("click",()=>navigatePreview(1));
+  layer.addEventListener("keydown",event=>{
+    if(event.key==="Escape"){event.preventDefault();event.stopPropagation();setWorkspacePreviewLightbox(false);return;}
+    if(event.key==="Tab"){
+      const controls=Array.from(panel.querySelectorAll('button,a[href],input,select,textarea,video[controls],audio[controls],iframe,[tabindex="0"]')).filter(el=>!el.disabled);
+      const first=controls[0],last=controls.at(-1);
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+      return;
+    }
+    if(event.target.closest("input,select,textarea,video,audio,model-viewer")||event.altKey||event.ctrlKey||event.metaKey)return;
+    if(event.key==="ArrowLeft"||event.key==="ArrowRight"){event.preventDefault();event.stopPropagation();navigatePreview(event.key==="ArrowRight"?1:-1);}
+  });
 
+  const caption=document.createElement("div");caption.className="preview-lightbox-caption";caption.textContent="←  Browse  →   ·   Right-click to zoom · Double-click to fit";
   head.append(title,close);
-  panel.append(head,stage);
+  panel.append(head,stage,previous,next,caption);
   layer.append(backdrop,panel);
   document.body.append(layer);
+  mountWorkspaceLightboxMedia();
   document.body.classList.add("preview-lightbox-open");
 
   workspacePreviewLightbox=true;
@@ -2738,13 +2823,16 @@ function previewableExplorerItems() {
 async function previewExplorerItem(item) {
   if (!item || item.kind === "bucket") return;
   if (item.folder) {
+    setWorkspacePreviewLightbox(false);
+    workspacePreviewRequestId++;workspacePreviewAbort?.abort();
+    if(workspacePreviewUrl)URL.revokeObjectURL(workspacePreviewUrl);workspacePreviewUrl="";
     const root = $("workspace-preview");
     root.replaceChildren();
     const head=document.createElement("div");head.className="preview-head";
     const title=document.createElement("div");title.className="preview-title";title.textContent=item.name;
     const controls=document.createElement("div");controls.className="preview-nav";
-    const lightbox=document.createElement("button");lightbox.className="ghost";lightbox.type="button";lightbox.textContent=workspaceLightboxOpen()?"Close lightbox":"Lightbox";lightbox.addEventListener("click",()=>setWorkspacePreviewLightbox(!workspaceLightboxOpen()));
-    const expand=document.createElement("button");expand.className="ghost";expand.type="button";expand.textContent=workspacePreviewExpanded?"Collapse":"Expand";expand.addEventListener("click",()=>setWorkspacePreviewExpanded(!workspacePreviewExpanded));
+    const lightbox=document.createElement("button");lightbox.className="ghost";lightbox.type="button";lightbox.dataset.previewAction="lightbox";lightbox.textContent=workspaceLightboxOpen()?"Close lightbox":"Lightbox";lightbox.addEventListener("click",()=>setWorkspacePreviewLightbox(!workspaceLightboxOpen()));
+    const expand=document.createElement("button");expand.className="ghost";expand.type="button";expand.dataset.previewAction="expand";expand.textContent=workspacePreviewExpanded?"Collapse":"Expand";expand.addEventListener("click",()=>setWorkspacePreviewExpanded(!workspacePreviewExpanded));
     controls.append(lightbox,expand);head.append(title,controls);
     const note=document.createElement("div");note.className="preview-folder";note.innerHTML=iconSvg("folder")+"<strong>Folder</strong><span>Press Enter to open this folder.</span>";
     root.append(head,note);

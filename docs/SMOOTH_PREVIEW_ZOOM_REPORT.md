@@ -1,0 +1,7 @@
+# Smooth image changes and lightbox zoom
+
+Image navigation now retains the displayed media and title during the next request. A small corner status acknowledges loading. The replacement image is downloaded and decoded before the current view is replaced; its previous managed blob URL is revoked only at commit. Late results are discarded, and errors retain the displayed file with a corner error notice. This supersedes the older repair report's error behavior that cleared the current media.
+
+Right-clicking a lightbox image offers Zoom in, Zoom out and Fit to screen. Zoom ranges from fitted size to 8×; wheel zoom also works. Drag pans an enlarged image, double-click restores fit, and each new image resets to fit. The menu supports keyboard arrows, Enter/native button activation, and Escape dismissal. Left/Right continue browsing images after Fit to screen and after an asynchronous swap; the dialog recovers focus if replacing content displaced it.
+
+Verification: 12 focused lightbox/private-read tests passed, including pending-view retention, zoom/menu behavior, fit followed by navigation, request races and failed loads. npm run check and git diff --check passed. An actual-options Chromium fixture verified a real right-click Zoom in action, delayed-load retention and corner feedback, image replacement, Left/Right handling, Escape, and return to the pane at desktop/mobile widths, without page errors. Chrome/API responses were mocked; live OAuth, every codec and R2 transfer behavior are not established by this UI check.

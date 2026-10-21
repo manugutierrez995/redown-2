@@ -58,7 +58,7 @@ test('preview failure replaces spinner and download rejection ends progress',asy
   const root={replaceChildren(){this.textContent='';},append(){},textContent:''};
   const context=vm.createContext({AbortController,URL,document:{createElement(){return {};},querySelectorAll(){return [];}},
     $(){return root;},workspacePreviewRequestId:0,workspacePreviewAbort:null,workspacePreviewUrl:'',
-    explorerSource(){return bucket;},objectContentType(){return 'image/webp';},
+    workspaceLightboxLayer(){return null;},explorerSource(){return bucket;},objectContentType(){return 'image/webp';},
     RedownCloudflareApi:{async preview(){throw new Error('Read denied. Retry.');},async download(){throw new Error('Download denied.');}},
     setOperation(){},finishOperation(text,failed){context.finished={text,failed};}});
   const begin=settings.indexOf('async function showWorkspacePreview('),end=settings.indexOf('\nfunction workspaceLightboxLayer',begin);

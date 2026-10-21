@@ -4,6 +4,10 @@ Branch: `chrome-web-store`. Candidate version: **0.5.14**.
 
 This branch is prepared for packaging and release work. **Do not describe it as approved or fully submission-ready yet.** The [complete pre-submission checklist](../PRE_SUBMISSION_CHECKLIST.md) remains the acceptance authority.
 
+## Latest main fixes incorporated
+
+Main through `60504d65ab366659a71e95ba4f757faac52416fc` is merged into this candidate: lightbox opening/navigation, gallery styling, retained-image loading, right-click zoom, compact anchored pagination, preview spacing and explicit Expand/Collapse synchronization. Store-specific PNG icons, version 0.5.14 and packaging are retained. See [current verification](VERIFICATION.md) for results and remaining blockers.
+
 ## Prepared here
 
 - PNG manifest/action icons at 16, 32, 48 and 128 pixels, rasterized from REDOWN's existing SVG; notification icon also uses PNG.
@@ -32,7 +36,7 @@ The script validates packaging, not remote-code compliance, security, privacy ac
 - Establish the actual store item ID and verify its Cloudflare redirect against the registered OAuth client. The existing manifest key is retained pending that verification.
 - Demonstrate real refresh-token issuance/renewal or honest reconnect behavior after expiry, restart and next-day use. This client rejects `offline_access`; it must not be added again without verified client support.
 - Run the clean-profile workflow matrix, particularly Simple/Nested menu reorder, deep nested destinations, Explorer, private preview/download and supported transfer paths.
-- Classify the known full-suite failures; focused passing tests are not a green full suite.
+- Full-suite verification currently has 114 passes and 27 failures, with the same failing names as the earlier 27-failure baseline. Resolve/classify these failures before release; focused passing tests are not a green full suite.
 - Complete third-party license inventory, including full notices for the bundled model-viewer dependency tree. Existing embedded notices are preserved, not represented as complete clearance.
 - Confirm rights to publish contributions and license/store distribution compatibility. Internal business use currently requires separate commercial permission.
 - Produce sanitized actual-product screenshots and the required small promotional image; verify current store image specifications.
