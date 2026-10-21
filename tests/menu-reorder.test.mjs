@@ -16,7 +16,9 @@ function harness({fail=false}={}){
 }
 test('keyboard reorder persists sibling order, preserves drafts/branch and ignores boundaries',async()=>{
   const h=harness(),handle=h.rows[0].querySelector('button');
+  handle.focus();
   handle.dispatchEvent(new h.dom.window.KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true}));await settle();
+  assert.equal(h.dom.window.document.activeElement,handle);
   assert.deepEqual(h.items.map(x=>x.id),['two','one','three']);
   assert.deepEqual(h.saved,[['two','one','three']]);
   assert.deepEqual([...h.root.children].map(x=>x.dataset.id),['two','one','three']);
@@ -73,4 +75,14 @@ test('Escape cancels lifted drag without saving or leaving compact cards behind'
  h.dom.window.document.dispatchEvent(new h.dom.window.MouseEvent('pointermove',{clientY:260,bubbles:true}));
  h.dom.window.document.dispatchEvent(new h.dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));await settle();
  assert.deepEqual(h.items.map(x=>x.id),['one','two','three']);assert.equal(h.saved.length,0);assert.equal(h.root.classList.contains('reorder-list-dragging'),false);assert.equal(h.dom.window.document.querySelector('.reorder-ghost'),null);h.dom.window.close();
+});
+
+test('saved moves retain focus so repeated arrow keys move the same branch',async()=>{
+  const h=harness(),handle=h.rows[0].querySelector('button');handle.focus();
+  for(let i=0;i<2;i++){
+    h.dom.window.document.activeElement.dispatchEvent(new h.dom.window.KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true}));await settle();
+    assert.equal(h.dom.window.document.activeElement,handle);
+  }
+  assert.deepEqual(h.items.map(x=>x.id),['two','three','one']);
+  assert.equal(h.saved.length,2);h.dom.window.close();
 });

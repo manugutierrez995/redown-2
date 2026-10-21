@@ -16,10 +16,10 @@
       const snapshot=list.slice(),parent=element.parentElement,next=element.nextSibling;
       list.splice(from,1);const index=list.indexOf(entries.get(target).item)+(after?1:0);list.splice(index,0,item);
       parent.insertBefore(element,after?target.nextSibling:target);
-      busy=true;handle.disabled=true;
+      busy=true;handle.setAttribute("aria-busy","true");
       try{await save();changed();handle.focus({preventScroll:true});handle.scrollIntoView?.({block:"nearest"});}
       catch(error){list.splice(0,list.length,...snapshot);parent.insertBefore(element,next?.parentElement===parent?next:null);changed(error);}
-      finally{busy=false;handle.disabled=false;}
+      finally{busy=false;handle.removeAttribute("aria-busy");}
     };
     handle.addEventListener('keydown',event=>{
       if(!['ArrowUp','ArrowDown'].includes(event.key))return;
