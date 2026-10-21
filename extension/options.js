@@ -535,22 +535,30 @@ function simpleFolderPathEditor(profile, host, message, bucketName, initialPrefi
       });
       create.addEventListener("click",async()=>{
         const name=input.value.trim();
-        if(!name||name==="."||name===".."||/[\\/\\\\\\0-\\x1f]/.test(name)){
+        if(!name||name==="."||name===".."||/[\/\\\x00-\x1f\x7f]/.test(name)){
           message.textContent="Enter one valid folder name, without slashes.";return;
         }
         if(!parentReady){message.textContent="Choose a parent first.";return;}
+        if(create.disabled)return;
         create.disabled=true;message.textContent="Creating directory…";
+        let creationTimer;
         try{
-          const response=await send({type:"cfCreateFolder",accountId:profile.accountId,bucketName:bucket,accountName:profile.accountName,prefix:parent.join("/"),name});
+          const response=await Promise.race([
+            send({type:"cfCreateFolder",accountId:profile.accountId,bucketName:bucket,accountName:profile.accountName,prefix:parent.join("/"),name}),
+            new Promise((_,reject)=>{creationTimer=setTimeout(()=>reject(new Error("Folder creation has not been confirmed. Refresh locations to check whether it was created before retrying.")),60000);})
+          ]);
           if(!response?.ok)throw new Error(response?.error||"Folder creation failed.");
-          if(token!==generation||bucket!==bucketName()||parent.join("/")!==parts.slice(0,index).join("/")||!row.isConnected)return;
+          if(token!==generation||bucket!==bucketName()||parent.join("/")!==parts.slice(0,index).join("/")||!row.isConnected){
+            if(message.textContent==="Creating directory…")message.textContent="Directory created in the previous location. Refresh locations to see it.";
+            return;
+          }
           if(!Array.from(selected.options).some(o=>o.value===name))option(selected,name,name);
           selected.value=name;selected.disabled=false;
           parts[index]=name;drafts.delete(index);input.value="";
           invalidateBelow();add.disabled=false;message.textContent="Directory created: /"+prefix();
           draw(index+1);
         }catch(error){message.textContent=error?.message||"Could not create directory.";}
-        finally{if(row.isConnected)create.disabled=false;}
+        finally{clearTimeout(creationTimer);if(row.isConnected)create.disabled=false;}
       });
       if(!parentReady){option(selected,"","Select an ancestor first");continue;}
       try{
