@@ -615,7 +615,7 @@ function simpleExtraOptions(profile,showIntro=true){
   function addRow(item){
     item.bucketName||=profile.bucketName;
     const row=document.createElement("div");row.className="card";
-    const first=document.createElement("div");first.className="grid two";
+    const first=document.createElement("div");first.className="grid simple-option-controls";
     first.append(field("Menu label (shown on right-click)",item.label||"",v=>{item.label=v;},"text","My Artwork"));
     const remove=document.createElement("button");remove.type="button";remove.className="ghost";remove.textContent="Remove option";
     remove.addEventListener("click",()=>{const i=options.indexOf(item);if(i>=0)options.splice(i,1);row.remove();saveProfiles();});
@@ -632,7 +632,7 @@ function simpleExtraOptions(profile,showIntro=true){
     moveUp.addEventListener("click",()=>move(-1));
     moveDown.addEventListener("click",()=>move(1));
     first.append(moveUp,moveDown,remove);row.append(first);
-    const second=document.createElement("div");second.className="grid two";
+    const second=document.createElement("div");second.className="grid simple-option-destination";
     const bucketWrap=document.createElement("div"),bucketLabel=document.createElement("label");bucketLabel.textContent="Bucket";
     const bucket=document.createElement("select");bucketWrap.append(bucketLabel,bucket);
     const folders=document.createElement("div");folders.className="location-levels";
@@ -742,7 +742,7 @@ function renderProfiles(){
     const badge=document.createElement("div"); badge.className="badge"; badge.textContent=p.type==="cloudflare-r2"?"R2":"GitHub";
     top.append(left,badge);
 
-    const grid=document.createElement("div"); grid.className="grid";
+    const grid=document.createElement("div"); grid.className="grid profile-fields";
     grid.append(
       field("Menu label",p.menuLabel||p.name||"",v=>p.menuLabel=v),
       p.type==="cloudflare-r2"
