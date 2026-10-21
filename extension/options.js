@@ -455,6 +455,7 @@ function renderRightClickMode(){
   $("use-nested-menu").checked=rightClickMode==='nested';
   $("simple-menu-editor").hidden=rightClickMode!=='simple';
   $("nested-menu-editor-panel").hidden=rightClickMode!=='nested';
+  $("right-click-mode-status").className="meta";
   $("right-click-mode-status").textContent=rightClickMode==='nested'
     ? "Nested menu active. Simple locations are saved but inactive."
     : "Simple menu active. Nested locations are saved but inactive.";
@@ -619,7 +620,7 @@ function simpleExtraOptions(profile,showIntro=true){
     first.append(field("Menu label (shown on right-click)",item.label||"",v=>{item.label=v;},"text","My Artwork"));
     const remove=document.createElement("button");remove.type="button";remove.className="ghost";remove.textContent="Remove option";
     remove.addEventListener("click",()=>{const i=options.indexOf(item);if(i>=0)options.splice(i,1);row.remove();saveProfiles();});
-    const handle=globalThis.RedownReorder?.attach(row,{items:()=>options,item,save:saveProfiles,label:item.label||"Simple destination",changed:error=>setStatus("right-click-mode-status",error?"Could not save menu order. Please retry.":"Menu order saved.",error?"bad":"ok")});
+    const handle=globalThis.RedownReorder?.attach(row,{items:()=>options,item,save:saveProfiles,label:item.label||"Simple destination",changed:error=>setStatus("menu-location-status",error?"Could not save menu order. Please retry.":"Menu order saved.",error?"bad":"ok")});
     if(handle)first.prepend(handle);
     first.append(remove);row.append(first);
     const second=document.createElement("div");second.className="grid simple-option-destination";
@@ -745,7 +746,7 @@ function renderProfiles(){
       : `GitHub · ${p.repository||"not configured"}`;
     left.append(title,meta);
     const badge=document.createElement("div"); badge.className="badge"; badge.textContent=p.type==="cloudflare-r2"?"R2":"GitHub";
-    const handle=globalThis.RedownReorder?.attach(card,{items:()=>profiles,item:p,save:saveProfileOrder,label:displayName(p),changed:error=>setStatus("right-click-mode-status",error?"Could not save menu order. Please retry.":"Menu order saved.",error?"bad":"ok")});
+    const handle=globalThis.RedownReorder?.attach(card,{items:()=>profiles,item:p,save:saveProfileOrder,label:displayName(p),changed:error=>setStatus("menu-location-status",error?"Could not save menu order. Please retry.":"Menu order saved.",error?"bad":"ok")});
     if(handle)top.append(handle);
     top.append(left,badge);
 
@@ -3827,11 +3828,11 @@ async function refreshLocationEditors(){
 $("refresh-menu-locations").addEventListener("click",async()=>{
   const button=$("refresh-menu-locations");if(button.disabled)return;
   button.disabled=true;button.textContent="Refreshing…";
-  setStatus("right-click-mode-status","Checking Cloudflare and refreshing locations…");
+  setStatus("menu-location-status","Checking Cloudflare and refreshing locations…");
   try{
     const refreshed=await refreshCloudflare();
-    if(refreshed)setStatus("right-click-mode-status","Location refresh finished. Any folder lookup errors appear beside the affected location.","ok");
-  }catch(error){setStatus("right-click-mode-status",error?.message||"Could not refresh locations. Retry.","bad");}
+    if(refreshed)setStatus("menu-location-status","Location refresh finished. Any folder lookup errors appear beside the affected location.","ok");
+  }catch(error){setStatus("menu-location-status",error?.message||"Could not refresh locations. Retry.","bad");}
   finally{button.disabled=false;button.textContent="Refresh locations";}
 });
 let cloudflareRefreshTask=null;
@@ -3848,13 +3849,13 @@ async function refreshCloudflareState(){
   $("disconnect-cloudflare").hidden=!connected;
   $("cloudflare-panel").hidden=!connected;
   $("local-tools").hidden=!connected;
-  if(!connected){setStatus("right-click-mode-status","Connect Cloudflare to refresh locations.","bad");return false;}
+  if(!connected){setStatus("menu-location-status","Connect Cloudflare to refresh locations.","bad");return false;}
 
   setStatus("hero-status","Checking Cloudflare access…");
   const result=await send({type:"cfAccounts"});
   if(!result?.ok){
     const message=result?.error||"Could not verify Cloudflare access. Retry.";
-    setStatus("cf-status",message,"bad");setStatus("hero-status",message,"bad");setStatus("right-click-mode-status",message,"bad");
+    setStatus("cf-status",message,"bad");setStatus("hero-status",message,"bad");setStatus("menu-location-status",message,"bad");
     if(/authorization|authenticate|authentication|session expired|connect cloudflare|reconnect cloudflare|unauthorized|\b401\b/i.test(message))$("connect-cloudflare").hidden=false;
     return false;
   }
@@ -3866,6 +3867,7 @@ async function refreshCloudflareState(){
   currentAccountId=select.value||"";
   if(currentAccountId)await refreshBuckets();
   await refreshLocationEditors();
+  setStatus("menu-location-status","Locations refreshed. Any folder lookup errors appear beside the affected location.","ok");
   await loadExplorerInventory().catch((error)=>{
     $("explorer-status").textContent=safeUiMessage(friendlyError(error,"load Cloudflare storage"));
   });

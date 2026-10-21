@@ -89,6 +89,7 @@
     .bucket:hover{border-color:#604191}
     .bucket strong{display:block}.bucket span{font-size:11px;color:var(--muted)}
     .status{margin-top:12px;min-height:20px;color:var(--muted);font-size:12px}
+    #menu-location-status:empty{display:none}
     .status.ok{color:var(--green)} .status.bad{color:var(--red)}
     .empty{border:1px dashed var(--line);border-radius:16px;padding:22px;text-align:center;color:var(--muted)}
     .toggle{display:flex;align-items:center;gap:8px;font-size:12px;color:#d5cce0}
@@ -338,6 +339,7 @@
       <label class="toggle"><input id="use-nested-menu" type="checkbox" aria-describedby="right-click-mode-status">Use Nested Menu</label>
     </div>
     <div id="right-click-mode-status" class="meta" role="status" style="margin-bottom:12px"></div>
+    <div id="menu-location-status" class="status" role="status" aria-live="polite"></div>
 
     <div id="simple-menu-editor">
       <h3>Simple · Quick send</h3>
